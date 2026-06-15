@@ -1,0 +1,283 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 1520" font-family="'SF Mono','Fira Code','Consolas',monospace">
+  <defs>
+    <marker id="a" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="6" markerHeight="4.5" orient="auto-start-auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280"/>
+    </marker>
+    <marker id="ar" viewBox="0 0 10 7" refX="10" refY="3.5" markerWidth="6" markerHeight="4.5" orient="auto-start-auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <style>
+    .L{font-size:9px;fill:#9ca3af;font-weight:700;letter-spacing:2px}
+    .n{font-size:10px;fill:#e5e7eb;text-anchor:middle}
+    .nb{font-size:10px;fill:#e5e7eb;text-anchor:middle;font-weight:700}
+    .ns{font-size:8px;fill:#93c5fd;text-anchor:middle}
+    .dn{font-size:9px;fill:#374151;text-anchor:middle;font-weight:600}
+    .ds{font-size:8px;fill:#6b7280;text-anchor:middle}
+    .e{stroke:#4b5563;stroke-width:1;fill:none;marker-end:url(#a)}
+    .cf{stroke:#dc2626;stroke-width:1;stroke-dasharray:5 3;fill:none;marker-end:url(#ar)}
+  </style>
+
+  <!-- Background -->
+  <rect width="580" height="1520" fill="#0f172a"/>
+
+  <!-- ═══ L0: TYPES  y=40 ═══ -->
+  <text x="20" y="30" class="L">L0  TYPES</text>
+  <line x1="20" y1="36" x2="560" y2="36" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- ConceptClass (center, hub node) -->
+  <rect x="210" y="48" width="160" height="38" rx="5" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="290" y="64" class="nb">ConceptClass</text>
+  <text x="290" y="78" class="ns">22 edges, hub</text>
+
+  <!-- BatchLearner -->
+  <rect x="30" y="48" width="120" height="34" rx="4" fill="#1e293b" stroke="#475569"/>
+  <text x="90" y="70" class="n">BatchLearner</text>
+
+  <!-- OnlineLearner -->
+  <rect x="430" y="48" width="125" height="34" rx="4" fill="#1e293b" stroke="#475569"/>
+  <text x="493" y="70" class="n">OnlineLearner</text>
+
+  <!-- GoldLearner + Measure.pi (smaller, flanking) -->
+  <rect x="30" y="96" width="110" height="30" rx="4" fill="#1e293b" stroke="#475569"/>
+  <text x="85" y="115" class="n">GoldLearner</text>
+
+  <rect x="440" y="96" width="110" height="30" rx="4" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="495" y="115" class="n">Measure.pi</text>
+
+  <!-- ═══ L1: MEASURES  y=175 ═══ -->
+  <text x="20" y="165" class="L">L1  MEASURES</text>
+  <line x1="20" y1="171" x2="560" y2="171" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- VCDim (center, highest fan-out) -->
+  <rect x="195" y="183" width="130" height="34" rx="4" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="260" y="204" class="nb">VCDim &lt; ∞</text>
+
+  <!-- LittlestoneDim (right) -->
+  <rect x="380" y="183" width="150" height="34" rx="4" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="455" y="204" class="n">LittlestoneDim &lt; ∞</text>
+
+  <!-- GrowthFunction (left) -->
+  <rect x="40" y="183" width="120" height="34" rx="4" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="100" y="204" class="n">GrowthFunction</text>
+
+  <!-- Rademacher (far left) -->
+  <rect x="40" y="230" width="120" height="34" rx="4" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="100" y="251" class="n">Rademacher → 0</text>
+
+  <!-- MindChangeOrdinal (far right) -->
+  <rect x="400" y="230" width="145" height="34" rx="4" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="473" y="251" class="n">MindChangeOrd.</text>
+
+  <!-- L0→L1 edges -->
+  <line x1="290" y1="86" x2="260" y2="183" class="e"/>
+  <line x1="290" y1="86" x2="455" y2="183" class="e"/>
+  <line x1="290" y1="86" x2="100" y2="183" class="e"/>
+  <line x1="290" y1="86" x2="100" y2="230" class="e"/>
+  <line x1="290" y1="86" x2="473" y2="230" class="e"/>
+
+  <!-- ═══ L2: INFRASTRUCTURE  y=310 ═══ -->
+  <text x="20" y="300" class="L">L2  INFRASTRUCTURE</text>
+  <line x1="20" y1="306" x2="560" y2="306" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- Central column: Symmetrization (biggest node) -->
+  <rect x="175" y="318" width="170" height="44" rx="5" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="260" y="337" class="nb">Symmetrization</text>
+  <text x="260" y="353" class="ns">3,027 lines</text>
+
+  <!-- Uniform Convergence (above sym, same column) -->
+  <rect x="370" y="318" width="150" height="34" rx="4" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="445" y="339" class="n">Uniform Conv.</text>
+
+  <!-- WellBehavedVC -->
+  <rect x="370" y="365" width="140" height="30" rx="4" fill="#2563eb" stroke="#1d4ed8"/>
+  <text x="440" y="384" class="n">WellBehavedVC</text>
+
+  <!-- Sauer-Shelah (left) -->
+  <rect x="30" y="318" width="115" height="34" rx="4" fill="#3b82f6" stroke="#60a5fa"/>
+  <text x="88" y="339" class="n">Sauer-Shelah</text>
+
+  <!-- Hoeffding (left, below) -->
+  <rect x="30" y="365" width="100" height="30" rx="4" fill="#1e293b" stroke="#475569"/>
+  <text x="80" y="384" class="n">Hoeffding</text>
+
+  <!-- NFL core (center-left) -->
+  <rect x="155" y="405" width="100" height="30" rx="4" fill="#1e293b" stroke="#475569"/>
+  <text x="205" y="424" class="n">NFL core</text>
+
+  <!-- Bridge: Bool bij (left) -->
+  <rect x="30" y="405" width="110" height="30" rx="4" fill="#3b82f6" stroke="#60a5fa"/>
+  <text x="85" y="424" class="n">Bridge: Bool</text>
+
+  <!-- CompressionScheme -->
+  <rect x="285" y="405" width="145" height="30" rx="4" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="358" y="424" class="n">CompressionScheme</text>
+
+  <!-- boost_two_thirds -->
+  <rect x="440" y="405" width="115" height="30" rx="4" fill="#1e293b" stroke="#475569"/>
+  <text x="498" y="424" class="n">boost_2/3</text>
+
+  <!-- L1→L2 edges (ordered to minimize crossings) -->
+  <line x1="260" y1="217" x2="88" y2="318" class="e"/>
+  <line x1="260" y1="217" x2="445" y2="318" class="e"/>
+  <line x1="260" y1="217" x2="358" y2="405" class="e"/>
+  <line x1="100" y1="217" x2="260" y2="318" class="e"/>
+  <line x1="495" y1="126" x2="445" y2="318" class="e"/>
+  <line x1="495" y1="126" x2="205" y2="405" class="e"/>
+  <line x1="440" y1="395" x2="260" y2="362" class="e"/>
+  <line x1="445" y1="352" x2="260" y2="318" class="e"/>
+  <line x1="260" y1="362" x2="80" y2="365" class="e"/>
+  <line x1="85" y1="435" x2="88" y2="352" class="e"/>
+  <line x1="88" y1="352" x2="100" y2="217" class="e"/>
+
+  <!-- ═══ L3: THEOREMS  y=490 ═══ -->
+  <text x="20" y="480" class="L">L3  THEOREMS</text>
+  <line x1="20" y1="486" x2="560" y2="486" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- FUNDAMENTAL THEOREM (center, largest) -->
+  <rect x="155" y="498" width="210" height="44" rx="6" fill="#2563eb" stroke="#60a5fa" stroke-width="2"/>
+  <text x="260" y="517" class="nb" font-size="11">FUNDAMENTAL THM</text>
+  <text x="260" y="533" class="ns">5-way equivalence</text>
+
+  <!-- vc_characterization -->
+  <rect x="30" y="555" width="155" height="32" rx="4" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="108" y="575" class="n">vc_characterization</text>
+
+  <!-- littlestone_charact -->
+  <rect x="210" y="555" width="160" height="32" rx="4" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="290" y="575" class="n">littlestone_charact.</text>
+
+  <!-- gold_theorem -->
+  <rect x="400" y="555" width="135" height="32" rx="4" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="468" y="575" class="n">gold_theorem</text>
+
+  <!-- online_imp_pac -->
+  <rect x="30" y="600" width="140" height="30" rx="4" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="100" y="619" class="n">online_imp_pac</text>
+
+  <!-- pac_not_imp_online -->
+  <rect x="195" y="600" width="160" height="30" rx="4" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="275" y="619" class="n">pac_not_imp_online</text>
+
+  <!-- ex_not_imp_pac -->
+  <rect x="380" y="600" width="145" height="30" rx="4" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="453" y="619" class="n">ex_not_imp_pac</text>
+
+  <!-- nfl_theorem_infinite -->
+  <rect x="100" y="645" width="160" height="30" rx="4" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="180" y="664" class="n">nfl_theorem_inf.</text>
+
+  <!-- universal_trichotomy -->
+  <rect x="310" y="645" width="200" height="36" rx="5" fill="#dc2626" stroke="#991b1b" stroke-width="1.5"/>
+  <text x="410" y="661" class="nb">universal_trichotomy</text>
+  <text x="410" y="674" style="font-size:7px;fill:#fca5a5;text-anchor:middle">2/3 proved</text>
+
+  <!-- L2→L3 edges -->
+  <line x1="358" y1="435" x2="260" y2="498" class="e"/>
+  <line x1="100" y1="251" x2="260" y2="498" class="e"/>
+  <line x1="100" y1="217" x2="260" y2="498" class="e"/>
+  <line x1="90" y1="82" x2="108" y2="555" class="e"/>
+  <line x1="493" y1="82" x2="290" y2="555" class="e"/>
+  <line x1="85" y1="126" x2="468" y2="555" class="e"/>
+  <line x1="260" y1="217" x2="108" y2="555" class="e"/>
+  <line x1="455" y1="217" x2="290" y2="555" class="e"/>
+  <line x1="473" y1="264" x2="468" y2="555" class="e"/>
+  <line x1="290" y1="587" x2="100" y2="600" class="e"/>
+  <line x1="260" y1="217" x2="275" y2="600" class="e"/>
+  <line x1="455" y1="217" x2="275" y2="600" class="e"/>
+  <line x1="205" y1="435" x2="180" y2="645" class="e"/>
+  <line x1="108" y1="587" x2="180" y2="645" class="e"/>
+  <line x1="498" y1="435" x2="410" y2="645" class="e"/>
+  <line x1="290" y1="587" x2="410" y2="645" class="e"/>
+  <line x1="108" y1="587" x2="410" y2="645" class="e"/>
+
+  <!-- ═══ L4: SORRY  y=730 ═══ -->
+  <text x="20" y="720" class="L">L4  SORRY</text>
+  <line x1="20" y1="726" x2="560" y2="726" stroke="#1e293b" stroke-width="1"/>
+
+  <rect x="50" y="738" width="230" height="44" rx="5" fill="#7f1d1d" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="165" y="756" class="nb">vcdim_finite_imp_compression</text>
+  <text x="165" y="772" style="font-size:8px;fill:#fca5a5;text-anchor:middle">Moran-Yehudayoff 2016</text>
+
+  <rect x="320" y="738" width="210" height="44" rx="5" fill="#7f1d1d" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="425" y="756" class="nb">bhmz_middle_branch</text>
+  <text x="425" y="772" style="font-size:8px;fill:#fca5a5;text-anchor:middle">BHMZ STOC 2021</text>
+
+  <line x1="165" y1="782" x2="358" y2="435" class="e"/>
+  <line x1="425" y1="782" x2="410" y2="681" class="e"/>
+
+  <!-- ═══ L5: DEAD BRANCHES  y=840 ═══ -->
+  <text x="20" y="830" class="L">L5  DEAD BRANCHES</text>
+  <line x1="20" y1="836" x2="560" y2="836" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- Dead branches in a 2-column layout, paired with their targets -->
+
+  <!-- CF1: NFL finite X → nfl_theorem_inf -->
+  <rect x="30" y="852" width="240" height="44" rx="4" fill="#1e293b" stroke="#475569" stroke-dasharray="4 3"/>
+  <text x="150" y="870" class="dn" style="fill:#9ca3af">✗  NFL for finite X</text>
+  <text x="150" y="886" class="ds">provably false: memorizer learns Set.univ</text>
+  <line x1="150" y1="852" x2="180" y2="675" class="cf"/>
+
+  <!-- CF2: BranchWise LDim → littlestone_charact -->
+  <rect x="300" y="852" width="250" height="44" rx="4" fill="#1e293b" stroke="#475569" stroke-dasharray="4 3"/>
+  <text x="425" y="870" class="dn" style="fill:#9ca3af">✗  BranchWise LDim</text>
+  <text x="425" y="886" class="ds">no path consistency in definition</text>
+  <line x1="425" y1="852" x2="290" y2="587" class="cf"/>
+
+  <!-- CF3: Direct union bound → Uniform Conv -->
+  <rect x="30" y="912" width="240" height="44" rx="4" fill="#1e293b" stroke="#475569" stroke-dasharray="4 3"/>
+  <text x="150" y="930" class="dn" style="fill:#9ca3af">✗  Direct union bound</text>
+  <text x="150" y="946" class="ds">gives 2^2m, not GrowthFunction</text>
+  <line x1="150" y1="912" x2="445" y2="352" class="cf"/>
+
+  <!-- CF4: UC without regularity → Symmetrization -->
+  <rect x="300" y="912" width="250" height="44" rx="4" fill="#1e293b" stroke="#475569" stroke-dasharray="4 3"/>
+  <text x="425" y="930" class="dn" style="fill:#9ca3af">✗  UC without regularity</text>
+  <text x="425" y="946" class="ds">bad event not measurable for uncountable C</text>
+  <line x1="425" y1="912" x2="260" y2="362" class="cf"/>
+
+  <!-- CF5: PAC with existential Dm → vc_characterization -->
+  <rect x="30" y="972" width="240" height="44" rx="4" fill="#1e293b" stroke="#475569" stroke-dasharray="4 3"/>
+  <text x="150" y="990" class="dn" style="fill:#9ca3af">✗  PAC with existential Dm</text>
+  <text x="150" y="1006" class="ds">trivially true via memorizer + point mass</text>
+  <line x1="150" y1="972" x2="108" y2="587" class="cf"/>
+
+  <!-- CF6: UC with D-dependent m0 → Uniform Conv -->
+  <rect x="300" y="972" width="250" height="44" rx="4" fill="#1e293b" stroke="#475569" stroke-dasharray="4 3"/>
+  <text x="425" y="990" class="dn" style="fill:#9ca3af">✗  UC with D-dependent m₀</text>
+  <text x="425" y="1006" class="ds">not distribution-free for PACLearnable</text>
+  <line x1="425" y1="972" x2="445" y2="352" class="cf"/>
+
+  <!-- CF7: Bridge for |Y| > 2 → Bridge: Bool -->
+  <rect x="165" y="1032" width="250" height="44" rx="4" fill="#1e293b" stroke="#475569" stroke-dasharray="4 3"/>
+  <text x="290" y="1050" class="dn" style="fill:#9ca3af">✗  Bridge for |Y| > 2</text>
+  <text x="290" y="1066" class="ds">Bool-specific bijection, lossy for larger Y</text>
+  <line x1="290" y1="1032" x2="85" y2="435" class="cf"/>
+
+  <!-- ═══ LEGEND  y=1110 ═══ -->
+  <line x1="20" y1="1100" x2="560" y2="1100" stroke="#334155" stroke-width="1"/>
+
+  <rect x="30" y="1120" width="12" height="12" rx="2" fill="#1e3a5f" stroke="#3b82f6"/>
+  <text x="48" y="1131" style="font-size:9px;fill:#94a3b8">Proved</text>
+
+  <rect x="110" y="1120" width="12" height="12" rx="2" fill="#2563eb" stroke="#60a5fa"/>
+  <text x="128" y="1131" style="font-size:9px;fill:#94a3b8">Key result</text>
+
+  <rect x="210" y="1120" width="12" height="12" rx="2" fill="#3b82f6" stroke="#60a5fa"/>
+  <text x="228" y="1131" style="font-size:9px;fill:#94a3b8">Mathlib bridge</text>
+
+  <rect x="330" y="1120" width="12" height="12" rx="2" fill="#1e293b" stroke="#475569"/>
+  <text x="348" y="1131" style="font-size:9px;fill:#94a3b8">Utility</text>
+
+  <rect x="410" y="1120" width="12" height="12" rx="2" fill="#7f1d1d" stroke="#dc2626"/>
+  <text x="428" y="1131" style="font-size:9px;fill:#94a3b8">Sorry / frontier</text>
+
+  <rect x="30" y="1145" width="12" height="12" rx="2" fill="#1e293b" stroke="#475569" stroke-dasharray="3 2"/>
+  <text x="48" y="1156" style="font-size:9px;fill:#94a3b8">Dead branch</text>
+
+  <line x1="140" y1="1151" x2="175" y2="1151" stroke="#4b5563" stroke-width="1"/>
+  <text x="182" y="1156" style="font-size:9px;fill:#94a3b8">Factual edge</text>
+
+  <line x1="280" y1="1151" x2="315" y2="1151" stroke="#dc2626" stroke-width="1" stroke-dasharray="5 3"/>
+  <text x="322" y="1156" style="font-size:9px;fill:#94a3b8">Counterfactual edge</text>
+</svg>
