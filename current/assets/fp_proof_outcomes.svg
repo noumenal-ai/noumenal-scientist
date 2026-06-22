@@ -1,0 +1,103 @@
+<svg viewBox="0 0 640 530" xmlns="http://www.w3.org/2000/svg" font-family="&#39;Times New Roman&#39;, &#39;Liberation Serif&#39;, Georgia, serif" font-size="12">
+  
+  <rect x="0" y="0" width="640" height="530" fill="white"></rect>
+
+  
+  <text x="340" y="28" text-anchor="middle" font-size="17" font-weight="bold">Proof Outcomes by Problem</text>
+
+  
+  
+  <rect x="90" y="45" width="245" height="200" fill="#f8f8fc" stroke="none"></rect>
+  <rect x="335" y="45" width="245" height="200" fill="#f0f0fa" stroke="none"></rect>
+  <rect x="90" y="245" width="245" height="200" fill="#fafafa" stroke="none"></rect>
+  <rect x="335" y="245" width="245" height="200" fill="#f4f4fb" stroke="none"></rect>
+
+  
+  <line x1="335" y1="45" x2="335" y2="445" stroke="#bbb" stroke-width="0.8" stroke-dasharray="6,4"></line>
+  <line x1="90" y1="245" x2="580" y2="245" stroke="#bbb" stroke-width="0.8" stroke-dasharray="6,4"></line>
+
+  
+  <rect x="90" y="45" width="490" height="400" fill="none" stroke="#888" stroke-width="1"></rect>
+
+  
+  <text x="105" y="65" fill="#999" font-size="11" font-style="italic">Partial, Large</text>
+  <text x="470" y="65" fill="#999" font-size="11" font-style="italic">Accepted, Large</text>
+  <text x="105" y="438" fill="#999" font-size="11" font-style="italic">Partial, Compact</text>
+  <text x="455" y="438" fill="#999" font-size="11" font-style="italic">Accepted, Compact</text>
+
+  
+  <text x="335" y="488" text-anchor="middle" font-size="13" font-style="italic">Generalization Robustness</text>
+  <text x="90" y="472" text-anchor="start" font-size="10" fill="#777">Low</text>
+  <text x="580" y="472" text-anchor="end" font-size="10" fill="#777">High</text>
+  
+  <line x1="130" y1="468" x2="540" y2="468" stroke="#999" stroke-width="0.7" marker-end="url(#arrowX)"></line>
+  <defs>
+    <marker id="arrowX" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="#999" stroke-width="0.8"></path>
+    </marker>
+    <marker id="arrowY" markerWidth="6" markerHeight="8" refX="3" refY="0" orient="auto">
+      <path d="M0,8 L3,0 L6,8" fill="none" stroke="#999" stroke-width="0.8"></path>
+    </marker>
+  </defs>
+
+  
+  <text x="28" y="245" text-anchor="middle" font-size="13" font-style="italic" transform="rotate(-90, 28, 245)">Proof Complexity</text>
+  <text x="72" y="445" text-anchor="end" font-size="10" fill="#777">Few</text>
+  <text x="72" y="52" text-anchor="end" font-size="10" fill="#777">Many</text>
+  
+  <line x1="76" y1="420" x2="76" y2="70" stroke="#999" stroke-width="0.7" marker-end="url(#arrowY)"></line>
+
+  
+
+  
+
+  
+  <rect x="487" y="380" width="11" height="11" fill="#2563eb" rx="1"></rect>
+  <text x="503" y="380" font-size="11" fill="#2563eb" font-weight="500">P6 Schur</text>
+
+  
+  <rect x="501" y="252" width="11" height="11" fill="#2563eb" rx="1"></rect>
+  <text x="482" y="248" font-size="11" fill="#2563eb" font-weight="500">P8 Lagrangian</text>
+
+  
+  <rect x="516" y="92" width="11" height="11" fill="#2563eb" rx="1"></rect>
+  <text x="532" y="107" font-size="11" fill="#2563eb" font-weight="500">P9 Tensor</text>
+
+  
+  <rect x="442" y="176" width="11" height="11" fill="#2563eb" rx="1"></rect>
+  <text x="458" y="173" font-size="11" fill="#2563eb" font-weight="500">P10 PCG</text>
+
+  
+
+  
+  <circle cx="350" cy="397" r="5.5" fill="#222"></circle>
+  <text x="361" y="408" font-size="11" fill="#222">P1 Φ⁴₃</text>
+
+  
+  <polygon points="227,138 234,151 220,151" fill="#c0392b"></polygon>
+  <text x="238" y="140" font-size="11" fill="#c0392b" font-weight="500">P2 Rankin-Selberg</text>
+
+  
+  <circle cx="198" cy="233" r="5.5" fill="#222"></circle>
+  <text x="209" y="228" font-size="11" fill="#222">P3 Markov</text>
+
+  
+  <circle cx="262" cy="305" r="5.5" fill="#222"></circle>
+  <text x="273" y="300" font-size="11" fill="#222">P4 Stam</text>
+
+  
+  <polygon points="164,338 171,351 157,351" fill="#c0392b"></polygon>
+  <text x="175" y="340" font-size="11" fill="#c0392b" font-weight="500">P5 OSlice</text>
+
+  
+  <circle cx="369" cy="277" r="5.5" fill="#222"></circle>
+  <text x="380" y="272" font-size="11" fill="#222">P7 QAcyclic</text>
+
+  
+  <rect x="92" y="500" width="10" height="10" fill="#2563eb" rx="1"></rect>
+  <text x="107" y="510" font-size="11" fill="#333">Accepted</text>
+  <circle cx="175" cy="505" r="5" fill="#222"></circle>
+  <text x="185" y="510" font-size="11" fill="#333">Partial</text>
+  <polygon points="241,500 247,510 235,510" fill="#c0392b"></polygon>
+  <text x="253" y="510" font-size="11" fill="#333">Rejected</text>
+</svg>

@@ -1,0 +1,121 @@
+<svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" font-family="&#39;Times New Roman&#39;, &#39;Liberation Serif&#39;, Georgia, serif" font-size="12">
+  <rect x="0" y="0" width="720" height="280" fill="white"></rect>
+
+  
+  <text x="360" y="22" text-anchor="middle" font-size="15" font-weight="bold">Problem-by-Problem Results Across Submissions</text>
+
+  
+  <text x="248" y="52" text-anchor="middle" font-size="11" font-weight="bold">P1</text>
+  <text x="293" y="52" text-anchor="middle" font-size="11" font-weight="bold">P2</text>
+  <text x="338" y="52" text-anchor="middle" font-size="11" font-weight="bold">P3</text>
+  <text x="383" y="52" text-anchor="middle" font-size="11" font-weight="bold">P4</text>
+  <text x="428" y="52" text-anchor="middle" font-size="11" font-weight="bold">P5</text>
+  <text x="473" y="52" text-anchor="middle" font-size="11" font-weight="bold">P6</text>
+  <text x="518" y="52" text-anchor="middle" font-size="11" font-weight="bold">P7</text>
+  <text x="563" y="52" text-anchor="middle" font-size="11" font-weight="bold">P8</text>
+  <text x="608" y="52" text-anchor="middle" font-size="11" font-weight="bold">P9</text>
+  <text x="653" y="52" text-anchor="middle" font-size="11" font-weight="bold">P10</text>
+
+  
+  <text x="218" y="87" text-anchor="end" font-size="12" font-weight="bold">This Work (GPT-5.2)</text>
+  <text x="218" y="127" text-anchor="end" font-size="12">OpenAI (internal)</text>
+  <text x="218" y="167" text-anchor="end" font-size="12">Aletheia (Gemini 3 DT)</text>
+  <text x="218" y="207" text-anchor="end" font-size="12" fill="#777">Benchmark Authors</text>
+
+  
+  <line x1="225" y1="58" x2="675" y2="58" stroke="#ddd" stroke-width="0.5"></line>
+  <line x1="225" y1="98" x2="675" y2="98" stroke="#ddd" stroke-width="0.5"></line>
+  <line x1="225" y1="138" x2="675" y2="138" stroke="#ddd" stroke-width="0.5"></line>
+  <line x1="225" y1="178" x2="675" y2="178" stroke="#ddd" stroke-width="0.5"></line>
+  <line x1="225" y1="218" x2="675" y2="218" stroke="#ddd" stroke-width="0.5"></line>
+
+  
+  
+  <circle cx="248" cy="83" r="8" fill="#f0c040"></circle>
+  
+  <polygon points="248,75 256,91 240,91" fill="#c0392b" transform="translate(45,0)"></polygon>
+  
+  <circle cx="338" cy="83" r="8" fill="#f0c040"></circle>
+  
+  <circle cx="383" cy="83" r="8" fill="#f0c040"></circle>
+  
+  <polygon points="428,75 436,91 420,91" fill="#c0392b"></polygon>
+  
+  <rect x="465" y="75" width="16" height="16" fill="#2563eb" rx="2"></rect>
+  
+  <circle cx="518" cy="83" r="8" fill="#f0c040"></circle>
+  
+  <rect x="555" y="75" width="16" height="16" fill="#2563eb" rx="2"></rect>
+  
+  <rect x="600" y="75" width="16" height="16" fill="#2563eb" rx="2"></rect>
+  
+  <rect x="645" y="75" width="16" height="16" fill="#2563eb" rx="2"></rect>
+
+  
+  
+  <line x1="243" y1="123" x2="253" y2="123" stroke="#bbb" stroke-width="2"></line>
+  
+  <line x1="288" y1="123" x2="298" y2="123" stroke="#bbb" stroke-width="2"></line>
+  
+  <line x1="333" y1="123" x2="343" y2="123" stroke="#bbb" stroke-width="2"></line>
+  
+  <rect x="375" y="115" width="16" height="16" fill="#2563eb" rx="2"></rect>
+  
+  <rect x="420" y="115" width="16" height="16" fill="#2563eb" rx="2"></rect>
+  
+  <rect x="465" y="115" width="16" height="16" fill="#2563eb" rx="2"></rect>
+  
+  <line x1="513" y1="123" x2="523" y2="123" stroke="#bbb" stroke-width="2"></line>
+  
+  <line x1="558" y1="123" x2="568" y2="123" stroke="#bbb" stroke-width="2"></line>
+  
+  <rect x="600" y="115" width="16" height="16" fill="#2563eb" rx="2"></rect>
+  
+  <rect x="645" y="115" width="16" height="16" fill="#2563eb" rx="2"></rect>
+
+  
+  
+  <line x1="243" y1="163" x2="253" y2="163" stroke="#bbb" stroke-width="2"></line>
+  
+  <rect x="285" y="155" width="16" height="16" fill="#2563eb" rx="2"></rect>
+  
+  <line x1="333" y1="163" x2="343" y2="163" stroke="#bbb" stroke-width="2"></line>
+  
+  <line x1="378" y1="163" x2="388" y2="163" stroke="#bbb" stroke-width="2"></line>
+  
+  <rect x="420" y="155" width="16" height="16" fill="#2563eb" rx="2"></rect>
+  
+  <line x1="468" y1="163" x2="478" y2="163" stroke="#bbb" stroke-width="2"></line>
+  
+  <rect x="510" y="155" width="16" height="16" fill="#2563eb" rx="2"></rect>
+  
+  <rect x="555" y="155" width="16" height="16" fill="#2563eb" rx="2" stroke="#f0c040" stroke-width="2"></rect>
+  
+  <rect x="600" y="155" width="16" height="16" fill="#2563eb" rx="2"></rect>
+  
+  <rect x="645" y="155" width="16" height="16" fill="#2563eb" rx="2"></rect>
+
+  
+  <line x1="243" y1="203" x2="253" y2="203" stroke="#bbb" stroke-width="2"></line>
+  <line x1="288" y1="203" x2="298" y2="203" stroke="#bbb" stroke-width="2"></line>
+  <line x1="333" y1="203" x2="343" y2="203" stroke="#bbb" stroke-width="2"></line>
+  <line x1="378" y1="203" x2="388" y2="203" stroke="#bbb" stroke-width="2"></line>
+  <line x1="423" y1="203" x2="433" y2="203" stroke="#bbb" stroke-width="2"></line>
+  <line x1="468" y1="203" x2="478" y2="203" stroke="#bbb" stroke-width="2"></line>
+  <line x1="513" y1="203" x2="523" y2="203" stroke="#bbb" stroke-width="2"></line>
+  <line x1="558" y1="203" x2="568" y2="203" stroke="#bbb" stroke-width="2"></line>
+  <rect x="600" y="195" width="16" height="16" fill="#2563eb" rx="2" opacity="0.5"></rect>
+  <rect x="645" y="195" width="16" height="16" fill="#2563eb" rx="2" opacity="0.5"></rect>
+
+  
+  <rect x="230" y="238" width="12" height="12" fill="#2563eb" rx="2"></rect>
+  <text x="247" y="249" font-size="10" fill="#333">Solved/Accepted</text>
+  <circle cx="326" cy="244" r="6" fill="#f0c040"></circle>
+  <text x="337" y="249" font-size="10" fill="#333">Partial</text>
+  <polygon points="392,238 398,250 386,250" fill="#c0392b"></polygon>
+  <text x="403" y="249" font-size="10" fill="#333">Rejected</text>
+  <line x1="448" y1="244" x2="460" y2="244" stroke="#bbb" stroke-width="2"></line>
+  <text x="465" y="249" font-size="10" fill="#333">No solution / Not attempted</text>
+  <rect x="590" y="238" width="12" height="12" fill="#2563eb" rx="2" stroke="#f0c040" stroke-width="2"></rect>
+  <text x="607" y="249" font-size="10" fill="#333">Contested (5/7 experts)</text>
+</svg>

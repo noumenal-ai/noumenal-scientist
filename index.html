@@ -1,1044 +1,809 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Noumenal: Building an AI Scientist</title>
-<style>
-  :root{
-    --paper:#FFFFFF; --ink:#000000; --ink-2:#1F1F1F; --muted:#444444;
-    --faint:#6b6b6b; --rule:#DDDDDD; --rule-2:#B8B8B8; --wash:#F4F4F4;
-    --fs-hero:clamp(34px,4vw,46px); --fs-xl:clamp(24px,2.4vw,32px);
-    --fs-lg:19px; --fs-md:16.5px; --fs-sm:13.5px; --fs-xs:12px;
-    --lh-tight:1.16; --lh-body:1.55; --maxw:980px;
-    --gutter:clamp(20px,5vw,48px);
-    --s3:16px; --s4:24px; --s5:40px; --s6:64px;
-    --dur:240ms; --ease:cubic-bezier(.2,0,0,1);
-  }
-  *{box-sizing:border-box; border-radius:0 !important;}
-  html{background:var(--paper);}
-  body{
-    margin:0; color:var(--ink); background:var(--paper);
-    font:var(--fs-md)/var(--lh-body) "Times New Roman",Times,Georgia,serif;
-    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-  }
-  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 var(--gutter);}
-  a{color:var(--ink); text-decoration:none;}
-  a:hover{text-decoration:underline;}
-
-  /* Top bar */
-  nav.top{position:sticky; top:0; z-index:50; background:rgba(255,255,255,.96);
-    border-bottom:1px solid var(--rule); backdrop-filter:saturate(120%) blur(2px);}
-  nav.top .wrap{height:60px; display:flex; align-items:center; justify-content:space-between;}
-  nav.top .brand{font-weight:700; font-size:18px; letter-spacing:-0.01em;}
-  nav.top .links{display:flex; gap:26px; font-size:var(--fs-sm); text-transform:uppercase; letter-spacing:.06em; color:var(--muted);}
-  nav.top .links a:hover{color:var(--ink);}
-
-  /* Hero */
-  header.hero{padding:var(--s6) 0 var(--s5);}
-  header.hero h1{font-size:var(--fs-hero); line-height:var(--lh-tight); font-weight:600; margin:0 0 14px; letter-spacing:-0.015em;}
-  header.hero .tagline{font-size:var(--fs-xl); line-height:var(--lh-tight); color:var(--muted); font-weight:400; margin:0 0 var(--s4); max-width:30ch;}
-  header.hero .deck{font-size:var(--fs-lg); max-width:62ch; color:var(--ink-2);}
-  header.hero .deck p{margin:0 0 10px;}
-
-  /* Sections */
-  section.s{padding:var(--s6) 0; border-top:1px solid var(--rule);}
-  section.s .kicker{font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:.14em; color:var(--faint); margin:0 0 8px;}
-  section.s h2{font-size:var(--fs-xl); line-height:var(--lh-tight); font-weight:600; margin:0 0 6px; letter-spacing:-0.01em;}
-  section.s h2 .n{color:var(--faint); font-weight:400; margin-right:.5ch;}
-  section.s .sub{font-size:var(--fs-lg); color:var(--muted); margin:0 0 var(--s4); max-width:64ch;}
-  section.s h3{font-size:var(--fs-lg); font-weight:600; margin:var(--s5) 0 8px;}
-  p{margin:0 0 14px; max-width:70ch;}
-  .lead{font-size:var(--fs-lg); max-width:66ch;}
-  .claim{font-weight:600;}
-
-  ul.b{margin:0 0 16px; padding-left:20px;} ul.b li{margin:0 0 6px; max-width:68ch;}
-  ul.b li::marker{color:var(--ink);}
-
-  /* Highlight cards: important / interesting / original */
-  .grid{display:grid; gap:18px; margin:var(--s4) 0;}
-  .grid.c3{grid-template-columns:repeat(3,1fr);}
-  .grid.c2{grid-template-columns:repeat(2,1fr);}
-  @media(max-width:760px){.grid.c3,.grid.c2{grid-template-columns:1fr;}}
-  .card{border:1px solid var(--rule); padding:18px 18px 16px; background:var(--paper);}
-  .card .lbl{font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:.12em; color:var(--faint); display:block; margin-bottom:8px; border-bottom:1px solid var(--rule); padding-bottom:6px;}
-  .card h4{font-size:16.5px; font-weight:600; margin:0 0 6px;}
-  .card p{font-size:var(--fs-sm); color:var(--ink-2); margin:0 0 8px;}
-
-  /* Witness block (proof or diagram) */
-  figure.w{margin:var(--s4) 0; border:1px solid var(--rule); background:var(--paper);}
-  figure.w .head{display:flex; justify-content:space-between; align-items:baseline; gap:12px;
-    border-bottom:1px solid var(--rule); padding:8px 14px; font-size:var(--fs-xs);
-    text-transform:uppercase; letter-spacing:.1em; color:var(--faint);}
-  figure.w .body{padding:18px;}
-  figure.w figcaption{padding:10px 14px; border-top:1px solid var(--rule); font-size:var(--fs-sm); color:var(--muted); font-style:italic;}
-  .src{font-style:normal; color:var(--faint); font-size:var(--fs-xs); letter-spacing:.02em; word-break:break-all;}
-  .src code{font-style:normal;}
-
-  /* Lean / code proof witness */
-  pre.lean{margin:0; padding:14px 16px; background:var(--wash); border-left:2px solid var(--ink);
-    overflow-x:auto; font:13px/1.5 "SFMono-Regular",ui-monospace,Menlo,Consolas,monospace; color:var(--ink-2);}
-  code.k{font:13px/1.4 "SFMono-Regular",ui-monospace,Menlo,Consolas,monospace; background:var(--wash); padding:1px 5px;}
-  .eq{font:14px/1.5 "SFMono-Regular",ui-monospace,Menlo,Consolas,monospace; color:var(--ink-2);}
-
-  /* Embedded corpus figure (real research figure, rendered monochrome) */
-  img.corpus-fig{display:block; width:100%; height:auto; max-height:560px; object-fit:contain;
-    background:var(--paper); filter:grayscale(1) contrast(1.02); opacity:.92; transition:opacity var(--dur) var(--ease);}
-  figure.w:hover img.corpus-fig{opacity:1;}
-
-  /* Inline SVG diagram (monochrome, hover-animated) */
-  svg.diagram{display:block; width:100%; height:auto; color:var(--ink);}
-  svg.diagram text{font-family:"Times New Roman",Times,serif; font-size:12px; fill:var(--ink-2);}
-  svg.diagram .node{fill:none; stroke:var(--ink); stroke-width:1;}
-  svg.diagram .node.em{stroke-width:2;}
-  svg.diagram .edge{fill:none; stroke:var(--ink); stroke-width:1;}
-  svg.diagram .group{fill:none; stroke:var(--rule-2); stroke-width:1; stroke-dasharray:4 6;}
-  svg.diagram .flow{stroke-dasharray:5 5; stroke-dashoffset:0;}
-  figure.w:hover svg.diagram .flow{animation:dash 1.4s linear infinite;}
-  @keyframes dash{to{stroke-dashoffset:-20;}}
-  .hint{font-size:var(--fs-xs); color:var(--faint); letter-spacing:.04em;}
-
-  /* Project cards (Ayush-style catalog: real repos, real status, real urls) */
-  .proj-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin:var(--s4) 0;}
-  @media(max-width:760px){.proj-grid{grid-template-columns:1fr;}}
-  .proj-card{display:flex; flex-direction:column; gap:8px; padding:14px 16px;
-    border:1px solid var(--rule); background:var(--paper); color:var(--ink);
-    text-decoration:none !important; transition:border-color var(--dur) var(--ease);}
-  a.proj-card:hover{border-color:var(--ink);}
-  .proj-card.no-link{cursor:default;}
-  .proj-head{display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
-  .proj-title{font-weight:600; font-size:var(--fs-md);}
-  .proj-blurb{margin:0; font-size:var(--fs-sm); color:var(--ink-2); line-height:1.5;}
-  .proj-link{font-size:var(--fs-xs); color:var(--faint); letter-spacing:.02em;
-    font-family:"SFMono-Regular",ui-monospace,Menlo,Consolas,monospace; word-break:break-all;}
-  a.proj-card:hover .proj-link{color:var(--ink);}
-
-  /* Featured band (top-of-page strip, Ayush's catalog) */
-  section.s#featured{padding-top:var(--s5);}
-  section.s#featured .proj-grid{grid-template-columns:repeat(3,1fr); gap:12px;}
-  @media(max-width:980px){section.s#featured .proj-grid{grid-template-columns:repeat(2,1fr);}}
-  @media(max-width:600px){section.s#featured .proj-grid{grid-template-columns:1fr;}}
-
-  /* Monochrome status tags */
-  .tag{display:inline-block; font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:.08em;
-    border:1px solid var(--ink); padding:1px 7px; line-height:1.5; vertical-align:middle;}
-  .tag.fill{background:var(--ink); color:var(--paper);}
-
-  /* Academic table */
-  table{width:100%; border-collapse:collapse; margin:var(--s4) 0; font-size:var(--fs-sm);}
-  th,td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--rule); vertical-align:top;}
-  th{font-weight:600; border-bottom:1px solid var(--rule-2);}
-  td.m,th.m{font-family:"SFMono-Regular",ui-monospace,Menlo,monospace; font-size:12.5px;}
-
-  /* Frontier (structure of uncertainty) */
-  .frontier{border:1px solid var(--ink); display:grid; grid-template-columns:1fr 1fr; margin:var(--s4) 0;}
-  .frontier .q{padding:18px; border:0;}
-  .frontier .q + .q{border-left:1px solid var(--rule);}
-  .frontier .q:nth-child(3),.frontier .q:nth-child(4){border-top:1px solid var(--rule);}
-  .frontier .q .qh{font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:.1em; color:var(--faint); margin-bottom:6px;}
-  .frontier .q .qt{font-weight:600; margin-bottom:4px;}
-
-  footer{border-top:1px solid var(--rule); padding:var(--s5) 0 var(--s6); margin-top:var(--s6); font-size:var(--fs-sm); color:var(--muted);}
-  footer .wrap{display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap;}
-  footer a:hover{color:var(--ink);}
-
-  @media print{nav.top{position:static;} section.s{break-inside:avoid;} figure.w:hover svg .flow{animation:none;}}
-  @media(prefers-reduced-motion:reduce){figure.w:hover svg.diagram .flow{animation:none;}}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
 </head>
 <body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  html { scroll-behavior:smooth; }
+  body { margin:0; background:#e9e6e0; }
+  @keyframes nmRise { from{ transform:translateY(18px);} to{ transform:translateY(0);} }
+  @keyframes nmDraw { 0%{ stroke-dashoffset:60; opacity:.15;} 45%{opacity:.9;} 100%{ stroke-dashoffset:0; opacity:.15;} }
+  @keyframes nmFlow { to{ stroke-dashoffset:-28; } }
+  @keyframes nmSpinY { from{ transform:rotateY(0deg);} to{ transform:rotateY(360deg);} }
+  @keyframes nmWobX { 0%,100%{ transform:rotateX(-27deg);} 50%{ transform:rotateX(4deg);} }
+  @keyframes nmGap { 0%,100%{ opacity:.10;} 50%{ opacity:.5;} }
+  @keyframes nmFieldDrift { to{ stroke-dashoffset:-40; } }
+  @media (prefers-reduced-motion: reduce){ *{ animation:none !important; } html{scroll-behavior:auto;} }
+</style>
+</helmet>
 
-<nav class="top"><div class="wrap">
-  <span class="brand">Noumenal</span>
-  <span class="links">
-    <a href="#substrate">Substrate</a>
-    <a href="#formalization">Formalization</a>
-    <a href="#measurement">Measurement</a>
-    <a href="#agents">Agents</a>
-    <a href="#reasoning">Reasoning</a>
-    <a href="#knowledge">Knowledge</a>
-  </span>
-</div></nav>
+<div style="background:#e9e6e0; color:#16120b; font-family:'Spectral',Georgia,serif; -webkit-font-smoothing:antialiased; box-sizing:border-box; overflow-x:hidden;">
 
-<main class="wrap">
-
-<header class="hero">
-  <h1>Noumenal</h1>
-  <p class="tagline">Building an AI scientist.</p>
-  <div class="deck">
-    <p>An automated researcher needs six things: a substrate to represent a world model, a way to formalize that substrate into a testable model, a measure of how much the model is believed, an agent loop that learns and intervenes, an inference engine that derives the certain and generalizes the uncertain, and a verified body of knowledge laid over a map of the open frontier.</p>
-    <p>Each ingredient rests on the one before it, and all of them rest on a structure of uncertainty.</p>
-    <p>What follows are our hypotheses about that architecture. We are verifying them one ingredient at a time, and every claim on this page carries a machine-checked proof or a figure from the work.</p>
+<!-- ░░ TOP CHROME ░░ -->
+<div style="position:sticky; top:0; z-index:60; background:rgba(233,230,224,0.9); backdrop-filter:saturate(120%) blur(6px); border-bottom:1px solid #cbc3b0;">
+  <div style="max-width:1120px; margin:0 auto; padding:13px clamp(20px,4vw,48px); display:flex; align-items:center; justify-content:space-between; box-sizing:border-box;">
+    <a href="#top" style="display:flex; align-items:center; gap:11px; text-decoration:none; color:#16120b;">
+      <span style="font-size:18px; font-weight:600; letter-spacing:-0.01em;">Noumenal</span>
+      <span style="font-family:'Spline Sans Mono',monospace; font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:#8a8273; padding-left:8px; border-left:1px solid #cbc3b0;">Internal atlas</span>
+    </a>
+    <button onClick="{{ toggleJson }}" style="font-family:'Spline Sans Mono',monospace; font-size:11px; letter-spacing:0.04em; color:#16120b; background:none; border:1px solid #b9b09a; border-radius:2px; padding:6px 11px; cursor:pointer; display:flex; align-items:center; gap:8px;">
+      <span style="width:6px; height:6px; border-radius:50%; background:#2f6b4a; display:inline-block;"></span>
+      GET · application/json
+    </button>
   </div>
-  <p class="lead"><a href="#featured">Projects</a> &middot; <a href="#substrate">Substrate</a> &middot; <a href="#formalization">Formalization</a> &middot; <a href="#measurement">Measurement</a> &middot; <a href="#agents">Agents</a> &middot; <a href="#reasoning">Reasoning</a> &middot; <a href="#knowledge">Knowledge</a></p>
-</header>
+</div>
 
-<section class="s" id="featured">
-  <div class="kicker">Featured projects</div>
-  <h2>The lineup</h2>
-  <p class="sub">Nine projects, one stack.</p>
-  <p class="lead">These are the projects the page maps to ingredients below; each card links to its repository where one exists.</p>
+<!-- ░░ HERO ░░ -->
+<section id="top" style="position:relative; background-color:#0d0a07; color:#ece2cf; padding:clamp(56px,8vh,96px) clamp(20px,4vw,48px) clamp(40px,6vh,72px); box-sizing:border-box; overflow:hidden;">
+  <div style="position:absolute; inset:0; background:radial-gradient(ellipse 80% 70% at 50% 34%, #221c14 0%, #130f0a 58%, #070504 100%);"></div>
 
-  <div class="proj-grid">
+  <div style="position:relative; max-width:1120px; margin:0 auto;">
+    <div style="display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,0.85fr); gap:clamp(32px,5vw,72px); align-items:start;">
 
-    <a class="proj-card" href="https://github.com/ayushmi/agentstate" target="_blank" rel="noopener" title="AgentState">
-      <div class="proj-head"><span class="proj-title">AgentState</span><span class="tag">open</span></div>
-      <p class="proj-blurb">Rust/Go agent state store. Hash-chained (blake3), four verification layers, claim checking, multi-language SDKs.</p>
-      <span class="proj-link">github.com/ayushmi/agentstate</span>
-    </a>
+      <div style="animation:nmRise 1s ease both;">
+        <div style="font-family:'Spline Sans Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#b89a5e; margin-bottom:22px;">Noumenal Research · the architecture of an AI scientist</div>
+        <h1 style="font-weight:400; font-size:clamp(40px,5.4vw,72px); line-height:1.02; letter-spacing:-0.02em; margin:0; color:#f6ecd6;">
+          A scientist that<br><span style="font-style:italic; font-weight:500;">shows its work.</span>
+        </h1>
+        <p style="font-size:clamp(17px,1.6vw,20px); line-height:1.62; color:#cdc2a9; max-width:46ch; margin:26px 0 0;">
+          Every result here is a <span style="color:#9fb0e8;">goal</span> and the <span style="color:#caa86e;">witness</span> offered for it — a proof, a figure, or an executed experiment — scored by four gates and left exactly as open as it really is. Not a catalog of answers. The process of making them, made visible.
+        </p>
 
-    <a class="proj-card" href="https://github.com/noumenal-ai/design-lab" target="_blank" rel="noopener" title="Design Lab">
-      <div class="proj-head"><span class="proj-title">Design Lab</span><span class="tag fill">closed</span></div>
-      <p class="proj-blurb">Monorepo unifying six verified Lean 4 ML libraries: learning theory, measurements, transformers, statistics, RL, neural networks, causality.</p>
-      <span class="proj-link">github.com/noumenal-ai/design-lab</span>
-    </a>
+        <div style="margin:34px 0 0; padding:20px 22px; border:1px solid #3a3022; background:rgba(20,15,9,0.5); border-radius:2px; max-width:48ch;">
+          <div style="font-family:'Spline Sans Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:#8a7551; margin-bottom:12px;">Score · after Sol LeWitt</div>
+          <div style="font-family:'Spline Sans Mono',monospace; font-size:12.5px; line-height:1.95; color:#bcae90;">
+            Draw a room that is also a diagram.<br>
+            Place a cube missing one edge.<br>
+            Set a mirror so the cube reads whole — from one vantage.<br>
+            On the wall, write the rule that generates all such cubes.<br>
+            <span style="color:#caa86e;">Leave one line unfinished.</span>
+          </div>
+        </div>
+      </div>
 
-    <a class="proj-card" href="https://github.com/noumenal-ai/design-lab" target="_blank" rel="noopener" title="Causality DAG">
-      <div class="proj-head"><span class="proj-title">Causality DAG</span><span class="tag fill">closed</span></div>
-      <p class="proj-blurb">140-node, 151-edge audited inheritance graph of Pearl 2009 plus ten post-2009 extensions, indexable inside Design Lab.</p>
-      <span class="proj-link">github.com/noumenal-ai/design-lab</span>
-    </a>
-
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/tetrad-audit-code" target="_blank" rel="noopener" title="Discovery Tetrad">
-      <div class="proj-head"><span class="proj-title">Process Audit</span><span class="tag">open</span></div>
-      <p class="proj-blurb">A four-gate, two-layer audit of the discovery process: locked rubric, harness, datasets (formal learning theory, statistical learning theory, first-proof audits).</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/tetrad-audit-code</span>
-    </a>
-
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/shape-of-uncertainty" target="_blank" rel="noopener" title="Belief geometry (GEO1)">
-      <div class="proj-head"><span class="proj-title">Belief geometry (GEO1)</span><span class="tag fill">closed</span></div>
-      <p class="proj-blurb">Belief geometry as a native epistemic state space: Cuzzolin-style readouts, frame refinement, Choquet bridge for continuous evidence.</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/shape-of-uncertainty</span>
-    </a>
-
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/audit-compression-progress" target="_blank" rel="noopener" title="Compression Progress">
-      <div class="proj-head"><span class="proj-title">Compression Progress</span><span class="tag">open</span></div>
-      <p class="proj-blurb">Signed compression progress on a sealed audit, proved Goodhart-resistant; pure-Mathlib Lean core plus continual-learning experiments.</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/audit-compression-progress</span>
-    </a>
-
-    <div class="proj-card no-link">
-      <div class="proj-head"><span class="proj-title">Conformal Counterfactuals</span><span class="tag">preprint</span></div>
-      <p class="proj-blurb">Formalization spec and Lean 4 development plan for a conformal world-model wrapper; four-claim package (theorem, wrapper, Atari-100k, DMControl).</p>
+      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:300px; gap:14px; animation:nmRise 1.2s ease .15s both;">
+        {{ cubeInner }}
+        <div style="text-align:center; max-width:340px;">
+          <div style="font-family:'Spline Sans Mono',monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:#8a7551;">Variations of Incomplete Open Cubes</div>
+          <div style="font-family:'Spline Sans Mono',monospace; font-size:13px; color:#f6ecd6; margin-top:9px; line-height:1.5;">{ S ⊊ E₁₂ : |S| ≥ 3, connected, non-coplanar } ∕ 𝒪ₕ&nbsp;=&nbsp;122</div>
+          <div style="font-size:11.5px; color:#9a8d72; margin-top:8px; line-height:1.45;">one compressed form — every cube it will ever show. After LeWitt, 1974.</div>
+        </div>
+      </div>
     </div>
 
-    <div class="proj-card no-link">
-      <div class="proj-head"><span class="proj-title">PAC-Bayes Self-Modifying</span><span class="tag">preprint</span></div>
-      <p class="proj-blurb">PAC-Bayes bound and anytime-certificate format for self-improving agents, demonstrated on a continually self-improving language agent.</p>
-    </div>
+    <!-- ░ THE FRAMEWORK ░ -->
+    <div style="margin-top:clamp(36px,6vh,72px); position:relative; animation:nmRise 1.3s ease .3s both;">
+      <div style="font-family:'Spline Sans Mono',monospace; font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:#8a7551; margin-bottom:6px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+        <span>The framework · four epistemological objects, three relations</span>
+        <span style="color:#7a6a4a;">all of it in a substrate of ignorance</span>
+      </div>
 
-    <div class="proj-card no-link">
-      <div class="proj-head"><span class="proj-title">Causal world model</span><span class="tag">preprint</span></div>
-      <p class="proj-blurb">Mechanism inference via kernel/sigma-algebra duality, empirically validated against industrial datasets.</p>
-    </div>
+      <div style="position:relative; max-width:940px; margin:0 auto;">
+        <svg viewBox="0 0 920 470" style="width:100%; height:auto; display:block; overflow:visible;" aria-hidden="true">
+          <!-- the field of ignorance / measurement -->
+          <ellipse cx="460" cy="238" rx="452" ry="218" fill="none" stroke="#46391f" stroke-width="1" stroke-dasharray="2 8" style="animation:nmFieldDrift 7s linear infinite;"></ellipse>
+          <!-- the two relation-triangles -->
+          <polygon points="150,235 460,80 460,395" fill="#b06a12" fill-opacity="0.05"></polygon>
+          <polygon points="770,235 460,80 460,395" fill="#3b4a93" fill-opacity="0.06"></polygon>
+          <!-- structural sides -->
+          <path d="M150,235 L460,80 L770,235 L460,395 Z" fill="none" stroke="#6a5836" stroke-width="1.2"></path>
+          <!-- the shared reasoning/experiment edge -->
+          <line x1="460" y1="80" x2="460" y2="395" stroke="#8a7551" stroke-width="1.3" stroke-dasharray="2 5"></line>
+          <!-- the formalization axis — the most fundamental choice, in stark contrast -->
+          <line x1="150" y1="235" x2="770" y2="235" stroke="#f6ecd6" stroke-width="2.8"></line>
+          <line x1="150" y1="235" x2="770" y2="235" stroke="#f6ecd6" stroke-width="7" opacity="0.12"></line>
+          <!-- a faint signal moving through the relations -->
+          <path d="M150,235 L460,80 L770,235 L460,395 Z" fill="none" stroke="#caa86e" stroke-width="1" stroke-dasharray="4 18" opacity="0.5" style="animation:nmFlow 1.9s linear infinite;"></path>
+          <!-- substrate connector (down to the Substrate annotation) -->
+          <line x1="758" y1="248" x2="764" y2="312" stroke="#5a4a2e" stroke-width="1" stroke-dasharray="2 4"></line>
+        </svg>
 
-  </div>
-</section>
+        <!-- ── object nodes ── -->
+        <div style="position:absolute; left:16.3%; top:50%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:5px; width:104px; color:#b9a988;">
+          <svg viewBox="0 0 60 60" style="width:28px; height:28px; overflow:visible;"><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.9"><line x1="15" y1="24" x2="36" y2="24"></line><line x1="36" y1="24" x2="36" y2="48"></line><line x1="36" y1="48" x2="15" y2="48"></line><line x1="15" y1="48" x2="15" y2="24"></line><line x1="25" y1="12" x2="46" y2="12"></line><line x1="46" y1="12" x2="46" y2="36"></line><line x1="46" y1="36" x2="25" y2="36"></line><line x1="25" y1="36" x2="25" y2="12"></line><line x1="15" y1="24" x2="25" y2="12"></line><line x1="36" y1="24" x2="46" y2="12"></line><line x1="36" y1="48" x2="46" y2="36"></line></g></svg>
+          <span style="font-size:16px; font-weight:500; letter-spacing:-0.01em; color:#e7dcc4;">Phenomena</span>
+          <span style="font-family:'Spline Sans Mono',monospace; font-size:9px; color:#8a7551;">the given</span>
+        </div>
 
-<section class="s" id="substrate">
-  <p class="kicker">Ingredient one</p>
-  <h2><span class="n">1</span> Substrate</h2>
-  <p class="sub">The representational medium an automated researcher's world-model lives in.</p>
-  <p class="lead">A hypothesis has to be made of something. We work in three media: symbolic objects in a formal language, neural function classes (notably transformers), and geometric spaces with inner products. Each medium carries a machine-checked anchor so that downstream claims stand on a definite footing.</p>
+        <div style="position:absolute; left:83.7%; top:50%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:5px; width:104px; color:#b9a988;">
+          <svg viewBox="0 0 60 60" style="width:28px; height:28px; overflow:visible;"><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.9"><line x1="15" y1="24" x2="36" y2="24"></line><line x1="36" y1="24" x2="36" y2="48"></line><line x1="36" y1="48" x2="15" y2="48"></line><line x1="15" y1="48" x2="15" y2="24"></line><line x1="25" y1="12" x2="46" y2="12"></line><line x1="46" y1="12" x2="46" y2="36"></line><line x1="46" y1="36" x2="25" y2="36"></line><line x1="25" y1="36" x2="25" y2="12"></line><line x1="15" y1="24" x2="25" y2="12"></line><line x1="36" y1="24" x2="46" y2="12"></line><line x1="36" y1="48" x2="46" y2="36"></line></g></svg>
+          <span style="font-size:16px; font-weight:500; letter-spacing:-0.01em; color:#e7dcc4;">Noumena</span>
+          <span style="font-family:'Spline Sans Mono',monospace; font-size:9px; color:#8a7551;">theory, not model</span>
+        </div>
 
-  <div class="grid c3">
-    <div class="card">
-      <span class="lbl">Important</span>
-      <h4>Geometric medium: kernel mean embedding reproduces integration.</h4>
-      <p class="claim">For every continuous test vector, the inner product against the mean embedding equals the integral against the measure.</p>
-      <p>This is the foundational property that lets distributions be treated as points in a Hilbert space.</p>
-    </div>
-    <div class="card">
-      <span class="lbl">Interesting</span>
-      <h4>Neural medium: a generalization certificate that survives floating-point execution.</h4>
-      <p class="claim">An end-to-end Dudley-type bound for a transformer in IEEE binary32, with the executed numerics inside the theorem.</p>
-      <p>The bound applies to the model that actually runs, including its rounding behavior.</p>
-    </div>
-    <div class="card">
-      <span class="lbl">Original</span>
-      <h4>Neural medium: episode-frame leakage has an intrinsic floor.</h4>
-      <p class="claim">The risk gap between frame-level and episode-level splits equals a conditional variance functional of the two sigma-algebras.</p>
-      <p>So a leak in the data partition cannot be papered over by adding more frames inside the same episodes.</p>
-    </div>
-  </div>
+        <a href="#agents" style="position:absolute; left:50%; top:17%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:5px; width:104px; text-decoration:none; color:#e7dcc4;" style-hover="color:#ffffff;">
+          <svg viewBox="0 0 60 60" style="width:28px; height:28px; overflow:visible;"><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.92"><line x1="15" y1="24" x2="36" y2="24"></line><line x1="36" y1="24" x2="36" y2="48"></line><line x1="36" y1="48" x2="15" y2="48"></line><line x1="15" y1="48" x2="15" y2="24"></line><line x1="25" y1="12" x2="46" y2="12"></line><line x1="46" y1="12" x2="46" y2="36"></line><line x1="46" y1="36" x2="25" y2="36"></line><line x1="25" y1="36" x2="25" y2="12"></line><line x1="15" y1="24" x2="25" y2="12"></line><line x1="36" y1="24" x2="46" y2="12"></line><line x1="36" y1="48" x2="46" y2="36"></line></g></svg>
+          <span style="font-size:16px; font-weight:500; letter-spacing:-0.01em;">Agents</span>
+          <span style="font-family:'Spline Sans Mono',monospace; font-size:9px; color:#8a7551;">the actor</span>
+        </a>
 
-  <figure class="w">
-    <div class="head"><span>Proof witness: geometric substrate</span><span>RKHS / kernel mean embedding</span></div>
-    <div class="body">
-<pre class="lean">theorem kernelMeanEmbedding_reproducing
-    (P : Measure X) [IsFiniteMeasure P]
-    (hcont : Continuous (fun x =&gt; kerFun H x (1 : &#8477;)))
-    (f : H) :
-    @inner &#8477; H _ (kernelMeanEmbedding (H := H) P) f = &#8747; x, f x &#8706;P</pre>
-    </div>
-    <figcaption>Reproducing property of the kernel mean embedding: integration against a measure becomes an inner product in the RKHS. This anchors the kernel/geometric substrate used throughout the rest of the architecture.</figcaption>
-    <div class="src">source: ZPM/Analysis/InnerProductSpace/KernelMeanEmbedding/Reproducing.lean :: kernelMeanEmbedding_reproducing</div>
-  </figure>
+        <a href="#knowledge" style="position:absolute; left:50%; top:84%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:5px; width:148px; text-decoration:none; color:#e7dcc4;" style-hover="color:#ffffff;">
+          <svg viewBox="0 0 60 60" style="width:28px; height:28px; overflow:visible;"><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.92"><line x1="15" y1="24" x2="36" y2="24"></line><line x1="36" y1="24" x2="36" y2="48"></line><line x1="36" y1="48" x2="15" y2="48"></line><line x1="15" y1="48" x2="15" y2="24"></line><line x1="25" y1="12" x2="46" y2="12"></line><line x1="46" y1="12" x2="46" y2="36"></line><line x1="46" y1="36" x2="25" y2="36"></line><line x1="25" y1="36" x2="25" y2="12"></line><line x1="15" y1="24" x2="25" y2="12"></line><line x1="36" y1="24" x2="46" y2="12"></line><line x1="36" y1="48" x2="46" y2="36"></line></g></svg>
+          <span style="font-size:16px; font-weight:500; letter-spacing:-0.01em;">Knowledge</span>
+          <span style="font-family:'Spline Sans Mono',monospace; font-size:9px; color:#8a7551; text-align:center;">fragile · the consequence</span>
+        </a>
 
-  <figure class="w">
-    <div class="head"><span>Proof witness: neural substrate</span><span>Transformer, IEEE binary32</span></div>
-    <div class="body">
-<pre class="lean">theorem certified_executed_generalization_dudley [IsProbabilityMeasure P] {d : &#8469;} [Nonempty (Fin d)]
-    (hm : 0 &lt; m) {R : &#8477;} (hR : 0 &#8804; R) (F : ParamSpace d &#8594; V &#8594; &#8477;) {b : &#8477;} (hb : 0 &lt; b)</pre>
-    </div>
-    <figcaption>End-to-end Dudley-style generalization bound for a transformer evaluated in IEEE binary32. The executed numerics are inside the statement, so the certificate refers to the running model itself.</figcaption>
-    <div class="src">source: TLT_Proofs/Bridge/Certificate/CertifiedTransformerBound.lean :: certified_executed_generalization_dudley</div>
-  </figure>
+        <!-- ── relations ── -->
+        <!-- Learning edge · Phenomena → Agents -->
+        <div style="position:absolute; left:33.2%; top:33.5%; transform:translate(-50%,-50%); text-align:center; width:120px; color:#cda05a;">
+          <div style="font-family:'Spline Sans Mono',monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase;">Learning</div>
+          <div style="font-family:'Spline Sans Mono',monospace; font-size:8.5px; color:#8a7551; margin-top:2px;">Phenomena → Agents</div>
+        </div>
 
-  <figure class="w">
-    <div class="head"><span>Proof witness: neural substrate</span><span>Episode-frame partition gap</span></div>
-    <div class="body">
-<pre class="lean">theorem bayesRisk_gap [IsProbabilityMeasure &#956;]
-    (hm&#8321;&#8322; : m&#8321; &#8804; m&#8322;) (hm&#8322; : m&#8322; &#8804; m&#8320;) (hX : MemLp X 2 &#956;) :
-    bayesRisk m&#8321; X &#956; - bayesRisk m&#8322; X &#956; = &#956;[Var[&#956;[X | m&#8322;]; &#956; | m&#8321;]]</pre>
-    </div>
-    <figcaption>The difference in Bayes risk between two sub-sigma-algebras equals an explained-variance functional. Applied to frame-level versus episode-level partitions of a robotics dataset, this turns the leakage gap into a measurable property of the partition itself.</figcaption>
-    <div class="src">source: projects/lewm/lean4/LewmValidity.lean :: bayesRisk_gap</div>
-  </figure>
+        <!-- Imagination edge · Agents → Noumena -->
+        <div style="position:absolute; left:66.8%; top:33.5%; transform:translate(-50%,-50%); text-align:center; width:140px; color:#9fb0e8;">
+          <div style="font-family:'Spline Sans Mono',monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase;">Imagination</div>
+          <div style="font-family:'Spline Sans Mono',monospace; font-size:8.5px; color:#8a7551; margin-top:2px; line-height:1.3;">Agents → Noumena<br>compression as proxy</div>
+        </div>
 
-  <figure class="w">
-    <div class="head"><span>Proof witness: neural substrate</span><span>Frame-split impossibility</span></div>
-    <div class="body">
-<pre class="lean">theorem frame_split_inconsistent [IsProbabilityMeasure &#956;]
-    (hX : MemLp X 2 &#956;) (hXm : StronglyMeasurable X) :
-    bayesRisk (&#8869; : MeasurableSpace &#937;) X &#956; - bayesRisk m&#8320; X &#956; = variance X &#956;</pre>
-    </div>
-    <figcaption>The risk gap between an unsplit dataset and the episode-level partition collapses to the variance of X. Frame-level splits cannot close this gap from inside the episode; the effective sample size is the number of groups.</figcaption>
-    <div class="src">source: projects/lewm/lean4/LewmValidity.lean :: frame_split_inconsistent</div>
-  </figure>
+        <!-- Formalization · the fundamental choice, centered on the Phenomena↔Noumena axis -->
+        <a href="#formalization" style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); text-align:center; width:214px; text-decoration:none; color:#16120b;" style-hover="color:#16120b;">
+          <div style="background:#f6ecd6; border-radius:2px; padding:8px 14px; box-shadow:0 0 0 5px rgba(13,10,7,0.92), 0 0 26px rgba(246,236,214,0.28);">
+            <div style="font-family:'Spline Sans Mono',monospace; font-size:12px; letter-spacing:0.16em; text-transform:uppercase; font-weight:600; color:#16120b;">Formalization</div>
+            <div style="font-family:'Spline Sans Mono',monospace; font-size:9px; color:#6a5836; margin-top:3px; line-height:1.35;">Causality → theory · Statistics → models</div>
+          </div>
+        </a>
 
-  <figure class="w">
-    <div class="head"><span>Proof witness: neural substrate</span><span>Random-effects variance decomposition</span></div>
-    <div class="body">
-<pre class="lean">theorem variance_grandMean_eq :
-    variance M.grandMean M.&#956; = M.&#963;b ^ 2 / M.G + M.&#963;w ^ 2 / (M.G * M.m)</pre>
-    </div>
-    <figcaption>Exact one-way random-effects decomposition for the grand mean across G groups of m frames. The between-group term scales with G alone, confirming that the effective sample size is the group count.</figcaption>
-    <div class="src">source: projects/lewm/lean4/LewmValidity.lean :: variance_grandMean_eq</div>
-  </figure>
+        <div style="position:absolute; left:36.5%; top:70%; transform:translate(-50%,-50%); text-align:center; width:160px; color:#d8a45f;">
+          <div style="font-family:'Spline Sans Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase;">Experiments</div>
+          <div style="font-family:'Spline Sans Mono',monospace; font-size:9px; color:#8a7551; margin-top:2px; line-height:1.3;">Phenomena · Agents · Knowledge</div>
+        </div>
 
-  <figure class="w">
-    <div class="head"><span>Diagram witness: symbolic substrate</span><span>Five-way VC equivalence</span></div>
-    <div class="body">
-      <img class="corpus-fig" src="assets/9f51c5f1_hero.svg" alt="Pentagon diagram of the five-way fundamental theorem equivalence: PAC learnable, finite VC dimension, vanishing Rademacher complexity, growth function bounded by Sauer-Shelah, and a compression scheme. All ten edges are marked proved.">
-    </div>
-    <figcaption>The symbolic substrate carries the fundamental theorem of statistical learning as a sealed five-way equivalence. Every vertex of the pentagon is connected to every other by a proved edge in the kernel.</figcaption>
-    <div class="src">source: Projects/formal-learning-theory-kernel/premise/hero.svg</div>
-  </figure>
+        <a href="#reasoning" style="position:absolute; left:63.5%; top:70%; transform:translate(-50%,-50%); text-align:center; width:160px; text-decoration:none; color:#9fb0e8;" style-hover="color:#c4d0f4;">
+          <div style="font-family:'Spline Sans Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase;">Reasoning</div>
+          <div style="font-family:'Spline Sans Mono',monospace; font-size:9px; color:#8a7551; margin-top:2px; line-height:1.3;">Noumena · Agents · Knowledge</div>
+        </a>
 
-  <figure class="w">
-    <div class="head"><span>Diagram witness: neural substrate</span><span>JEPA training trajectories on Reacher</span></div>
-    <div class="body">
-      <img class="corpus-fig" src="assets/323020c8_fig_trajectory_overlay.png" alt="Overlay of 64-pixel versus 128-pixel JEPA training trajectories for effective rank, KSG mutual-information estimate, validation prediction loss, and linear-probe R-squared across epochs 0 to 99 on dm_control Reacher.">
-    </div>
-    <figcaption>Real training trajectories for a JEPA-style predictive model on dm_control Reacher. Non-stationarity in the effective rank and the mutual-information estimator are visible across epochs, motivating the group-level partition results above.</figcaption>
-    <div class="src">source: Projects/Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/runs/sweep_traj100/reacher/fig_trajectory_overlay.png</div>
-  </figure>
+        <!-- ── substrate (property of noumena) ── -->
+        <a href="#substrate" style="position:absolute; left:83%; top:71%; transform:translate(-50%,-50%); text-align:center; width:160px; text-decoration:none; color:#cdbf9f;" style-hover="color:#f3ead4;">
+          <div style="font-family:'Spline Sans Mono',monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:#8a7551;">Substrate</div>
+          <div style="font-size:12.5px; line-height:1.3; margin-top:2px;">a property of Noumena</div>
+          <div style="font-family:'Spline Sans Mono',monospace; font-size:9.5px; color:#9a8d72; margin-top:1px;">GEO1 · Lean 4 · Logic</div>
+        </a>
 
-  <ul class="b">
-    <li>The symbolic medium is a Mathlib-adjacent Lean 4 development; theorems are quoted verbatim and travel with their files.</li>
-    <li>The neural medium covers attention-routing function classes for transformers and JEPA-style predictive models for robotics data.</li>
-    <li>The geometric medium uses RKHS structure so that distributions, independence tests, and risk functionals all live in the same inner-product space.</li>
-    <li>Each medium ships with at least one machine-checked theorem stated against the artifact that actually runs.</li>
-  </ul>
-
-  <h3>Projects</h3>
-  <div class="proj-grid">
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/zetesis-puremath" target="_blank" rel="noopener" title="zetesis-puremath">
-      <div class="proj-head"><span class="proj-title">zetesis-puremath</span><span class="tag">open</span></div>
-      <p class="proj-blurb">Shared Mathlib-adjacent pure mathematics: the symbolic/geometric substrate staged from the formalization projects.</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/zetesis-puremath</span>
-    </a>
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/transformer-learning-theory" target="_blank" rel="noopener" title="transformer-learning-theory">
-      <div class="proj-head"><span class="proj-title">transformer-learning-theory</span><span class="tag">open</span></div>
-      <p class="proj-blurb">Lean 4 measurability-theoretic foundations for transformers: attention routing universality, compositional measurability.</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/transformer-learning-theory</span>
-    </a>
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/world-model-lab" target="_blank" rel="noopener" title="world-model-lab">
-      <div class="proj-head"><span class="proj-title">world-model-lab</span><span class="tag">open</span></div>
-      <p class="proj-blurb">Experiments studying and correcting machine errors in automated tasks run by AI and robots.</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/world-model-lab</span>
-    </a>
-    <a class="proj-card" href="https://github.com/noumenal-ai/proof-and-theorem-library" target="_blank" rel="noopener" title="proof-and-theorem-library">
-      <div class="proj-head"><span class="proj-title">proof-and-theorem-library</span><span class="tag fill">closed</span></div>
-      <p class="proj-blurb">A library of reusable mechanized theorems and proof witnesses in Lean 4.</p>
-      <span class="proj-link">github.com/noumenal-ai/proof-and-theorem-library</span>
-    </a>
-  </div>
-</section>
-
-<section class="s" id="formalization">
-  <p class="kicker">Estimable representations</p>
-  <h2><span class="n">2</span> Formalization</h2>
-  <p class="sub">Turning substrate into a model that finite data can test.</p>
-  <p class="lead">A representation is useful only when it admits identification on the causal side and uniform convergence on the statistical side. We pin down the exact measurability, independence, and capacity conditions under which a hypothesis class becomes estimable from a finite sample, and we machine-check the bridges between them.</p>
-
-  <div class="grid c3">
-    <div class="card">
-      <span class="lbl">Important</span>
-      <h4>One theorem, five equivalences</h4>
-      <p class="claim">PAC learnability, finite VC dimension, sample compression, uniform convergence, and a learning rule collapse to a single equivalence class.</p>
-      <p>Verified end to end in Lean 4 over an arbitrary measurable instance space, with the singleton-class hypothesis weakened where possible.</p>
-    </div>
-    <div class="card">
-      <span class="lbl">Interesting</span>
-      <h4>Independence as a kernel norm</h4>
-      <p class="claim">Under a characteristic kernel, the Hilbert-Schmidt Independence Criterion vanishes exactly when the joint factorises.</p>
-      <p>Gives a finite-sample test for conditional independence usable inside identification arguments for structural causal models.</p>
-    </div>
-    <div class="card">
-      <span class="lbl">Original</span>
-      <h4>No universal proof generator</h4>
-      <p class="claim">No single generator closes PAC, online, and Gold simultaneously; the three paradigms are formally distinct.</p>
-      <p>The kernel therefore carries separate tactics per regime, each tied to its own learnability characterisation.</p>
-    </div>
-  </div>
-
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>Lean 4</span></div>
-    <div class="body">
-<pre class="lean">theorem fundamental_theorem (X : Type u) [MeasurableSpace X]
-    [MeasurableSingletonClass X]
-    (C : ConceptClass X Bool)
-    [MeasurableConceptClass X C] :
-    (PACLearnable X C ↔ VCDim X C &lt; ⊤) ∧
-    ((VCDim X C &lt; ⊤) ↔ ∃ (k : ℕ) (cs : CompressionSchemeWithInfo0 X Bool C), cs.size = k) ∧ ...</pre>
-    </div>
-    <figcaption>Machine-checked five-conjunct Fundamental Theorem of Statistical Learning, bundling PAC learnability, finite VC dimension, and a finite sample compression scheme into one chain of equivalences.</figcaption>
-    <div class="src">source: FLT_Proofs/Theorem/PAC.lean::fundamental_theorem</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>Lean 4</span></div>
-    <div class="body">
-<pre class="lean">theorem hsicDef_zero_iff_independent
-    (hchar : IsCharacteristic (H := H) (X := X × Y))
-    (P : Measure (X × Y)) :
-    hsicDef (H := H) P = 0 ↔ P = (P.map Prod.fst).prod (P.map Prod.snd)</pre>
-    </div>
-    <figcaption>HSIC vanishes if and only if the joint measure factorises into its marginals, given a characteristic kernel on the product space. This is the measurable backbone for kernel-based independence testing.</figcaption>
-    <div class="src">source: ZPM/Analysis/InnerProductSpace/HSIC/ZeroIff.lean::hsicDef_zero_iff_independent</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>Lean 4</span></div>
-    <div class="body">
-<pre class="lean">theorem analyticSet_nullMeasurableSet
-    {α : Type*}
-    [TopologicalSpace α] [MeasurableSpace α] [BorelSpace α] [PolishSpace α]
-    {μ : MeasureTheory.Measure α} [MeasureTheory.IsFiniteMeasure μ]
-    {s : Set α} (hs : MeasureTheory.AnalyticSet s) :
-    MeasureTheory.NullMeasurableSet s μ</pre>
-    </div>
-    <figcaption>Every analytic set in a Polish space is null-measurable under any finite Borel measure. This weakens the measurability hypothesis demanded by uniform convergence from full Borel to the analytic hierarchy.</figcaption>
-    <div class="src">source: FLT_Proofs/PureMath/AnalyticMeasurability.lean::analyticSet_nullMeasurableSet</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Diagram</span><span>Concept-class measurability</span></div>
-    <div class="body">
-      <img class="corpus-fig" src="assets/eca1ea4d_borel_analytic_separation.png" alt="Strict inclusion chain MeasurableSet subset AnalyticSet subset NullMeasurableSet, with a singleton-class witness on the analytic-Borel boundary.">
-    </div>
-    <figcaption>Strict inclusion chain MeasurableSet ⊂ AnalyticSet ⊂ NullMeasurableSet, with a singleton-class witness sitting on the boundary between Borel and analytic. The separation licenses the weakened measurability premise in the uniform convergence argument.</figcaption>
-    <div class="src">source: Projects/formal-learning-theory-kernel/assets/borel_analytic_separation.png</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>Lean 4</span></div>
-    <div class="body">
-<pre class="lean">theorem no_universal_generator :
-    ¬ ∃ g ∈ fltTheory.generators,
-      Paradigm.pac ∈ g.paradigm ∧ Paradigm.online ∈ g.paradigm ∧ Paradigm.gold ∈ g.paradigm</pre>
-    </div>
-    <figcaption>A formal non-existence result: no proof generator inside the kernel covers PAC, online, and Gold learning at once. The three regimes admit distinct learnability characterisations and must be argued separately.</figcaption>
-    <div class="src">source: world_model/WorldModel/ProofOperadTheorems.lean::no_universal_generator</div>
-  </figure>
-
-  <ul class="b">
-    <li>Identification on the causal side reduces to factorisation tests once HSIC is calibrated against a characteristic kernel.</li>
-    <li>Uniform convergence on the statistical side survives weakening MeasurableSet to NullMeasurableSet, widening the admissible concept classes.</li>
-    <li>Sample compression supplies the constructive direction of the Fundamental Theorem, with a compression size bounded by the VC dimension.</li>
-    <li>Paradigm separation forces composition: a batch learner family is glued by a measurable monad, with the gluing operation associative under uniform measurability.</li>
-  </ul>
-
-  <h3>Projects</h3>
-  <div class="proj-grid">
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/formal-learning-theory-kernel" target="_blank" rel="noopener" title="formal-learning-theory-kernel">
-      <div class="proj-head"><span class="proj-title">formal-learning-theory-kernel</span><span class="tag">open</span></div>
-      <p class="proj-blurb">Lean 4 kernel for statistical learning theory: first complete formalization of the five-way fundamental theorem across PAC, online, Gold.</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/formal-learning-theory-kernel</span>
-    </a>
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/Formal-Learning-Theory" target="_blank" rel="noopener" title="Formal-Learning-Theory">
-      <div class="proj-head"><span class="proj-title">Formal-Learning-Theory</span><span class="tag fill">closed</span></div>
-      <p class="proj-blurb">Integrated presentation and Lean 4 modular extension package of formal learning theory.</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/Formal-Learning-Theory</span>
-    </a>
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/formal-learning-theory-dataset" target="_blank" rel="noopener" title="formal-learning-theory-dataset">
-      <div class="proj-head"><span class="proj-title">formal-learning-theory-dataset</span><span class="tag">open</span></div>
-      <p class="proj-blurb">Structured JSON dataset for formal learning theory plus a fine-tuned small model specialized in its formalization.</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/formal-learning-theory-dataset</span>
-    </a>
-  </div>
-</section>
-
-<section class="s" id="measurement">
-  <p class="kicker">Quantifying the epistemic state</p>
-  <h2><span class="n">3</span> Measurement</h2>
-  <p class="sub">Numbers the scientist can compute on itself: divergences, concentration, capacity, and a progress meter that does not bend under pressure.</p>
-  <p class="lead">A scientist that cannot measure its own state cannot improve. We give the agent a small, formal toolkit: a divergence bound that relates total variation to information loss, a concentration inequality for sample-mean estimators, a capacity equivalence that decides when a hypothesis class is learnable at all, a bounded embedding for comparing distributions in a reproducing-kernel space, and a telescoping audit signal whose accumulated value is exactly the endpoint difference.</p>
-
-  <div class="grid c3">
-    <div class="card">
-      <span class="lbl">Important</span>
-      <h4>Pinsker with sharp constant</h4>
-      <p class="claim">Total variation between two probability measures is bounded by a square-root function of their KL divergence, with the constant of one half.</p>
-      <p>This is the basic conversion rate between information loss and decision error. The agent uses it to turn likelihood gaps into bounds on test power.</p>
-    </div>
-    <div class="card">
-      <span class="lbl">Interesting</span>
-      <h4>Efron-Stein variance bound</h4>
-      <p class="claim">The variance of any square-integrable function of independent inputs is bounded by a sum of conditional-deviation terms, one per coordinate.</p>
-      <p>A general device for controlling sample-mean fluctuations of arbitrary estimators without assuming product structure beyond independence.</p>
-    </div>
-    <div class="card">
-      <span class="lbl">Original</span>
-      <h4>Audit progress telescopes</h4>
-      <p class="claim">Cumulative compression progress along any audit trajectory equals the endpoint difference of the underlying scalar functional.</p>
-      <p>A path-independent progress meter. No relabelling, splitting, or padding of intermediate steps changes the total. The signal is by construction unresponsive to local manipulation.</p>
-    </div>
-  </div>
-
-  <figure class="w">
-    <div class="head"><span>Witness 3.1 / proof</span><span>Pinsker inequality</span></div>
-    <div class="body">
-<pre class="lean">theorem pinsker_proof
-    (P Q : Measure α) [IsProbabilityMeasure P] [IsProbabilityMeasure Q]
-    (hac : P.AbsolutelyContinuous Q) (h_int : Integrable (llr P Q) P) :
-    tvDistReal P Q ≤ Real.sqrt (klDivReal P Q / 2)</pre>
-    </div>
-    <figcaption>Sharp form. Total variation distance is bounded by the square root of KL divided by two, under absolute continuity and integrability of the log-likelihood ratio.</figcaption>
-    <div class="src">source: ZPM/InformationTheory/Pinsker/General.lean :: pinsker_proof</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Witness 3.2 / proof</span><span>Efron-Stein inequality</span></div>
-    <div class="body">
-<pre class="lean">theorem efronStein (f : (Fin n → Ω) → ℝ) (hf : MemLp f 2 μˢ) :
-    variance f μˢ ≤ ∑ i : Fin n, ∫ x, (f x - condExpExceptCoord (μs := μs) i f x)^2 ∂μˢ :=</pre>
-    </div>
-    <figcaption>Coordinate-wise variance decomposition for functions of n independent random variables in a product space. The reference inequality behind most modern concentration arguments.</figcaption>
-    <div class="src">source: empirical_analysis/slt/proofs/EfronStein.lean :: efronStein</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Witness 3.3 / proof</span><span>Audit progress telescopes</span></div>
-    <div class="body">
-<pre class="lean">theorem cumCP_telescope {ι : Type*} (E : ι → ℝ) (g : ℕ → ι) (T : ℕ) :
-    cumCP E g T = E (g 0) - E (g T)</pre>
-    </div>
-    <figcaption>The cumulative compression-progress signal along any trajectory g of length T reduces to the endpoint difference of E. Intermediate states cancel exactly. Splitting a step into two adds nothing; padding adds nothing.</figcaption>
-    <div class="src">source: AuditCP/AuditCP/Telescope.lean :: cumCP_telescope</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Witness 3.4 / proof</span><span>VC dimension and compression</span></div>
-    <div class="body">
-<pre class="lean">theorem fundamental_vc_compression_with_info
-    (X : Type u) (C : ConceptClass X Bool) :
-    (VCDim X C < ⊤) ↔
-    (∃ (k : ℕ) (cs : CompressionSchemeWithInfo0 X Bool C), cs.size = k) :=</pre>
-    </div>
-    <figcaption>Moran-Yehudayoff equivalence. A binary concept class has finite VC dimension iff it admits a finite sample-compression scheme with side information. Learnability and compressibility are the same measurement.</figcaption>
-    <div class="src">source: empirical_analysis/flt/proofs/Complexity/Compression.lean :: fundamental_vc_compression_with_info</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Witness 3.5 / proof</span><span>Kernel mean embedding norm</span></div>
-    <div class="body">
-<pre class="lean">theorem kernelMeanEmbedding_norm_le
-    (P : Measure X) [IsProbabilityMeasure P] :
-    ‖kernelMeanEmbedding (H := H) P‖ ≤ BoundedKernel.bound (H := H) (X := X)</pre>
-    </div>
-    <figcaption>Every probability measure embeds into the reproducing-kernel Hilbert space H with norm bounded by a fixed kernel constant. Distances between distributions become Hilbert distances, ready for closed-form tests.</figcaption>
-    <div class="src">source: SMFE/PureMath/KernelMeanEmbedding.lean :: kernelMeanEmbedding_norm_le</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Witness 3.6 / figure</span><span>Edge-ranking diagnostic</span></div>
-    <div class="body">
-      <img class="corpus-fig" src="assets/194dc45f_fig_01_mrr_curves.png" alt="MRR vs deletion fraction curves for six edge-ranking methods on OGBL-BioKG">
-    </div>
-    <figcaption>Mean reciprocal rank against deletion fraction for six edge-ranking methods on OGBL-BioKG. Deletion-AUC operationalises a coverage measurement: the smaller the area under MRR-decay, the more accurately the score identifies edges the model relies on.</figcaption>
-    <div class="src">source: Projects/SMFE/Experiment 1/figures/fig_01_mrr_curves.png</div>
-  </figure>
-
-  <h3>Projects</h3>
-  <div class="proj-grid">
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/icm-unbundling" target="_blank" rel="noopener" title="icm-unbundling">
-      <div class="proj-head"><span class="proj-title">icm-unbundling</span><span class="tag fill">closed</span></div>
-      <p class="proj-blurb">Out-of-distribution geometry via factored knowledge-graph embeddings; Lean-verified learning theory for state-mechanism decomposition.</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/icm-unbundling</span>
-    </a>
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/tetrad-audit-dataset" target="_blank" rel="noopener" title="tetrad-audit-dataset">
-      <div class="proj-head"><span class="proj-title">tetrad-audit-dataset</span><span class="tag">open</span></div>
-      <p class="proj-blurb">282 schema-valid per-goal audit records across five substrates with human-graded gold-standard exemplars.</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/tetrad-audit-dataset</span>
-    </a>
-  </div>
-
-  <ul class="b">
-    <li>Divergence layer: Pinsker converts a KL bound into a total-variation bound, so a likelihood test inherits a quantitative power guarantee.</li>
-    <li>Concentration layer: Efron-Stein controls the variance of any L2 estimator built from independent samples, with no model-specific assumptions.</li>
-    <li>Capacity layer: the VC-compression equivalence settles when a class is learnable at all, and pins sample complexity to a combinatorial constant.</li>
-    <li>Progress layer: the telescoping identity yields an additive scalar whose endpoint value is the only thing that can move it.</li>
-  </ul>
-</section>
-
-<section class="s" id="agents">
-  <p class="kicker">Ingredient four</p>
-  <h2><span class="n">4</span> Agents</h2>
-  <p class="sub">The scientist closes the loop: learn the world, imagine the consequence, act under risk.</p>
-  <p class="lead">An automated researcher is an agent. It estimates dynamics from samples, rolls out hypothetical interventions in a learned model, and chooses experiments whose expected payoff justifies their cost. Convergence guarantees, audit budgets, and coherent risk measures are the load-bearing pieces.</p>
-
-  <div class="grid c3">
-    <div class="card">
-      <span class="lbl">Important</span>
-      <h4>Learning converges almost surely</h4>
-      <p class="claim">Q-learning iterates converge to the optimal action-value function under Markovian sampling and inverse-polynomial step sizes.</p>
-      <p>The classical Watkins guarantee is now machine-checked at the sample-path level, with almost-sure convergence on Markov sequences.</p>
-    </div>
-    <div class="card">
-      <span class="lbl">Interesting</span>
-      <h4>Linear value-function approximation is on the same footing</h4>
-      <p class="claim">Linear TD with Markovian samples converges almost surely to the TD fixed point.</p>
-      <p>The two convergence results share a stochastic-approximation core, formalized as a reusable theorem family.</p>
-    </div>
-    <div class="card">
-      <span class="lbl">Original</span>
-      <h4>Disciplined action lowers coherent risk</h4>
-      <p class="claim">Under any coherent risk measure, switching from an unsupervised to a disciplined factor decreases the risk charge, cell by cell.</p>
-      <p>This makes oversight a quantitative ingredient in the decision calculus, with a uniform cell-wise inequality.</p>
-    </div>
-  </div>
-
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>almost-sure convergence</span></div>
-    <div class="body">
-<pre class="lean">theorem ae_tendsto_of_QLearning_markov
-  {ν : ℝ} (hν : ν ∈ Set.Ioo (2 / 3) 1)
-  (hq : QLearningIterates (spec := spec) (q := q))
-  (hα : spec.α = fun n : ℕ => inv_poly ν 2 n) :
-  ∀ᵐ ω ∂ spec.MRP.markov_samples,
-    Tendsto (fun n => q n ω) atTop (𝓝 spec.optimal_q)</pre>
-    </div>
-    <figcaption>Q-learning iterates converge almost surely to the optimal Q-function under Markovian sampling, with step sizes on an inverse-polynomial schedule.</figcaption>
-    <div class="src">source: design-lab/rl/RLTheory/Algorithm/QLearning.lean :: ae_tendsto_of_QLearning_markov</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>linear TD convergence</span></div>
-    <div class="body">
-<pre class="lean">theorem ae_tendsto_of_linearTD_markov
-  {ν : ℝ} (hν : ν ∈ Set.Ioo (2 / 3) 1)
-  (hw : LinearTDIterates (spec := spec) (w := w))
-  (hα : spec.α = fun n : ℕ => inv_poly ν 2 n) :
-  ∀ᵐ ω ∂ spec.markov_samples,
-    Tendsto (fun n => w n ω) atTop (𝓝 spec.td_fixed_point)</pre>
-    </div>
-    <figcaption>Linear temporal-difference learning converges almost surely to its fixed point under the same Markov-sample regime.</figcaption>
-    <div class="src">source: design-lab/rl/RLTheory/Algorithm/LinearTD.lean :: ae_tendsto_of_linearTD_markov</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>coherent risk under discipline</span></div>
-    <div class="body">
-<pre class="lean">theorem coherentRiskMeasure_lowers_under_disciplined_DE
-    (rho : CoherentRiskMeasure Cell)
-    (loss : Cell → ℚ → ℚ)
-    (factorDisc factorAd : Cell → ℚ)
-    (hfactor_le : ∀ c, factorDisc c ≤ factorAd c)
-    (hloss_mono : ∀ c f₁ f₂, f₁ ≤ f₂ → loss c f₁ ≤ loss c f₂) :
-    rho.charge (fun c => loss c (factorDisc c))
-      ≤ rho.charge (fun c => loss c (factorAd c))</pre>
-    </div>
-    <figcaption>For any coherent risk measure on the cell space, a disciplined factor yields a lower risk charge than an undisciplined factor whenever the loss is monotone.</figcaption>
-    <div class="src">source: decision-engg/lean/AutomatedFirmsModel_Rewrite.lean :: coherentRiskMeasure_lowers_under_disciplined_DE</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>audit budget is horizon-free</span></div>
-    <div class="body">
-<pre class="lean">theorem finite_audit_goodhart {ι : Type*} {F : Set ι} {Ehat E : ι → ℝ} {Δ : ℝ}
-    (hUD : UniformDev F Ehat E Δ) {g : ℕ → ι} (hg : Admissible g F) (T : ℕ) :
-    cumCP Ehat g T ≤ cumCP E g T + 2 * Δ</pre>
-    </div>
-    <figcaption>Cumulative progress under a panel estimate cannot exceed the true progress by more than twice the panel deviation, independent of horizon T. The bound underwrites finite-panel evaluation of self-improving agents.</figcaption>
-    <div class="src">source: verifiable_RSI/audit-compression-progress/AuditCP/AuditCP/FiniteAudit.lean :: finite_audit_goodhart</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Diagram witness</span><span>verified neural pipeline</span></div>
-    <div class="body">
-      <img class="corpus-fig" src="assets/033d6fa2_torchlean-layout.png" alt="TorchLean architecture showing typed tensors, shared graph intermediate representation, verified reverse-mode autograd, IEEE-754 semantics, and certificate checking feeding into Lean proofs, executable models, and formal certificates.">
-    </div>
-    <figcaption>The neural-substrate side of the agent: typed tensors and a shared graph IR carry IEEE-754 semantics through autograd to executable models and machine-checkable certificates.</figcaption>
-    <div class="src">source: Noumenal/design-lab/neural-networks/home_page/assets/media/figures/torchlean-layout.png</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Diagram witness</span><span>certified action under perturbation</span></div>
-    <div class="body">
-      <img class="corpus-fig" src="assets/ace1ca54_verification-bounds.png" alt="Interval bound propagation and alpha-CROWN pipeline: perturbation set propagated through affine and ReLU relaxations to certified output bounds with a verified margin.">
-    </div>
-    <figcaption>Interval bound propagation and the alpha-CROWN relaxation produce sound output bounds for a perturbed input, with a margin that downstream policies can rely on.</figcaption>
-    <div class="src">source: Noumenal/design-lab/neural-networks/home_page/assets/media/examples/showcase/verification-bounds.png</div>
-  </figure>
-
-  <ul class="b">
-    <li>Convergence is proved at the sample-path level, on Markovian sample sequences, with no i.i.d. assumption.</li>
-    <li>The coherent-risk theorem is paradigm-neutral: it holds for any coherent measure on the cell space, including conditional value-at-risk.</li>
-    <li>The horizon-free audit bound separates panel quality from run length, so a sealed audit panel can score arbitrarily long self-improvement runs.</li>
-    <li>Bound-propagation certificates compose with the convergence and risk results to give an end-to-end action-time guarantee.</li>
-  </ul>
-
-  <h3>Projects</h3>
-  <div class="proj-grid">
-    <div class="proj-card no-link">
-      <div class="proj-head"><span class="proj-title">metis</span><span class="tag fill">closed</span></div>
-      <p class="proj-blurb">A typed argmax-routing autodidact: gated knowledge commits over an append-only version DAG on the verified Lean 4 substrate.</p>
-    </div>
-    <div class="proj-card no-link">
-      <div class="proj-head"><span class="proj-title">noumenal_agent</span><span class="tag fill">closed</span></div>
-      <p class="proj-blurb">Agent runtime for the discovery loop.</p>
+        <!-- ── measurement field ── -->
+        <a href="#measurement" style="position:absolute; left:50%; top:97%; transform:translate(-50%,-50%); text-align:center; width:min(96%,640px); text-decoration:none; color:#a99a7c;" style-hover="color:#d8cba8;">
+          <div style="font-size:12.5px; line-height:1.35;">All relations hold in a substrate of ignorance, read only through <span style="color:#caa86e;">epistemic measurement</span>.</div>
+          <div style="font-family:'Spline Sans Mono',monospace; font-size:9.5px; color:#8a7551; margin-top:3px;">probability · belief · plausibility · Choquet capacity — each changes what knowledge is definable</div>
+        </a>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="s" id="reasoning">
-  <p class="kicker">Deductive and inductive inference</p>
-  <h2><span class="n">5</span> Reasoning</h2>
-  <p class="sub">What a machine-checked proof settles, and where inductive generalization runs out.</p>
-  <p class="lead">Reasoning has two faces. The deductive face is a Lean kernel that signs off on a theorem statement and a proof term. The inductive face is the boundary at which generalization from finite data is well-defined at all: PAC, online, and learning-in-the-limit are distinct paradigms, each with its own dimension and its own impossibility line.</p>
-
-  <div class="grid c3">
-    <div class="card">
-      <span class="lbl">Important</span>
-      <h4>Identification in the limit has a hard wall</h4>
-      <p class="claim">Any concept class that contains every finite subset and at least one infinite concept is not EX-learnable.</p>
-      <p>Gold's 1967 impossibility, machine-checked end to end. The kernel forecloses learning-in-the-limit for the natural superfinite family.</p>
-    </div>
-    <div class="card">
-      <span class="lbl">Interesting</span>
-      <h4>PAC and online are different paradigms</h4>
-      <p class="claim">There exists a measurable concept class that is PAC learnable yet not online learnable.</p>
-      <p>A constructive witness with finite VC dimension and infinite Littlestone dimension, exhibiting the gap explicitly.</p>
-    </div>
-    <div class="card">
-      <span class="lbl">Original</span>
-      <h4>Analytic measurability is the correct hypothesis</h4>
-      <p class="claim">An analytic non-Borel set yields a singleton class on which the well-behaved VC target holds while the Krapp-Wirth separation fails.</p>
-      <p>The classical Borel measurability hypothesis for uniform convergence is too strong. The kernel pins the strict gap on a concrete witness.</p>
+<!-- ░░ AGENT-FACE PANEL (toggle) ░░ -->
+<sc-if value="{{ showJson }}" hint-placeholder-val="{{ false }}">
+  <div style="background:#0d0a07; color:#cdc2a9; border-bottom:1px solid #3a3022;">
+    <div style="max-width:1120px; margin:0 auto; padding:22px clamp(20px,4vw,48px);">
+      <div style="font-family:'Spline Sans Mono',monospace; font-size:11px; letter-spacing:0.04em; color:#b89a5e; margin-bottom:12px;">// the same unit, the agent representation · one record, two faces (the DOI content-negotiation model)</div>
+      <pre style="margin:0; font-family:'Spline Sans Mono',monospace; font-size:12px; line-height:1.7; color:#cdbf9f; white-space:pre-wrap; word-break:break-word;">{{ jsonText }}</pre>
     </div>
   </div>
+</sc-if>
 
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>Gold 1967, mechanized</span></div>
-    <div class="body">
-<pre class="lean">theorem gold_theorem (X : Type u) [Countable X] [DecidableEq X]
-    (C : ConceptClass X Bool)
-    (h_finite : &#8704; (S : Finset X), (fun x =&gt; decide (x &#8712; S)) &#8712; C)
-    (h_infinite : &#8707; c &#8712; C, Set.Infinite { x | c x = true }) :
-    &#172; EXLearnable X C</pre>
+<!-- ░░ SECTIONS ░░ -->
+<sc-for list="{{ sections }}" as="sec" hint-placeholder-count="6">
+  <section id="{{ sec.id }}" style="scroll-margin-top:72px; max-width:1120px; margin:0 auto; padding:clamp(46px,7vh,80px) clamp(20px,4vw,48px) 0; box-sizing:border-box;">
+    <div style="display:flex; align-items:baseline; gap:16px; border-bottom:1px solid #16120b; padding-bottom:13px; flex-wrap:wrap;">
+      <div style="font-family:'Spline Sans Mono',monospace; font-size:13px; color:#8a8273;">{{ sec.n }}</div>
+      <h2 style="font-size:clamp(28px,3.4vw,44px); font-weight:500; letter-spacing:-0.015em; margin:0; line-height:1;">{{ sec.name }}</h2>
+      <div style="margin-left:auto; font-family:'Spline Sans Mono',monospace; font-size:10.5px; letter-spacing:0.06em; color:#8a8273;">{{ sec.tagline }}</div>
     </div>
-    <figcaption>First machine-checked proof of Gold's impossibility theorem in any proof assistant. The hypothesis is the standard superfinite condition; the conclusion is non-learnability in the limit.</figcaption>
-    <div class="src">source: FLT_Proofs/Theorem/Gold.lean::gold_theorem</div>
-  </figure>
+    <p style="font-size:18px; line-height:1.55; color:#3a3327; max-width:66ch; margin:16px 0 0;">{{ sec.def }}</p>
+    <sc-if value="{{ sec.umbrella }}" hint-placeholder-val="">
+      <p style="font-size:14px; line-height:1.55; color:#6a6253; max-width:68ch; margin:12px 0 0; font-style:italic;">{{ sec.umbrella }}</p>
+    </sc-if>
 
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>Paradigm separation</span></div>
-    <div class="body">
-<pre class="lean">theorem pac_not_implies_online :
-    &#8707; (X : Type) (_ : MeasurableSpace X) (C : ConceptClass X Bool),
-      PACLearnable X C &#8743; &#172; OnlineLearnable X Bool C</pre>
-    </div>
-    <figcaption>A constructive existence proof: PAC learnability does not entail online learnability. The companion theorem shows EX-learnability does not imply PAC learnability either.</figcaption>
-    <div class="src">source: FLT_Proofs/Theorem/Separation.lean::pac_not_implies_online</div>
-  </figure>
+    <div style="margin:26px 0 0; display:flex; flex-direction:column; gap:16px;">
+      <sc-for list="{{ sec.projects }}" as="p" hint-placeholder-count="3">
+        <article style="border:1px solid #16120b; background:#efece4; border-radius:2px;">
+          <div style="display:flex; flex-wrap:wrap; gap:10px 14px; justify-content:space-between; align-items:baseline; padding:15px 18px; border-bottom:1px solid #d8d0bf;">
+            <div style="min-width:240px;">
+              <span style="font-size:18px; font-weight:600; letter-spacing:-0.01em;">{{ p.title }}</span>
+              <div style="font-family:'Spline Sans Mono',monospace; font-size:11px; color:#8a8273; margin-top:4px;">{{ p.repo }} · {{ p.vis }}</div>
+              <sc-if value="{{ p.alsoIn }}" hint-placeholder-val="">
+                <div style="font-family:'Spline Sans Mono',monospace; font-size:10px; letter-spacing:0.04em; color:#3b4a93; margin-top:5px;">also in · {{ p.alsoIn }}</div>
+              </sc-if>
+            </div>
+            <span style="font-family:'Spline Sans Mono',monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:#5f574a; border:1px solid #b9b09a; border-radius:2px; padding:3px 9px; white-space:nowrap;">{{ p.status }}</span>
+          </div>
 
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>EX vs PAC</span></div>
-    <div class="body">
-<pre class="lean">theorem ex_not_implies_pac :
-    &#8707; (X : Type) (C : ConceptClass X Bool),
-      EXLearnable X C &#8743; ... &#172; PACLearnable X C</pre>
-    </div>
-    <figcaption>The third edge of the triangle: a class identifiable in the limit but not PAC learnable. The three paradigms separate pairwise with concrete witnesses.</figcaption>
-    <div class="src">source: FLT_Proofs/Theorem/Separation.lean::ex_not_implies_pac</div>
-  </figure>
+          <div style="padding:16px 18px;">
+            <sc-if value="{{ p.direction }}" hint-placeholder-val="">
+              <div style="font-family:'Spline Sans Mono',monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#3b4a93; margin-bottom:7px;">◆ research direction</div>
+              <p style="font-size:16.5px; line-height:1.5; color:#16120b; max-width:64ch; margin:0;">{{ p.direction }}</p>
+            </sc-if>
+            <sc-if value="{{ p.tbd }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; align-items:center; gap:10px; color:#9a9384;">
+                <svg viewBox="0 0 60 60" style="width:22px; height:22px; flex:none; overflow:visible;"><g stroke="#b9b09a" stroke-width="1.5" stroke-linecap="round" fill="none"><line x1="15" y1="24" x2="36" y2="24"></line><line x1="36" y1="24" x2="36" y2="48"></line><line x1="36" y1="48" x2="15" y2="48"></line><line x1="15" y1="48" x2="15" y2="24"></line><line x1="25" y1="12" x2="46" y2="12"></line><line x1="46" y1="12" x2="46" y2="36"></line><line x1="15" y1="24" x2="25" y2="12"></line><line x1="36" y1="24" x2="46" y2="12"></line></g></svg>
+                <span style="font-family:'Spline Sans Mono',monospace; font-size:12px; font-style:italic;">research direction · to be specified</span>
+              </div>
+            </sc-if>
 
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>Measurability boundary</span></div>
-    <div class="body">
-<pre class="lean">theorem analytic_nonborel_set_gives_measTarget_separation
-    (A : Set &#8477;) (hA : AnalyticSet A) (hA_non : &#172; MeasurableSet A) :
-    WellBehavedVCMeasTarget (singletonClassOn A) &#8743;
-    KrappWirthSeparationMeasTarget (singletonClassOn A) = False</pre>
-    </div>
-    <figcaption>An analytic non-Borel witness exhibits a strict gap between two measurability targets used in uniform-convergence theorems. The weaker hypothesis suffices; the stronger one does not.</figcaption>
-    <div class="src">source: FLT_Proofs/Theorem/BorelAnalyticSeparation.lean::analytic_nonborel_set_gives_measTarget_separation</div>
-  </figure>
+            <sc-if value="{{ p.hasWitness }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; flex-direction:column; gap:12px; margin-top:14px;">
+                <sc-for list="{{ p.witnesses }}" as="w" hint-placeholder-count="0">
 
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>Choquet capacitability</span></div>
-    <div class="body">
-<pre class="lean">theorem MeasureTheory.measure_isChoquetCapacity
-    {&#945; : Type*}
-    [TopologicalSpace &#945;] [MeasurableSpace &#945;] [BorelSpace &#945;] [PolishSpace &#945;]
-    (&#956; : MeasureTheory.Measure &#945;) [MeasureTheory.IsFiniteMeasure &#956;] :
-    MeasureTheory.IsChoquetCapacity (fun s : Set &#945; =&gt; &#956; s)</pre>
-    </div>
-    <figcaption>Choquet's capacitability theorem, machine-checked and Mathlib-contributable. This is the descriptive-set-theoretic lemma the uniform-convergence boundary above rests on.</figcaption>
-    <div class="src">source: FLT_Proofs/PureMath/ChoquetCapacity.lean::MeasureTheory.measure_isChoquetCapacity</div>
-  </figure>
+                  <sc-if value="{{ w.claim }}" hint-placeholder-val="">
+                    <div style="display:flex; gap:11px; align-items:baseline; margin-top:6px;">
+                      <span style="font-family:'Spline Sans Mono',monospace; font-size:11px; color:#8a8273; flex:none;">{{ w.n }}</span>
+                      <p style="margin:0; font-size:16px; line-height:1.5; color:#16120b; max-width:66ch;">{{ w.claim }}</p>
+                    </div>
+                  </sc-if>
 
-  <figure class="w">
-    <div class="head"><span>Diagram</span><span>Gold separation</span></div>
-    <div class="body">
-      <img class="corpus-fig" src="assets/e88dcd20_gold_separation.png" alt="Diagram of the Gold-style separation from PAC: locking sequence construction, finite-subset indicator witness class, and the logical chain proving Gold does not imply PAC.">
-    </div>
-    <figcaption>Locking-sequence construction, finite-subset indicator class, and the logical chain that demonstrates identification in the limit does not imply PAC.</figcaption>
-    <div class="src">source: Projects/formal-learning-theory-kernel/assets/gold_separation.png</div>
-  </figure>
+                  <sc-if value="{{ w.isProof }}" hint-placeholder-val="{{ false }}">
+                    <div style="border:1px solid #16120b; border-radius:2px; overflow:hidden; background:#100c07; transition:box-shadow .25s ease;" style-hover="box-shadow:0 8px 26px -16px rgba(0,0,0,.7);">
+                      <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 13px; border-bottom:1px solid #2a2218; gap:10px;">
+                        <span style="font-family:'Spline Sans Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#6fae86;">⊢ Proof witness</span>
+                        <span style="font-family:'Spline Sans Mono',monospace; font-size:10px; color:#6fae86; border:1px solid #2f6b4a; border-radius:2px; padding:1px 7px; white-space:nowrap;">{{ w.cell }}</span>
+                      </div>
+                      <pre style="margin:0; padding:13px 15px; font-family:'Spline Sans Mono',monospace; font-size:12px; line-height:1.55; color:#d7cdb6; overflow-x:auto;">{{ w.code }}</pre>
+                      <div style="padding:8px 13px; border-top:1px solid #2a2218;"><span style="font-family:'Spline Sans Mono',monospace; font-size:10px; color:#8a7551; word-break:break-all;">{{ w.source }}</span></div>
+                    </div>
+                  </sc-if>
 
-  <figure class="w">
-    <div class="head"><span>Diagram</span><span>Proof discovery order</span></div>
-    <div class="body">
-      <img class="corpus-fig" src="assets/3ac5b40a_discovery_dag.svg" alt="Directed acyclic graph with 42 nodes arranged in topological order, showing the human-guided proof discovery sequence with red edges marking failed proof routes and grey arrows marking the actual discovery order.">
-    </div>
-    <figcaption>42 theorems in topological order. Grey arrows mark the discovery sequence; red edges mark routes the kernel rejected. The shape of the search tree is itself an artifact of formal reasoning.</figcaption>
-    <div class="src">source: Projects/formal-learning-theory-kernel/premise/discovery_dag.svg</div>
-  </figure>
+                  <sc-if value="{{ w.isFigure }}" hint-placeholder-val="{{ false }}">
+                    <div style="border:1px solid #16120b; border-radius:2px; overflow:hidden; background:#fff;">
+                      <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 13px; border-bottom:1px solid #e3ddcf; gap:10px;">
+                        <span style="font-family:'Spline Sans Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#3b4a93;">◇ Diagram witness</span>
+                        <span style="font-family:'Spline Sans Mono',monospace; font-size:10px; color:#3b4a93; border:1px solid #3b4a93; border-radius:2px; padding:1px 7px; white-space:nowrap;">{{ w.cell }}</span>
+                      </div>
+                      <div style="padding:16px; display:flex; justify-content:center; background:#faf8f2;"><sc-if value="{{ w.src }}" hint-placeholder-val=""><img src="{{ w.src }}" alt="{{ w.alt }}" loading="lazy" decoding="async" style="max-width:460px; width:100%; height:auto; filter:grayscale(1) contrast(1.03);"></sc-if></div>
+                      <div style="padding:8px 13px; border-top:1px solid #e3ddcf; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+                        <span style="font-family:'Spline Sans Mono',monospace; font-size:10px; color:#8a8273; word-break:break-all;">{{ w.source }}</span>
+                        <sc-if value="{{ w.flag }}" hint-placeholder-val=""><span style="font-family:'Spline Sans Mono',monospace; font-size:10px; color:#b06a12;">{{ w.flag }}</span></sc-if>
+                      </div>
+                    </div>
+                  </sc-if>
 
-  <ul class="b">
-    <li>Three paradigms, three dimensions: PAC tracks VC dimension, online tracks Littlestone dimension, EX tracks mind-change ordinals. Pairwise non-implications are signed by the kernel.</li>
-    <li>Impossibility is a hard conclusion. <code class="k">gold_theorem</code> rules out a learner on a precisely typed family; no algorithmic improvement closes the gap.</li>
-    <li>Descriptive set theory enters at the measurability boundary. Analytic sets are the right level of generality for the uniform-convergence hypothesis.</li>
-    <li>The discovery DAG records the actual route through proof space, including rejected branches. Reasoning leaves an audit trail.</li>
-  </ul>
+                  <sc-if value="{{ w.isEmpirical }}" hint-placeholder-val="{{ false }}">
+                    <div style="border:1px solid #16120b; border-radius:2px; overflow:hidden; background:#efece4;">
+                      <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 13px; border-bottom:1px solid #d8d0bf; gap:10px;">
+                        <span style="font-family:'Spline Sans Mono',monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#b06a12;">▦ Empirical witness</span>
+                        <span style="font-family:'Spline Sans Mono',monospace; font-size:10px; color:#b06a12; border:1px solid #b06a12; border-radius:2px; padding:1px 7px; white-space:nowrap;">{{ w.cell }}</span>
+                      </div>
+                      <div style="padding:15px 16px;">
+                        <div style="font-family:'Spline Sans Mono',monospace; font-size:11.5px; color:#5f574a; line-height:1.55; margin-bottom:14px;">{{ w.headline }}</div>
+                        <sc-for list="{{ w.metrics }}" as="m" hint-placeholder-count="0">
+                          <div style="display:flex; align-items:center; gap:12px; margin-bottom:9px;">
+                            <span style="font-size:13px; color:#16120b; flex:0 0 188px; line-height:1.2;">{{ m.label }}</span>
+                            <svg viewBox="0 0 100 8" preserveAspectRatio="none" style="flex:1; height:8px; background:#ddd5c4; border-radius:1px;"><rect x="0" y="0" width="{{ m.pct }}" height="8" fill="#16120b"></rect></svg>
+                            <span style="font-family:'Spline Sans Mono',monospace; font-size:11px; color:#5f574a; flex:none; width:90px; text-align:right;">{{ m.frac }}</span>
+                          </div>
+                        </sc-for>
+                        <sc-if value="{{ w.hasStats }}" hint-placeholder-val="{{ false }}">
+                          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                            <sc-for list="{{ w.stats }}" as="s" hint-placeholder-count="0">
+                              <span style="font-family:'Spline Sans Mono',monospace; font-size:11px; color:#16120b; border:1px solid #cbc3b0; border-radius:2px; padding:4px 9px;"><strong style="font-weight:600;">{{ s.v }}</strong> {{ s.k }}</span>
+                            </sc-for>
+                          </div>
+                        </sc-if>
+                        <sc-if value="{{ w.note }}" hint-placeholder-val="">
+                          <p style="font-size:13px; line-height:1.5; color:#6a6253; margin:13px 0 0; font-style:italic;">{{ w.note }}</p>
+                        </sc-if>
+                      </div>
+                      <div style="padding:8px 13px; border-top:1px solid #d8d0bf;"><span style="font-family:'Spline Sans Mono',monospace; font-size:10px; color:#8a8273; word-break:break-all;">{{ w.source }}</span></div>
+                    </div>
+                  </sc-if>
 
-  <h3>Projects</h3>
-  <div class="proj-grid">
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/cslib" target="_blank" rel="noopener" title="cslib">
-      <div class="proj-head"><span class="proj-title">cslib</span><span class="tag">open</span></div>
-      <p class="proj-blurb">The Lean Computer Science Library: semantics, calculi, and the deductive-reasoning substrate.</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/cslib</span>
-    </a>
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/formal-learning-theory-discovery" target="_blank" rel="noopener" title="formal-learning-theory-discovery">
-      <div class="proj-head"><span class="proj-title">formal-learning-theory-discovery</span><span class="tag">open</span></div>
-      <p class="proj-blurb">Synthetic math discovery analysis: 74 reasoning traces, metakernel data, 10,000+ exploration paths.</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/formal-learning-theory-discovery</span>
-    </a>
-  </div>
-</section>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ p.pending }}" hint-placeholder-val="{{ false }}">
+              <div style="margin:14px 0 0; display:flex; align-items:center; gap:10px; padding:11px 14px; border:1px dashed #c2b9a4; border-radius:2px; background:#e6e2d8;">
+                <svg viewBox="0 0 60 60" style="width:20px; height:20px; flex:none; overflow:visible;"><g stroke="#b9b09a" stroke-width="1.5" stroke-linecap="round" fill="none"><line x1="15" y1="24" x2="36" y2="24"></line><line x1="36" y1="24" x2="36" y2="48"></line><line x1="36" y1="48" x2="15" y2="48"></line><line x1="15" y1="48" x2="15" y2="24"></line><line x1="25" y1="12" x2="46" y2="12"></line><line x1="46" y1="12" x2="46" y2="36"></line><line x1="15" y1="24" x2="25" y2="12"></line></g></svg>
+                <span style="font-family:'Spline Sans Mono',monospace; font-size:11.5px; color:#8a8273; font-style:italic;">witness · pending</span>
+              </div>
+            </sc-if>
 
-<section class="s" id="knowledge">
-  <p class="kicker">Six: knowledge</p>
-  <h2><span class="n">6</span> Knowledge &amp; the structure of uncertainty</h2>
-  <p class="sub">What the scientist comes to know, and the map of where that knowledge stops.</p>
-  <p class="lead">Knowledge in this programme is a body of verified results laid over a frontier map that says which classes admit learning at all, with what posterior guarantee, and after how many mind changes. The witnesses below give the standard characterizations: VC dimension for batch learning, Littlestone dimension for online learning, finite ordinals for learning in the limit, and a McAllester-style posterior bound.</p>
+            <sc-if value="{{ p.note }}" hint-placeholder-val="">
+              <p style="font-size:13px; line-height:1.5; color:#6a6253; margin:11px 0 0; font-style:italic;">{{ p.note }}</p>
+            </sc-if>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+  </section>
+</sc-for>
 
-  <div class="grid c3">
-    <div class="card">
-      <span class="lbl">Important</span>
-      <h4>Learnability has a finite-dimensional certificate.</h4>
-      <p class="claim">PAC learnability of a concept class is equivalent to finite VC dimension.</p>
-      <p>The result fixes which hypothesis classes can be learned from i.i.d. samples at all. Below the threshold the class is learnable with sample complexity polynomial in the VC dimension; above it, no learner succeeds uniformly.</p>
+<!-- ░░ TRUST BASE / FOOTER ░░ -->
+<footer style="margin-top:clamp(48px,7vh,80px); background:#0d0a07; color:#cdc2a9;">
+  <div style="max-width:1120px; margin:0 auto; padding:clamp(36px,5vh,56px) clamp(20px,4vw,48px);">
+    <div style="font-family:'Spline Sans Mono',monospace; font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:#b89a5e; margin-bottom:16px;">Verified modulo a named base — not from nothing</div>
+    <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:30px;">
+      <span style="font-family:'Spline Sans Mono',monospace; font-size:12px; color:#cdbf9f; border:1px solid #3a3022; border-radius:2px; padding:7px 12px;">Lean 4 kernel</span>
+      <span style="font-family:'Spline Sans Mono',monospace; font-size:12px; color:#cdbf9f; border:1px solid #3a3022; border-radius:2px; padding:7px 12px;">propext · Classical.choice · Quot.sound</span>
+      <span style="font-family:'Spline Sans Mono',monospace; font-size:12px; color:#cdbf9f; border:1px solid #3a3022; border-radius:2px; padding:7px 12px;">Mathlib @ pinned commit</span>
+      <span style="font-family:'Spline Sans Mono',monospace; font-size:12px; color:#cdbf9f; border:1px solid #3a3022; border-radius:2px; padding:7px 12px;">enumerated FFI boundaries</span>
     </div>
-    <div class="card">
-      <span class="lbl">Interesting</span>
-      <h4>Learning in the limit has an ordinal boundary.</h4>
-      <p class="claim">A concept class is EX-learnable iff some learner makes fewer than &omega; mind changes on every text.</p>
-      <p>The mind-change count, measured as an ordinal below &omega;, sharply distinguishes the EX-learnable classes from the unlearnable ones. Finite ordinals separate paradigms that look identical at the level of asymptotic correctness.</p>
-    </div>
-    <div class="card">
-      <span class="lbl">Original</span>
-      <h4>A posterior-aware bound holds at finite sample size.</h4>
-      <p class="claim">For any prior P and finite m, every posterior Q over hypotheses satisfies a McAllester PAC-Bayes bound with confidence 1&minus;&delta;.</p>
-      <p>The Gibbs generalization error is controlled by the empirical Gibbs error plus a complexity term in the cross-entropy of Q against P, divided by 2m. This is the posterior bound, machine-checked.</p>
-    </div>
-  </div>
-
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>VC characterization of PAC learnability</span></div>
-    <div class="body">
-<pre class="lean">theorem vc_characterization (X : Type u) [MeasurableSpace X]
-    [MeasurableSingletonClass X]
-    (C : ConceptClass X Bool)
-    [MeasurableConceptClass X C] :
-    PACLearnable X C &harr; VCDim X C &lt; &top; :=</pre>
-    </div>
-    <figcaption>The canonical batch-learning characterization. The biconditional ties learnability to a combinatorial dimension; everything below this line is downstream.</figcaption>
-    <div class="src">source: empirical_analysis/flt/proofs/Theorem/PAC.lean::vc_characterization</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>Littlestone dimension characterizes online learning</span></div>
-    <div class="body">
-<pre class="lean">theorem littlestone_characterization (X : Type) (C : ConceptClass X Bool) :
-    OnlineLearnable X Bool C &harr; LittlestoneDim X C &lt; &top; :=</pre>
-    </div>
-    <figcaption>The adversarial counterpart of the VC theorem. Online learnability is equivalent to finite Littlestone dimension; the dimension is the threshold separating worst-case-tractable classes from worst-case-hopeless ones.</figcaption>
-    <div class="src">source: empirical_analysis/flt/proofs/Theorem/Online.lean::littlestone_characterization</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>Mistake bound equals Littlestone dimension</span></div>
-    <div class="body">
-<pre class="lean">theorem optimal_mistake_bound_eq_ldim (X : Type)
-    (C : ConceptClass X Bool) (hne : C.Nonempty) :
-    (&uarr;(OptimalMistakeBound X C) : WithBot (WithTop &Nopf;)) = LittlestoneDim X C :=</pre>
-    </div>
-    <figcaption>Quantitative tightening of the previous theorem. The minimax mistake count of the optimal online learner is exactly the Littlestone dimension, with no slack.</figcaption>
-    <div class="src">source: empirical_analysis/flt/proofs/Theorem/Online.lean::optimal_mistake_bound_eq_ldim</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>Mind-change boundary for EX-learnability</span></div>
-    <div class="body">
-<pre class="lean">theorem mind_change_characterization (X : Type u)
-    (C : ConceptClass X Bool) :
-    EXLearnable X C &harr;
-      &exist; (L : GoldLearner X Bool),
-        &forall; (c : Concept X Bool), c &isin; C &rarr;
-          &forall; (T : TextPresentation X c),
-            MindChangeOrdinal X L c T.toDataStream &lt; Ordinal.omega0 :=</pre>
-    </div>
-    <figcaption>Learning in the limit is characterized by an ordinal mind-change count below &omega;. The ordinal grades how many times the learner is permitted to revise its conjecture before settling on a correct hypothesis.</figcaption>
-    <div class="src">source: empirical_analysis/flt/proofs/Theorem/Gold.lean::mind_change_characterization</div>
-  </figure>
-
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span>McAllester PAC-Bayes posterior bound</span></div>
-    <div class="body">
-<pre class="lean">theorem pac_bayes_finite {X : Type u} [MeasurableSpace X]
-    {H : Type*} [Fintype H] [Nonempty H]
-    (D : MeasureTheory.Measure X) [MeasureTheory.IsProbabilityMeasure D]
-    (c : Concept X Bool) (hc_meas : Measurable c)
-    (hs : H &rarr; Concept X Bool) (hhs_meas : &forall; h, Measurable (hs h))
-    (P : FinitePMF H) (hP_pos : &forall; h, 0 &lt; P.prob h)
-    (m : &Nopf;) (hm : 0 &lt; m) (&delta; : &Ropf;) (h&delta; : 0 &lt; &delta;) (h&delta;1 : &delta; &le; 1) :
-    MeasureTheory.Measure.pi (fun _ : Fin m =&gt; D)
-      { S : Fin m &rarr; X |
-        &forall; (Q : FinitePMF H),
-          gibbsError Q hs c D &le;
-            gibbsEmpError Q hs c S +
-            Real.sqrt ((crossEntropyFinitePMF Q P + Real.log (1 / &delta;)) / (2 * &uarr;m)) }
-      &ge; ENNReal.ofReal (1 - &delta;) :=</pre>
-    </div>
-    <figcaption>The posterior bound, in finite-hypothesis form. For every posterior Q the Gibbs error is controlled by the empirical Gibbs error plus a complexity term in H(Q,P), with probability at least 1&minus;&delta; over the sample.</figcaption>
-    <div class="src">source: empirical_analysis/flt/proofs/Theorem/PACBayes.lean::pac_bayes_finite</div>
-  </figure>
-
-  <h3>The frontier</h3>
-  <p>Verified knowledge is laid over a four-region map. The same map is what the scientist uses to decide what to attack next.</p>
-  <div class="frontier">
-    <div class="q">
-      <div class="qh">Settled results</div>
-      <div class="qt">Closed-form characterizations.</div>
-      <p>VC-PAC equivalence, Littlestone-online equivalence, mistake-bound equality, mind-change ordinal boundary, McAllester PAC-Bayes bound. All machine-checked.</p>
-    </div>
-    <div class="q">
-      <div class="qh">Open problems</div>
-      <div class="qt">Well-posed, unresolved.</div>
-      <p>Tight posterior bounds for infinite hypothesis spaces with measurable priors; characterization of agnostic online learnability beyond Littlestone; sample-complexity gaps in the PAC-Bayes regime.</p>
-    </div>
-    <div class="q">
-      <div class="qh">Unexplained regularities</div>
-      <div class="qt">Anomalies not yet formalized.</div>
-      <p>Empirical generalization of overparametrized models below the bound; benign overfitting; regularities in transformer learning curves outside the VC regime.</p>
-    </div>
-    <div class="q">
-      <div class="qh">Out of scope</div>
-      <div class="qt">Beyond the present framing.</div>
-      <p>Learnability under non-stationary distributions without a stability assumption; computability-theoretic boundaries of learning by reflective agents; epistemic guarantees over open-ended action spaces.</p>
+    <div style="display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; align-items:flex-end; border-top:1px solid #2a2218; padding-top:24px;">
+      <div>
+        <div style="font-size:18px; color:#f6ecd6; font-weight:500; margin-bottom:6px;">Noumenal</div>
+        <div style="font-size:14px; color:#9a8d72; line-height:1.5;">An AI scientist, one verified ingredient at a time.<br>Internal research atlas · a deterministic render of the corpus.</div>
+      </div>
+      <div style="flex:1; display:flex; justify-content:flex-end; align-items:center; gap:10px; min-width:200px;">
+        <span style="font-family:'Spline Sans Mono',monospace; font-size:11px; color:#6a5c40; font-style:italic;">leave one line unfinished</span>
+        <div style="height:1px; background:#6a5c40; width:90px; position:relative;"><div style="position:absolute; right:0; top:0; height:1px; width:34px; background:#0d0a07;"></div></div>
+      </div>
     </div>
   </div>
+</footer>
 
-  <ul class="b">
-    <li>The three paradigms are characterized by three different complexity measures: VC dimension, Littlestone dimension, and mind-change ordinal. Each measure is tight.</li>
-    <li>PAC-Bayes provides a posterior-sensitive guarantee at finite sample size, with explicit confidence 1&minus;&delta; over the draw of S.</li>
-    <li>The frontier map assigns every project on the page to one of the four regions and routes new work accordingly.</li>
-  </ul>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:2200}}">
+class Component extends DCLogic {
+  state = { showJson: false, frame: 0 };
 
-  <figure class="w">
-    <div class="head"><span>Diagram witness</span><span>Frontier as a geometric object</span></div>
-    <div class="body">
-      <img class="corpus-fig" src="assets/9bb0bef3_shape_of_uncertainty_four_panel_poster.png" alt="Four-panel poster showing the visible record, an old-frame total-conflict state, a failed vacuous refinement, and a hidden-state representation extension producing a nonempty stable focal region.">
-    </div>
-    <figcaption>The frontier map drawn as a four-panel demonstration of refusal, refinement, and stable focal regions. A concrete instance of the abstract four-region taxonomy used above.</figcaption>
-    <div class="src">source: Projects/DIALOCO Workshop/v12/outputs/four_panel_demo/shape_of_uncertainty_four_panel_poster.png</div>
-  </figure>
+  componentDidMount() {
+    this._cubeTimer = setInterval(() => this.setState(s => ({ frame: s.frame + 1 })), 3000);
+  }
+  componentWillUnmount() { clearInterval(this._cubeTimer); }
 
-  <h3>Projects</h3>
-  <div class="proj-grid">
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/First-Proof-Benchmark-Results" target="_blank" rel="noopener" title="First-Proof-Benchmark-Results">
-      <div class="proj-head"><span class="proj-title">First-Proof-Benchmark-Results</span><span class="tag">open</span></div>
-      <p class="proj-blurb">Empirical analysis of synthetic discovery of non-trivial mathematical proofs using frontier models.</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/First-Proof-Benchmark-Results</span>
-    </a>
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/traces-corpus" target="_blank" rel="noopener" title="traces-corpus (TRACES)">
-      <div class="proj-head"><span class="proj-title">traces-corpus (TRACES)</span><span class="tag fill">closed</span></div>
-      <p class="proj-blurb">Empirical reserve of 43 datasets with natural out-of-distribution shift, structured for mechanism-discovery benchmarking.</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/traces-corpus</span>
-    </a>
-    <a class="proj-card" href="https://github.com/Zetetic-Dhruv/formal-learning-theory-book" target="_blank" rel="noopener" title="formal-learning-theory-book">
-      <div class="proj-head"><span class="proj-title">formal-learning-theory-book</span><span class="tag">open</span></div>
-      <p class="proj-blurb">A 202-page textbook of formal learning theory with a 142-node concept graph.</p>
-      <span class="proj-link">github.com/Zetetic-Dhruv/formal-learning-theory-book</span>
-    </a>
-  </div>
-</section>
+  renderVals() {
+    const spine = [
+      { n: '01', name: 'Substrate',     href: '#substrate' },
+      { n: '02', name: 'Formalization', href: '#formalization' },
+      { n: '03', name: 'Measurement',   href: '#measurement' },
+      { n: '04', name: 'Agents',        href: '#agents' },
+      { n: '05', name: 'Reasoning',     href: '#reasoning' },
+      { n: '06', name: 'Knowledge',     href: '#knowledge' },
+    ];
 
-<section class="s" id="method">
-  <p class="kicker">Method and falsification</p>
-  <h2><span class="n">7</span> How we work, and what would break it</h2>
-  <p class="sub">Every claim on this page carries a witness from the corpus: a Lean theorem the kernel checks, or a figure from a run that produced it. Nothing here rests on prose alone.</p>
+    // witness builders
+    const W = {
+      proof: (o) => ({ isProof:true,  isFigure:false, isEmpirical:false, cell:'', code:'', source:'', ...o }),
+      fig:   (o) => ({ isProof:false, isFigure:true,  isEmpirical:false, cell:'', src:'', alt:'', source:'', flag:'', ...o }),
+      emp:   (o) => ({ isProof:false, isFigure:false, isEmpirical:true,  cell:'', headline:'', metrics:[], stats:[], note:'', source:'', ...o, hasStats: !!(o.stats && o.stats.length) }),
+    };
+    const svgURI = (vb, inner) => 'data:image/svg+xml;utf8,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+vb+'" font-family="ui-monospace, monospace">'+inner+'</svg>');
+    W.dia = (o) => W.fig({ cell:o.cell||'supporting_argument', n:o.n, claim:o.claim, alt:o.alt||'', flag:o.flag||'', source:o.source, src: svgURI(o.vb, o.svg) });
+    const P = (o) => { const w = o.witnesses || []; return {
+      title:'', repo:'', vis:'', status:'', alsoIn:'', direction:'', tbd:false, note:'', ...o,
+      witnesses:w, hasWitness: w.length>0, pending: (o.pending !== undefined ? o.pending : w.length===0)
+    }; };
+    const tbd = (o) => P({ tbd:true, pending:true, witnesses:[], ...o });
 
-  <p class="lead">A scientist that improves itself can only be trusted if its measured progress tracks its real progress. We state that as a theorem and we name the conditions that void it.</p>
+    const sections = [
+      {
+        id:'substrate', n:'01', name:'Substrate', tagline:'geometric · symbolic · neural',
+        def:'What a hypothesis is made of — the representational medium a world-model lives in.',
+        projects:[
+          tbd({ title:'Design Lab', repo:'noumenal-ai/design-lab', vis:'internal', status:'active', alsoIn:'Formalization · Knowledge',
+            note:'Its libraries live in §06 Knowledge and surface here as witnesses; the Substrate direction is still to be specified.' }),
+          P({ title:'Belief geometry · GEO1', repo:'noumenal-ai/shape-of-uncertainty', vis:'private', status:'active', alsoIn:'Measurement',
+            direction:'Belief geometry as the representational medium a theory is made of. The original move is a role assignment — as general relativity assigned manifolds to spacetime, GEO1 assigns the belief simplex the role of native epistemic state space: a theory is first a region, trajectory, obstruction, and repair policy in that geometry, and equations or causal graphs are charts exported only after it stabilizes.',
+            witnesses:[
+              W.dia({ n:'arg.1', cell:'research_programme',
+                claim:'The centerpoint: the native object of theory formation is the geometry itself — belief state plus theory regions, allowed motions, diagnostics, and repair policies — and symbolic equations, causal graphs, and programmes are charts exported from it, not the thing being formed.',
+                source:'GEO1 · §1.3 / Figure 1.1 (redrawn)',
+                vb:'0 0 440 168', svg:`<rect x="16" y="62" width="92" height="44" fill="none" stroke="#16120b" stroke-width="1.2"/><text x="28" y="82" font-size="9">experimental</text><text x="28" y="95" font-size="9">records</text><path d="M110,84 L146,84" stroke="#16120b" stroke-width="1.1"/><path d="M140,80 L146,84 L140,88" fill="none" stroke="#16120b" stroke-width="1.1"/><rect x="148" y="56" width="106" height="56" fill="#3b4a93" fill-opacity="0.12" stroke="#3b4a93" stroke-width="1.4"/><text x="162" y="80" font-size="9.5" fill="#3b4a93">belief geometry</text><text x="162" y="95" font-size="8.5" fill="#3b4a93">points · faces · repairs</text><g stroke="#16120b" stroke-width="1.1" fill="none"><path d="M256,72 L300,40"/><path d="M256,84 L300,84"/><path d="M256,96 L300,128"/></g><rect x="302" y="26" width="120" height="30" fill="none" stroke="#16120b" stroke-width="1.1" stroke-dasharray="4 3"/><text x="312" y="45" font-size="9" fill="#5f574a">equation chart</text><rect x="302" y="69" width="120" height="30" fill="none" stroke="#16120b" stroke-width="1.1" stroke-dasharray="4 3"/><text x="312" y="88" font-size="9" fill="#5f574a">causal-graph chart</text><rect x="302" y="112" width="120" height="30" fill="none" stroke="#16120b" stroke-width="1.1" stroke-dasharray="4 3"/><text x="312" y="131" font-size="9" fill="#5f574a">programme chart</text>` }),
+              W.dia({ n:'arg.2', cell:'novel_discovery',
+                claim:'A partial theory is a region, not a sentence: a focal set is a set of mechanism profiles sharing the committed coordinates while leaving the rest open — ignorance carried as mass on a set, not forced into a probability over complete law names.',
+                source:'GEO1 · §3.2, §9.2 (redrawn)',
+                vb:'0 0 440 126', svg:`<rect x="18" y="40" width="46" height="34" fill="#16120b"/><text x="34" y="62" font-size="12" fill="#efe3c4">L</text><rect x="70" y="40" width="46" height="34" fill="#16120b"/><text x="86" y="62" font-size="12" fill="#efe3c4">D</text><rect x="122" y="40" width="46" height="34" fill="#16120b"/><text x="134" y="62" font-size="12" fill="#efe3c4">¬C</text><rect x="174" y="40" width="46" height="34" fill="#16120b"/><text x="190" y="62" font-size="12" fill="#efe3c4">N</text><rect x="226" y="40" width="46" height="34" fill="#16120b"/><text x="242" y="62" font-size="12" fill="#efe3c4">M</text><rect x="278" y="40" width="46" height="34" fill="#16120b"/><text x="290" y="62" font-size="12" fill="#efe3c4">¬F</text><rect x="330" y="40" width="46" height="34" fill="none" stroke="#b06a12" stroke-width="1.3" stroke-dasharray="4 3"/><text x="344" y="62" font-size="12" fill="#b06a12">A?</text><rect x="382" y="40" width="46" height="34" fill="none" stroke="#b06a12" stroke-width="1.3" stroke-dasharray="4 3"/><text x="396" y="62" font-size="12" fill="#b06a12">B?</text><text x="18" y="98" font-size="9.5" fill="#16120b">committed where the evidence commits</text><text x="300" y="98" font-size="9" fill="#b06a12">open → repair experiments</text>` }),
+              W.dia({ n:'arg.3', cell:'frontier_direction',
+                claim:'Forward causal pairing: a graph intervention induces a paired belief transport, and probability semantics is conserved exactly on the singleton-focal slice — the protected anchor. Lifting full graphical do-calculus beyond that slice is the open frontier.',
+                source:'GEO1 · Figure 4.1 / §4 (redrawn)',
+                vb:'0 0 440 160', svg:`<polygon points="60,140 230,24 400,140" fill="none" stroke="#16120b" stroke-width="1.4"/><line x1="118" y1="140" x2="342" y2="140" stroke="#2f6b4a" stroke-width="6" stroke-opacity="0.3"/><line x1="118" y1="140" x2="342" y2="140" stroke="#2f6b4a" stroke-width="1.4"/><circle cx="170" cy="140" r="3" fill="#2f6b4a"/><circle cx="230" cy="140" r="3" fill="#2f6b4a"/><circle cx="300" cy="140" r="3" fill="#2f6b4a"/><text x="138" y="156" font-size="10" fill="#2f6b4a">protected slice  =  probability semantics</text><text x="172" y="66" font-size="10" fill="#5f574a">G ⇝ G′  paired with belief transport</text><text x="150" y="100" font-size="11" fill="#2f6b4a">Bel = Pl = P  on singletons</text>` }),
+              W.dia({ n:'arg.4', cell:'established_result',
+                claim:'The medium grows only conservatively: a vacuous frame refinement preserves old belief and plausibility and commutes with combination, but it also preserves hard conflict — so adding hidden coordinates demands explicit conservation assumptions, modelled by a forced representation cover.',
+                source:'GEO1 · Figure 7.1 / §7 (redrawn)',
+                vb:'0 0 440 150', svg:`<rect x="40" y="50" width="120" height="56" fill="none" stroke="#16120b" stroke-width="1.3"/><text x="58" y="44" font-size="9.5" fill="#5f574a">frame Θ</text><text x="66" y="83" font-size="11">m,  Bel(E)</text><path d="M168,78 L232,78" stroke="#16120b" stroke-width="1.2"/><path d="M225,73 L232,78 L225,83" fill="none" stroke="#16120b" stroke-width="1.2"/><text x="180" y="70" font-size="10" fill="#3b4a93">ρ↑</text><rect x="240" y="50" width="160" height="56" fill="none" stroke="#16120b" stroke-width="1.3"/><text x="258" y="44" font-size="9.5" fill="#5f574a">refined Θ′</text><text x="258" y="83" font-size="11" fill="#2f6b4a">Bel(ρ⁻¹E) preserved</text><text x="60" y="130" font-size="9.5" fill="#b06a12">A ∩ B = ∅  ⟹  ρ⁻¹A ∩ ρ⁻¹B = ∅  (conflict survives)</text>` }),
+            ],
+            note:'Original to GEO1 (the substrate layer): the role assignment of belief geometry as native medium, partial theories as regions, the forward causal pairing, and conservative extension. The finite anchors are proved; the full do-calculus lift is open. Figure from the private shape-of-uncertainty repo — confirm public use.' }),
+        ],
+      },
+      {
+        id:'formalization', n:'02', name:'Formalization', tagline:'causal · statistical',
+        def:'How raw structure becomes a model that finite data can test.',
+        projects:[
+          tbd({ title:'Design Lab', repo:'noumenal-ai/design-lab', vis:'internal', status:'active', alsoIn:'Substrate · Knowledge',
+            note:'Formalization direction to be specified.' }),
+          P({ title:'Causality DAG', repo:'noumenal-ai/design-lab · causality', vis:'internal', status:'active',
+            direction:'A Lean-audited inheritance graph of Pearl (2009) plus ten post-2009 extensions — every modern result carried as a conjecture with a tracked proof obligation.',
+            witnesses:[ W.proof({ cell:'open_step',
+              code:'theorem Transportability_proved :\n    Transportability := by\n  sorry',
+              source:'design-lab/causality/Causality/Proofs/Modern/Transportability.lean ∷ Transportability_proved' }) ],
+            note:'Honest open: the statement composes with Pearl transportability, but the proof obligation is still live.' }),
+          tbd({ title:'Causal world model · UMTI', repo:'no published repo', vis:'field-validated', status:'active', alsoIn:'Agents',
+            note:'Mechanism inference via kernel / sigma-algebra duality. Direction and repo to be specified.' }),
+        ],
+      },
+      {
+        id:'measurement', n:'03', name:'Measurement', tagline:'belief · concentration · progress',
+        def:'Numbers the scientist can compute on itself — and a progress meter that does not bend under pressure.',
+        projects:[
+          P({ title:'Belief geometry · GEO1', repo:'noumenal-ai/shape-of-uncertainty', vis:'private', status:'active', alsoIn:'Substrate',
+            direction:'What the scientist computes on a belief state: belief and plausibility as readouts, identifiability as the complement of a collision set, residual dependence after fixing the shared variables, and the capacity regularity that lets continuous records be measured at all. Diagnostics native to the geometry, not bolted on after a model is chosen.',
+            witnesses:[
+              W.dia({ n:'arg.1', cell:'novel_discovery',
+                claim:'Belief and plausibility are the readouts of the state, and ordinary probability is exactly the singleton-focal readout — the credal interval [Bel, Pl] is what a single distribution throws away.',
+                source:'GEO1 · §2.3, §4.3 (redrawn)',
+                vb:'0 0 440 120', svg:`<line x1="60" y1="64" x2="380" y2="64" stroke="#16120b" stroke-width="1.2"/><line x1="140" y1="55" x2="140" y2="73" stroke="#2f6b4a" stroke-width="1.8"/><line x1="300" y1="55" x2="300" y2="73" stroke="#2f6b4a" stroke-width="1.8"/><path d="M140,64 L300,64" stroke="#2f6b4a" stroke-width="3" stroke-opacity="0.25"/><circle cx="222" cy="64" r="4.5" fill="#3b4a93"/><text x="120" y="46" font-size="10" fill="#2f6b4a">Bel(E)</text><text x="284" y="46" font-size="10" fill="#2f6b4a">Pl(E)</text><text x="210" y="92" font-size="10" fill="#3b4a93">P(E)</text><text x="64" y="110" font-size="9.5" fill="#5f574a">probability = the singleton-focal readout; the credal interval is wider</text>` }),
+              W.dia({ n:'arg.2', cell:'novel_discovery',
+                claim:'Backward direction: a belief displacement is read diagnostically to infer which manipulation occurred, and non-identifiability becomes a geometric object — an affine collision set whose complement is identifiability and whose structure scores the next experiment.',
+                source:'GEO1 · Figure 5.1 / §5 (redrawn)',
+                vb:'0 0 440 158', svg:`<circle cx="70" cy="80" r="4" fill="#16120b"/><text x="52" y="76" font-size="11">m</text><path d="M78,76 L210,40" stroke="#16120b" stroke-width="1.2"/><path d="M202,38 L210,40 L204,46" fill="none" stroke="#16120b" stroke-width="1.2"/><text x="216" y="42" font-size="10" fill="#5f574a">ρ(T₁m)</text><path d="M78,82 L210,76" stroke="#16120b" stroke-width="1.2"/><path d="M202,72 L210,76 L203,81" fill="none" stroke="#16120b" stroke-width="1.2"/><text x="216" y="80" font-size="10" fill="#5f574a">ρ(T₂m)</text><path d="M78,86 L210,122" stroke="#b06a12" stroke-width="1.4"/><circle cx="214" cy="122" r="5" fill="none" stroke="#b06a12" stroke-width="1.4"/><text x="226" y="126" font-size="10" fill="#b06a12">ρ(T₃m) = ρ(T₄m)</text><text x="250" y="146" font-size="9.5" fill="#b06a12">collision  =  non-identifiable</text>` }),
+              W.dia({ n:'arg.3', cell:'novel_discovery',
+                claim:'A diagnostic the geometry computes on itself: after the shared variables are fixed, the private coordinates are still dependent iff the fiber is not a product — so a candidate explanation can be checked for whether its shared variables actually explain the dependence.',
+                source:'GEO1 · Figure 8.1 / §8 (redrawn)',
+                vb:'0 0 440 150', svg:`<g stroke="#16120b" stroke-width="1"><rect x="44" y="36" width="86" height="86" fill="none"/><line x1="87" y1="36" x2="87" y2="122"/><line x1="44" y1="79" x2="130" y2="79"/></g><circle cx="65" cy="58" r="4" fill="#16120b"/><circle cx="109" cy="58" r="4" fill="#16120b"/><circle cx="65" cy="100" r="4" fill="#16120b"/><circle cx="109" cy="100" r="4" fill="#16120b"/><text x="48" y="138" font-size="10" fill="#2f6b4a">product fiber:  I = 0  (explained)</text><g stroke="#16120b" stroke-width="1"><rect x="262" y="36" width="86" height="86" fill="none"/><line x1="305" y1="36" x2="305" y2="122"/><line x1="262" y1="79" x2="348" y2="79"/></g><circle cx="283" cy="58" r="4" fill="#b06a12"/><circle cx="327" cy="100" r="4" fill="#b06a12"/><text x="258" y="138" font-size="10" fill="#b06a12">diagonal:  I = 1 bit  (residual)</text>` }),
+              W.proof({ cell:'established_result',
+                code:'theorem mutualInformation_eq_zero_iff_product :\n    I(P₁ ; P₂ | S = s) = 0  ↔  F_s = π₁ F_s × π₂ F_s',
+                source:'design-lab/measurements/ZPM/InformationTheory/MutualInformation/ZeroIffProduct.lean:26 ∷ mutualInformationReal_eq_zero_iff_product' }),
+              W.dia({ n:'arg.4', cell:'frontier_direction',
+                claim:'The continuous witness bridge: nonsingleton belief mass requires a set-valued observation, and a continuous, existential witness event is measured through Choquet capacity — analytic events are capacitable from inside by compact sets and null-measurable under finite measures.',
+                source:'GEO1 · Figure 6.1, §6.3 (redrawn)',
+                vb:'0 0 440 150', svg:`<rect x="28" y="34" width="150" height="58" fill="none" stroke="#16120b" stroke-width="1.3"/><text x="38" y="58" font-size="10">set-valued  Y : Ω → 2^Θ\\{∅}</text><text x="38" y="78" font-size="10" fill="#3b4a93">m(A) = P(Y = A)</text><path d="M86,96 L86,118" stroke="#16120b" stroke-width="1.1"/><path d="M82,112 L86,118 L90,112" fill="none" stroke="#16120b" stroke-width="1.1"/><text x="40" y="136" font-size="9" fill="#5f574a">finite branch → belief mass</text><path d="M230,118 C240,52 360,46 392,70 C360,128 250,132 230,118 Z" fill="none" stroke="#16120b" stroke-width="1.3"/><rect x="262" y="82" width="34" height="24" fill="#2f6b4a" fill-opacity="0.18" stroke="#2f6b4a" stroke-width="1.1"/><rect x="306" y="86" width="28" height="20" fill="#2f6b4a" fill-opacity="0.18" stroke="#2f6b4a" stroke-width="1.1"/><text x="312" y="62" font-size="9.5" fill="#5f574a">analytic A ⊆ X (Polish)</text><text x="232" y="140" font-size="9" fill="#2f6b4a">c(A) = sup { c(K) : K ⊆ A compact }</text>` }),
+              W.proof({ cell:'established_result',
+                code:'theorem measure_isChoquetCapacity :\n    a finite Borel measure on a Polish space is a Choquet capacity\ntheorem AnalyticSet.nullMeasurableSet :\n    A analytic  ⟹  NullMeasurableSet A μ   (μ finite)',
+                source:'design-lab/measurements/ZPM/MeasureTheory/ChoquetCapacity/Def.lean:56 · …/AnalyticMeasurability/NullMeasurable.lean:77' }),
+              W.proof({ cell:'boundary_result',
+                code:'theorem learn_measurable : a jointly-measurable learned rule\n    stays measurable in future records once training is fixed\ntheorem attention_produces_non_borel_bad_event :\n    a natural attention construction yields a non-Borel bad set\n    -- Borel-only handling would overclaim; analytic layer needed',
+                source:'design-lab/learning-theory/FLT_Proofs/Learner/Properties.lean:62 · transformers/TLT_Proofs/Strictness/NonBorelWitness.lean:306' }),
+            ],
+            note:'Original to GEO1 (the diagnostics layer): the backward collision reading, the residual-dependence test, and the continuous capacity bridge. Status (Appendix C): the Choquet branch is conditional on Polish / analytic / capacity hypotheses; an automatic record→evidence rule remains open.' }),
+          P({ title:'Compression Progress', repo:'Zetetic-Dhruv/audit-compression-progress', vis:'open', status:'open',
+            direction:'A path-independent progress meter: cumulative compression progress along any audit trajectory telescopes to the endpoint difference, so relabelling, splitting, or padding cannot move it.',
+            witnesses:[ W.proof({ cell:'established_result',
+              code:'theorem cumCP_telescope {ι : Type*}\n    (E : ι → ℝ) (g : ℕ → ι) (T : ℕ) :\n    cumCP E g T = E (g 0) - E (g T)',
+              source:'audit-compression-progress/AuditCP/Telescope.lean ∷ cumCP_telescope' }) ] }),
+          tbd({ title:'Conformal Counterfactuals', repo:'no published repo', vis:'planned', status:'planned',
+            note:'Open / planned — in the stack, not yet started. Four-claim package: theorem, world-model wrapper, Atari-100k, DMControl.' }),
+        ],
+      },
+      {
+        id:'agents', n:'04', name:'Agents', tagline:'learn · imagine · act',
+        def:'The loop that proposes and probes — learning, imagined experiments, and intervention under uncertainty.',
+        projects:[
+          P({ title:'world-model-lab', repo:'Zetetic-Dhruv/world-model-lab', vis:'open', status:'open',
+            direction:'Episode-frame leakage in a predictive world-model is an intrinsic floor: the Bayes-risk gap between frame- and episode-level splits equals an explained-variance functional, so more frames cannot close it.',
+            witnesses:[
+              W.proof({ cell:'established_result',
+                code:'theorem bayesRisk_gap [IsProbabilityMeasure μ]\n    (hm : m₁ ≤ m₂) (hX : MemLp X 2 μ) :\n    bayesRisk m₁ X μ - bayesRisk m₂ X μ\n      = μ[Var[μ[X | m₂]; μ | m₁]]',
+                source:'world-model-lab/projects/lewm/lean4/LewmValidity.lean ∷ bayesRisk_gap' }),
+              W.fig({ cell:'merely_true',
+                src:'current/assets/323020c8_fig_trajectory_overlay.png',
+                alt:'JEPA training trajectories — effective rank, KSG mutual information, validation prediction loss, and linear-probe R² across 100 epochs on dm_control Reacher, 64px vs 128px.',
+                source:'Machine Errors/JEPA/.../runs/sweep_traj100/reacher/fig_trajectory_overlay.png' }),
+            ],
+            note:'The figure is empirical, not transported — the proof is what makes the leak a property of the partition rather than the run.' }),
+          P({ title:'transformer-learning-theory', repo:'Zetetic-Dhruv/transformer-learning-theory', vis:'open', status:'active', alsoIn:'Knowledge',
+            direction:'The open neurosymbolic-routing programme: where in a transformer does continuous, certifiable neural computation hand off to discrete symbolic routing — and what does an agent pay in learnability and design budget for crossing that line? The learner model, read along attention’s temperature axis. (Its settled certificate + expressivity theorems live in §06 Knowledge.)',
+            witnesses:[
+              W.dia({ n:'arg.1', cell:'novel_discovery',
+                claim:'The measurability cliff — the centerpiece: a strict descriptive-complexity drop located exactly at attention’s softmax/argmax boundary. Soft (neural) attention’s bad event is Borel — learnable and certifiable; the hard (symbolic) argmax mixture-of-experts cascade is analytic-but-non-Borel at every depth, yet stays learnable as null-measurable. Routing temperature is the neural↔symbolic dial.',
+                source:'TLT · assets/cliff.svg (schematic) · Boundary/MeasurabilityCliff.lean',
+                vb:'0 0 440 162', svg:`<line x1="40" y1="132" x2="412" y2="132" stroke="#16120b" stroke-width="1"/><text x="40" y="150" font-size="9" fill="#5f574a">soft · neural (finite τ)</text><text x="318" y="150" font-size="9" fill="#5f574a">hard · symbolic (τ = ∞)</text><path d="M52,52 L233,52" stroke="#2f6b4a" stroke-width="2"/><text x="58" y="44" font-size="9.5" fill="#2f6b4a">Borel · certifiable</text><path d="M233,52 L240,52 L240,104 L247,104" fill="none" stroke="#16120b" stroke-width="1.2"/><line x1="240" y1="36" x2="240" y2="132" stroke="#b06a12" stroke-width="1.2" stroke-dasharray="4 3"/><text x="206" y="30" font-size="9" fill="#b06a12">softmax / argmax line</text><path d="M247,104 L406,104" stroke="#b06a12" stroke-width="2"/><text x="252" y="97" font-size="9.5" fill="#b06a12">analytic non-Borel · still learnable</text>` }),
+              W.proof({ cell:'established_result',
+                code:'theorem measurabilityCliff :\n    soft multi-head stack ⊨ KW (Borel ghost-gap);\n    hard argmax MoE cascade ⊭ KW, yet null-measurable.\n    Strict KW ⊊ WB_meas at the softmax/argmax boundary\ntheorem temperatureCliff : the drop is the routing temperature',
+                source:'design-lab/transformers/TLT_Proofs/Boundary/MeasurabilityCliff.lean · …/Boundary/TemperatureCliff.lean' }),
+              W.proof({ n:'arg.2', cell:'established_result',
+                claim:'Why the agent should care: measurability is the certificate’s precondition. The executed fp32 forward is measurable, so the §06 bound applies; for the argmax cascade no measurable functional represents the bad event, so the precondition is unsatisfiable exactly where the cliff falls — the symbolic regime forfeits the certificate the neural regime earns.',
+                code:'theorem executedCertificate_precondition_satisfied_and_violated :\n    executed fp32 forward is measurable  (hFmeas holds, bound applies)\n    ∧  argmax cascade: no measurable functional  (hFmeas unsatisfiable)',
+                source:'design-lab/transformers/TLT_Proofs/Bridge/Certificate/MeasurabilityPrecondition.lean ∷ executedCertificate_precondition_satisfied_and_violated' }),
+              W.dia({ n:'arg.3', cell:'frontier_direction',
+                claim:'The tempered design law the agent optimizes over: two complementary certificates bound the same routed-symbol gap — a smooth Dudley certificate, tighter when routing is soft; a hard arrangement-VC Sauer–Shelah certificate, tighter when routing is sharp — meeting at an explicit crossover sharpness βStar on the real attention router. βStar is where an agent should place its routing temperature.',
+                source:'TLT · assets/crossover.svg (schematic) · TemperedDesignLaw/CertificateReal.lean',
+                vb:'0 0 440 160', svg:`<line x1="46" y1="130" x2="412" y2="130" stroke="#16120b" stroke-width="1"/><line x1="46" y1="22" x2="46" y2="130" stroke="#16120b" stroke-width="1"/><text x="320" y="146" font-size="9" fill="#5f574a">routing sharpness β →</text><path d="M52,42 C150,74 250,110 406,124" fill="none" stroke="#2f6b4a" stroke-width="1.8"/><text x="56" y="38" font-size="9.5" fill="#2f6b4a">smooth Dudley</text><path d="M52,122 C160,104 260,68 406,32" fill="none" stroke="#3b4a93" stroke-width="1.8"/><text x="322" y="30" font-size="9.5" fill="#3b4a93">hard Sauer–Shelah</text><line x1="214" y1="22" x2="214" y2="130" stroke="#b06a12" stroke-width="1" stroke-dasharray="3 3"/><circle cx="214" cy="92" r="4" fill="#b06a12"/><text x="196" y="146" font-size="9" fill="#b06a12">βStar</text>` }),
+              W.proof({ n:'arg.4', cell:'research_programme',
+                claim:'The handle this gives an agent: the certified capacity is a map out of architecture-configuration space, so every TransformerConfig (four Nats) carries a generalization budget — the design law is capacity ⊕ measurability ⊕ expressivity, and self-improvement is search over that map.',
+                code:'theorem config_capacity_law :\n    ∀ cfg : TransformerConfig, certified budget(cfg)\n    -- depth & head count flow through the Dudley capacity term\ntheorem TransformerDesignLaw : capacity ⊕ measurability ⊕ expressivity',
+                source:'design-lab/transformers/TLT_Proofs/Bridge/Certificate/ConfigDesignLaw.lean ∷ config_capacity_law · TransformerDesignLaw' }),
+            ],
+            note:'Open programme. The cliff and design law are proved (the temperature instance of Gupta arXiv:2604.25028, Thm 4.1, at attention’s regularization boundary); what is open for the agent is using βStar and the config map as live controls — choosing routing temperature and architecture against a certified budget during self-improvement. Schematic figures redraw the repo’s assets/{cliff,crossover}.svg.' }),
+          P({ title:'Learner measurability · FLT', repo:'design-lab · learning-theory', vis:'internal', status:'active', alsoIn:'Knowledge',
+            direction:'When is a learned rule an admissible measurable policy? The novel measurability theory the Fundamental Theorem forced — the σ-algebra precondition an agent must respect to even state a generalization certificate, the exact boundary at which it fails, and the routing abstraction that carries it to attention. (The settled characterization theorems live in §06 Knowledge.)',
+            witnesses:[
+              W.dia({ n:'arg.1', cell:'novel_discovery',
+                claim:'Learner measurability is the precondition for being an admissible measurable policy: MeasurableBatchLearner is a Lean 4 typeclass for joint learner measurability, and the kernel proves a strict measurability hierarchy — discrete and symbolic learners are always measurable; uncountable selection can leave a learner outside the Borel σ-algebra yet inside the null-measurable one.',
+                source:'TLT/FLT · measurability hierarchy (redrawn) · Learner/Measurability.lean',
+                vb:'0 0 440 150', svg:`<rect x="40" y="26" width="360" height="104" fill="none" stroke="#16120b" stroke-width="1.3"/><text x="50" y="20" font-size="9" fill="#5f574a">universally / null-measurable</text><rect x="64" y="44" width="312" height="74" fill="#3b4a93" fill-opacity="0.07" stroke="#3b4a93" stroke-width="1.2"/><text x="74" y="40" font-size="9" fill="#3b4a93">Borel-measurable</text><rect x="92" y="62" width="256" height="48" fill="#2f6b4a" fill-opacity="0.1" stroke="#2f6b4a" stroke-width="1.2"/><text x="102" y="78" font-size="9" fill="#2f6b4a">discrete · symbolic learners (always)</text><circle cx="300" cy="92" r="6" fill="#b06a12"/><text x="214" y="96" font-size="9" fill="#b06a12">uncountable selection</text><text x="50" y="132" font-size="8.5" fill="#5f574a">strict: the outer rings are inhabited</text>` }),
+              W.proof({ cell:'established_result',
+                code:'class MeasurableBatchLearner (X C) where\n    learn_measurable : a jointly-measurable learned rule stays\n      measurable in future records once training is fixed\ntheorem measurability_hierarchy_strict :\n    Measurable ⊊ NullMeasurable  (inhabited by an FLT class)',
+                source:'design-lab/learning-theory/FLT_Proofs/Learner/Measurability.lean ∷ MeasurableBatchLearner · measurability_hierarchy_strict' }),
+              W.proof({ n:'arg.2', cell:'novel_discovery',
+                claim:'The σ-algebra refinement: the kernel’s uniform-convergence condition (WellBehavedVC, requiring only NullMeasurableSet) is strictly weaker than Krapp–Wirth (2024), which requires MeasurableSet (Borel) — a modern σ-algebra-explicit form of the Pollard–Dudley universal-measurability framework, packaged as a Borel-parameterization typeclass.',
+                code:'instance : WellBehavedVCMeasTarget C\n  -- any class parameterized by a StandardBorelSpace with jointly\n  -- measurable evaluation; needs NullMeasurableSet, not Borel\ntheorem wellBehavedVC_weaker_than_krappWirth',
+                source:'design-lab/learning-theory/FLT_Proofs/Measurability/{BorelParam,KrappWirthSeparation}.lean' }),
+              W.fig({ n:'arg.3', cell:'novel_discovery',
+                claim:'The Borel-analytic separation — the standout: the first concrete concept-class witness inhabiting the strict gap between an analytic-non-Borel bad event and a Borel one. WellBehavedVC holds (the bad event is null-measurable) while Krapp–Wirth fails (it is not Borel). The full counterexample proof is below.',
+                src:'current/assets/eca1ea4d_borel_analytic_separation.png',
+                alt:'Three-panel Borel-analytic separation: the singleton witness class over an analytic non-Borel set A; the proof chain bad-event → Suslin projection → analytic → Choquet capacity → null-measurable, against the failed assume-Borel path; and the strict gap WellBehavedVC HOLDS vs KrappWirth FAILS.',
+                source:'design-lab/learning-theory/FLT_Proofs/Separation/BorelAnalytic.lean · assets/borel_analytic_separation.svg' }),
+              W.proof({ cell:'established_result',
+                code:`-- The entire Borel-analytic counterexample (exists_measTarget_separation)
 
-  <p class="claim">Measured improvement is trustworthy exactly when the audit gap stays bounded; when it cannot be bounded, the guarantee is vacuous and the program fails.</p>
+WITNESS.   Let A ⊆ ℝ be analytic, non-Borel (exists under
+  standard set theory). Define the singleton class
+      singletonClassOn(A) = {zeroConcept} ∪ {singletonConcept a | a ∈ A}
+  where singletonConcept a returns true only at x = a.
 
-  <ul class="b">
-    <li>Each result is either machine-checked in Lean 4 against Mathlib, or backed by a figure from the run that produced it. The source file or theorem name is printed beside every claim.</li>
-    <li>Self-improvement is scored on a sealed audit distribution. Progress on that audit telescopes to an endpoint identity, so an agent cannot farm reward by cycling between states it forgets and relearns.</li>
-    <li>The link from audit score to real score holds only under a uniform deviation bound across the admissible hypotheses. That bound is the load-bearing hypothesis, stated explicitly below.</li>
-    <li>Falsifier: if the audit panel is reusable and the hypothesis class has enough capacity to memorize it, the deviation cannot be bounded, the budget term diverges, and verified progress stops certifying anything. We have measured this gap growing on a small MLP.</li>
-  </ul>
+STEP 1  (every hypothesis is Borel).
+  zeroConcept is constant; each singletonConcept a is piecewise
+  constant on the measurable singleton {a}.  So every hypothesis in
+  the class is Borel-measurable.
 
-  <figure class="w">
-    <div class="head"><span>Proof witness</span><span class="tag">Lean 4 · sorry-free</span></div>
-    <div class="body">
-<pre class="lean">theorem finite_audit_goodhart {ι : Type*} {F : Set ι} {Ehat E : ι → ℝ} {Δ : ℝ}
-    (hUD : UniformDev F Ehat E Δ) {g : ℕ → ι} (hg : Admissible g F) (T : ℕ) :
-    cumCP Ehat g T ≤ cumCP E g T + 2 * Δ</pre>
-    </div>
-    <figcaption>Measured cumulative progress (Ehat) exceeds true progress (E) by at most twice the deviation budget Δ, for any admissible improvement sequence and any horizon T. The bound is horizon-free. It holds only while UniformDev F Ehat E Δ holds: lose the deviation bound and the guarantee is empty.</figcaption>
-    <div class="src">source: <code>verifiable_RSI/audit-compression-progress/AuditCP/AuditCP/FiniteAudit.lean : finite_audit_goodhart</code></div>
-  </figure>
-</section>
+STEP 2  (reduce to a planar witness).
+  The uniform-convergence bad event — ghost-sample pairs on which
+  some hypothesis has empirical gap ≥ ε/2 — reduces, by a preimage
+  calculation, to the planar witness event W ⊆ ℝ².
 
-</main>
+STEP 3  (W is analytic ⇒ null-measurable).
+  W = { (training, ghost) : ∃ a ∈ A. training misses a ∧ ghost hits a }.
+  W is an existential projection of a Borel set, hence analytic (Σ¹₁)
+  by Suslin's theorem (1917).  Analytic sets are universally
+  measurable by Choquet capacitability (1954; Kechris 30.13, formalized
+  here) — so W is NullMeasurableSet.            ⊢ WellBehavedVCMeasTarget
 
-<footer><div class="wrap">
-  <div>
-    <div style="color:var(--ink); margin-bottom:6px;">Noumenal</div>
-    <div>Building an AI scientist, one verified ingredient at a time.</div>
-    <div style="margin-top:6px; color:var(--faint);">&copy; 2026</div>
-  </div>
-  <div style="display:flex; gap:24px;">
-    <a href="mailto:dhruv@zetesislabs.com">Contact</a>
-  </div>
-</div></footer>
+STEP 4  (W is not Borel).
+  Suppose W were Borel.  Then its preimage under the constant section
+      x ↦ (a₀, x)
+  would be Borel.  But that preimage is A itself — not Borel. ⇒⇐
+                                                 ⊬ KrappWirthWellBehaved
 
+CONCLUSION.
+  WellBehavedVCMeasTarget holds while KrappWirthWellBehaved fails:
+  the gap between NullMeasurableSet and MeasurableSet is inhabited by
+  a concrete concept class.                      ∎  (axioms: propext,
+                                                    Classical.choice, Quot.sound)`,
+                source:'design-lab/learning-theory/FLT_Proofs/Separation/BorelAnalytic.lean ∷ exists_measTarget_separation' }),
+              W.proof({ n:'arg.4', cell:'research_programme',
+                claim:'Why an agent needs this: BorelRouterCode abstracts conditional interpolation — attention, mixture-of-experts routing, and transfer — as Borel-parameterized concept classes, so the measurability guarantee transports to the routed/neurosymbolic learners of §04. Interpolation and amalgamation closures are corollaries.',
+                code:'def BorelRouterCode : conditional interpolation over a\n    StandardBorelSpace — attention · routing · transfer\ntheorem interpClassFixed_subset_amalgClass :\n    interpolation ⊆ amalgamation  (both inherit WellBehavedVCMeasTarget)',
+                source:'design-lab/learning-theory/FLT_Proofs/Router/BorelRouterCode.lean ∷ interpClassFixed_subset_amalgClass' }),
+            ],
+            note:'These measurability theorems are proved (sorry-free, in the FLT kernel) — what makes them an Agents programme rather than settled trivia is their role: they fix when a self-improving learner’s policy is an admissible measurable object and when a routed/attention learner forfeits its certificate. The separation is conditional on an analytic non-Borel A ⊆ ℝ (standard set theory); exists_measTarget_separation takes that as a hypothesis. Figure is the kernel’s real assets/borel_analytic_separation.svg.' }),
+          tbd({ title:'metis', repo:'Zetetic-Dhruv/metis', vis:'private', status:'active',
+            note:'Typed argmax-routing autodidact; gated knowledge commits over an append-only DAG. Private — witness exposure to decide.' }),
+          tbd({ title:'noumenal_agent', repo:'noumenal-ai/noumenal_agent', vis:'private', status:'active',
+            note:'Agent runtime for the discovery loop. Private — witness exposure to decide.' }),
+          P({ title:'PAC-Bayes Self-Modifying', repo:'no published repo', vis:'preprint', status:'preprint',
+            direction:'A PAC-Bayes bound and anytime-certificate format for self-improving agents, demonstrated on a continually self-improving language agent.',
+            note:'Preprint — witness pending.' }),
+          tbd({ title:'Causal world model · UMTI', repo:'no published repo', vis:'field-validated', status:'active', alsoIn:'Formalization',
+            note:'Direction to be specified.' }),
+        ],
+      },
+      {
+        id:'reasoning', n:'05', name:'Reasoning', tagline:'deductive · inductive · RSI',
+        def:'Deriving the certain and generalizing the uncertain — and auditing the path that got there.',
+        projects:[
+          P({ title:'AgentState', repo:'ayushmi/agentstate', vis:'open', status:'open',
+            direction:'A clear reasoning target: hash-chained agent state with four verification layers and claim-checking, so every committed state is independently re-checkable.',
+            note:'Rust / Go — a code witness, not Lean. Witness form to decide.' }),
+          P({ title:'Discovery Tetrad', repo:'tetrad-audit-code + tetrad-audit-dataset', vis:'open', status:'open',
+            direction:'A process-level audit over reasoning itself: separate the goal from the witness offered for it, score each by four gates, and read out a 25-cell outcome vocabulary for completed discovery traces.',
+            witnesses:[ W.emp({ cell:'established_result',
+              headline:'Five heterogeneous substrates (FLT, SLT, FirstProof, AI-Scientist v1 & v2) audited under one frozen instrument — judge + schema + validator — with zero schema failures.',
+              stats:[ {v:'282', k:'goal records'}, {v:'288', k:'witness records'}, {v:'50', k:'step records'}, {v:'620', k:'evaluated units'}, {v:'25', k:'outcome cells'}, {v:'70', k:'sophism flags'} ],
+              note:'Goal vs witness, each scored by the four gates → a 16-cell goal map and a 9-cell witness cascade. This atlas is laid out in that grammar; the audit code and dataset are folded here as one card.',
+              source:'tetrad-audit-dataset · validate_outputs.py → 282 files, 0 failures' }) ] }),
+          P({ title:'First-Proof Benchmark Results', repo:'Zetetic-Dhruv/First-Proof-Benchmark-Results', vis:'open', status:'open',
+            direction:'Treat proof search as navigation over an explicit ignorance partition: score every step on four gates in real time, log what is not yet known, and let the next move be discovered from the measurement rather than planned.',
+            witnesses:[
+              W.emp({ cell:'established_result',
+                headline:'GPT-5.2 · 8 h unattended · ~$32 · 4 / 10 theorem-level proofs accepted · 85 steps audited (Harvard First Proof benchmark).',
+                metrics:[
+                  {label:'Assumption compliance', pct:100, frac:'85/85'},
+                  {label:'Inference validity', pct:98, frac:'83/85'},
+                  {label:'Goal completion', pct:76, frac:'65/85'},
+                  {label:'Generalization robustness', pct:69, frac:'59/85'},
+                ],
+                note:'The four gates mirror the Tetrad — compliance→Pl, inference→Coh, goal→Comp, robustness→Inv. The 29-point validity→robustness drop is the finding: the model rarely errs locally; it fails when a special case will not transport.',
+                source:'First-Proof-Benchmark-Results · doi:10.5281/zenodo.18629234' }),
+              W.fig({ cell:'supporting_argument',
+                src:'current/assets/fp_comparison_grid.svg',
+                alt:'Problem-by-problem results across submissions: this work, OpenAI, Aletheia (Google), and the benchmark authors.',
+                source:'First-Proof-Benchmark-Results/assets/comparison_grid.svg' }),
+            ] }),
+        ],
+      },
+      {
+        id:'knowledge', n:'06', name:'Knowledge', tagline:'the verified corpus',
+        def:'What is actually known, laid over the frontier.',
+        umbrella:'Design Lab (noumenal-ai/design-lab) is that body of work — one monorepo unifying seven Lean 4 libraries. Each is a research programme in its own right; their theorems are the witnesses cited across every section above.',
+        projects:[
+          P({ title:'Causality', repo:'design-lab · causality', vis:'internal', status:'active',
+            direction:'Pearl (2009) plus ten modern extensions, Lean-audited as an inheritance DAG; each modern result a tracked conjecture.',
+            witnesses:[ W.proof({ cell:'open_step',
+              code:'theorem CounterfactualID_proved :\n    CounterfactualID := by\n  sorry',
+              source:'design-lab/causality/Causality/Proofs/Modern/CounterfactualID.lean ∷ CounterfactualID_proved' }) ],
+            note:'Open obligations are tracked, not hidden.' }),
+          P({ title:'Transformers · TLT', repo:'design-lab · transformers', vis:'internal', status:'active', alsoIn:'Agents',
+            direction:'The formalized core: a certified, computable generalization bound for the IEEE binary32 transformer that actually runs, and the strict depth/width expressivity hierarchy underneath it. Zero sorry; everything reduces to propext · Classical.choice · Quot.sound. (The open neurosymbolic-routing programme this enables lives in §04 Agents.)',
+            witnesses:[
+              W.proof({ n:'arg.1', cell:'established_result',
+                claim:'The result: a generalization bound stated about the executed program, not an idealized model — every term computable from the actual fp32 weights, off a McDiarmid-small sample event.',
+                code:'theorem certified_executed_generalization_dudley :\n    R_trueᵉˣᵉᶜ ≤ R̂_empᵉˣᵉᶜ\n      + 2·(12√2·B/√m) + ε + 2·L·envBound\n  -- B the affine Dudley entropy integral; envBound the fp32 envelope',
+                source:'design-lab/transformers/TLT_Proofs/Bridge/Certificate/CertifiedTransformerBound.lean ∷ certified_executed_generalization_dudley' }),
+              W.proof({ cell:'established_result',
+                code:'theorem attnHead_literal_certified_generalization :\n    the bound holds for TorchLean’s literal IEEE32Exec\n    scaledDotProductAttention — the rounding atom is derived,\n    not supplied (no input-quantization slack)',
+                source:'design-lab/transformers/TLT_Proofs/Bridge/Certificate/AttentionLiteralExecutedBinding.lean ∷ attnHead_literal_certified_generalization' }),
+              W.proof({ n:'arg.2', cell:'established_result',
+                claim:'One network, read two ways: exact reals for the theorems and bit-exact float32 for the program, proven equal in coordinates — the certified head is TorchLean’s literal scaledDotProductAttention, and the head-split reshape carries no pathology.',
+                code:'theorem matCoords_scaledDotProductAttention :\n    certifiedHead = Spec.scaledDotProductAttention  (in coordinates)\ntheorem multiHeadAttention_forward_one :\n    Spec.MultiHeadAttention.forward (1 head) = reshape selfAttn',
+                source:'design-lab/transformers/TLT_Proofs/Bridge/Spec/ScaledDotProductAttentionCorrespondence.lean · …/MultiHeadAttentionSingleHeadReduction.lean' }),
+              W.proof({ n:'arg.3', cell:'established_result',
+                claim:'It lifts to the real architecture: a depth-L stack of true multi-head encoder layers (attention ∘ feed-forward), capacity growing with depth and head count and free of any sequence-length factor.',
+                code:'theorem transformerEncoderStackMH_certified_generalization :\n    certified fp32 bound for a depth-L multi-head encoder stack\ntheorem multiHeadAttn_weight_lip :\n    MHA Lipschitz in weights, constant linear in H, no seq-length factor',
+                source:'design-lab/transformers/TLT_Proofs/Bridge/Certificate/MultiHeadEncoderStack.lean · …/Bridge/Lipschitz/MultiHeadAttnCertificate.lean' }),
+              W.dia({ n:'arg.4', cell:'established_result',
+                claim:'The expressivity hierarchy: depth and width strictly buy capability, proved as real non-membership separations at every rung — and the routing’s logical type is read off the score degree (affine = first-order convex cells; self-attention’s quadratic scores = second-order semialgebraic, non-convex, yet still finite-VC).',
+                source:'TLT · assets/staircase.svg (schematic) · TemperedDesignLaw/Mux*',
+                vb:'0 0 440 162', svg:`<g fill="none" stroke="#16120b" stroke-width="1.3"><rect x="42" y="112" width="60" height="30"/><rect x="42" y="82" width="118" height="60"/><rect x="42" y="52" width="178" height="90"/><rect x="42" y="28" width="250" height="114"/></g><text x="108" y="131" font-size="10" fill="#5f574a">grade 0</text><text x="168" y="101" font-size="11" fill="#5f574a">⊊ 1</text><text x="228" y="71" font-size="11" fill="#5f574a">⊊ 2</text><text x="300" y="44" font-size="11" fill="#3b4a93">⊊ 3 …</text><text x="42" y="158" font-size="9" fill="#b06a12">depth and width strictly enlarge the realizable routes — proved at every rung</text>` }),
+              W.proof({ cell:'established_result',
+                code:'theorem binCascadeGrade_ssubset_succ : grade L ⊊ grade (L+1)  ∀L  (depth)\ntheorem constArityGrade_ssubset_succ : arity n ⊊ arity (n+1)  ∀n  (width)\ntheorem affineArgmaxCell_FO / quadraticArgmaxCell_SO_semialgebraic :\n    affine routing = first-order; quadratic (self-attn) = second-order',
+                source:'design-lab/transformers/TLT_Proofs/TemperedDesignLaw/MuxDepthLadderGeneral.lean · MuxWidth.lean · FOSOMembership.lean' }),
+            ],
+            note:'Formalized and sealed: the certificate is about the executed program (rounding derived to a single exp atom), lifted to a real multi-head encoder stack, over a strict depth/width expressivity hierarchy. These theorems are the settled foundation the §04 Agents neurosymbolic programme builds on.' }),
+          P({ title:'Learning Theory · FLT', repo:'design-lab · learning-theory', vis:'internal', status:'active', alsoIn:'Agents',
+            direction:'The formalized core: 354 machine-checked theorems, 0 sorry, axioms {propext, Classical.choice, Quot.sound} only — the Fundamental Theorem of Statistical Learning as one sealed five-way equivalence, a new constructive compression route, the three-paradigm separation, and the first Lean PAC-Bayes bridge. (The novel measurability theory this forced — the learner-measurability hierarchy and the Borel-analytic counterexample — lives in §04 Agents.)',
+            witnesses:[
+              W.fig({ n:'arg.1', cell:'established_result',
+                claim:'The Fundamental Theorem of Statistical Learning, all five conjuncts proved sorry-free: PAC-learnability, finite VC dimension, a finite compression scheme, vanishing Rademacher complexity, and the Sauer–Shelah growth bound are one equivalence class.',
+                src:'current/assets/9f51c5f1_hero.svg',
+                alt:'Pentagon of the five-way fundamental-theorem equivalence: PAC learnable, finite VC dimension, finite compression, uniform convergence / vanishing Rademacher, Sauer–Shelah growth.',
+                source:'design-lab/learning-theory/FLT_Proofs/Theorem/PAC.lean ∷ fundamental_theorem · premise/hero.svg' }),
+              W.proof({ cell:'established_result',
+                code:'theorem fundamental_theorem (X) [MeasurableConceptClass X C] :\n    PACLearnable C ↔ FiniteCompression C\n      ↔ RademacherVanishes C ↔ FiniteSampleComplexity C\n      ↔ SauerShelahBounded C ↔ VCDim C < ⊤',
+                source:'design-lab/learning-theory/FLT_Proofs/Theorem/PAC.lean ∷ fundamental_theorem' }),
+              W.dia({ n:'arg.2', cell:'novel_discovery',
+                claim:'The literal Independent VC development — state-of-the-art beyond Mathlib itself: a self-contained Vapnik–Chervonenkis theory built directly on Mathlib’s three bare primitives (Shatters, VCDim, GrowthFunction) and carried far past what Mathlib contains — 50 sorry-free modules climbing from the combinatorial core through real-valued capacity and the learning bridge to a categorical framework synthesis. It is hard precisely because each tier crosses into a new mathematical domain Mathlib does not bridge — combinatorics → metric / descriptive set theory → measure theory → category theory — every crossing demanding infrastructure constructed from scratch, sorry-free, on axioms propext · Classical.choice · Quot.sound.',
+                source:'FLT · Complexity/IndependentVC — 50-module development (redrawn)',
+                vb:'0 0 462 410', svg:`<text x="92" y="22" font-size="11" fill="#16120b">Independent VC theory</text><text x="92" y="36" font-size="8" fill="#8a8273">50 sorry-free modules on Mathlib’s three primitives — going SoTA past them · each tier a new domain crossing</text>
+<!-- apex: framework synthesis -->
+<rect x="92" y="60" width="312" height="64" fill="#3b4a93" fill-opacity="0.1" stroke="#3b4a93" stroke-width="1.3"/><text x="104" y="78" font-size="10" fill="#3b4a93">Framework synthesis · Γ / γ axes</text><text x="104" y="93" font-size="8" fill="#3b4a93">Cap_Σ functor — “the dimension zoo is one functor”</text><text x="104" y="106" font-size="8" fill="#3b4a93">LObj category · automorphism subgroup · expressivity + structure closures</text><text x="104" y="118" font-size="8" fill="#3b4a93">point↔concept Galois connection (Birkhoff polarity / FCA)</text>
+<!-- tier4: learning bridge -->
+<rect x="92" y="130" width="312" height="46" fill="#2f6b4a" fill-opacity="0.1" stroke="#2f6b4a" stroke-width="1.3"/><text x="104" y="146" font-size="10" fill="#2f6b4a">Learning bridge</text><text x="104" y="160" font-size="8" fill="#3a3327">finite VC ⇒ PAC · Fundamental Theorem</text><text x="104" y="171" font-size="8" fill="#3a3327">VCDim &lt; ⊤  ⟺  PACLearnable  ⟺  eventual polynomial growth</text>
+<!-- tier3: real capacity -->
+<rect x="92" y="182" width="312" height="46" fill="none" stroke="#16120b" stroke-width="1.2"/><text x="104" y="198" font-size="10" fill="#16120b">Real-valued capacity</text><text x="104" y="212" font-size="8" fill="#5f574a">Dudley (VCDim ≤ dim V) · pseudodimension · fat-shattering</text><text x="104" y="223" font-size="8" fill="#5f574a">halfspaces in ℝⁿ : VCDim = n (sharp)</text>
+<!-- tier2: structural closure -->
+<rect x="92" y="234" width="312" height="46" fill="none" stroke="#16120b" stroke-width="1.2"/><text x="104" y="250" font-size="10" fill="#16120b">Structural closure</text><text x="104" y="264" font-size="8" fill="#5f574a">lattice closure · union sharp d + d′ + 1 · Boolean combinations</text><text x="104" y="275" font-size="8" fill="#5f574a">duality &amp; VC-density · Assouad sandwich · self-dual finiteness</text>
+<!-- tier1: combinatorial core -->
+<rect x="92" y="286" width="312" height="46" fill="none" stroke="#16120b" stroke-width="1.2"/><text x="104" y="302" font-size="10" fill="#16120b">Combinatorial core</text><text x="104" y="316" font-size="8" fill="#5f574a">growth calculus · finiteness ⟺ polynomial growth</text><text x="104" y="327" font-size="8" fill="#5f574a">quantitative Sauer–Shelah · Pajor · packing (em/d)^d</text>
+<!-- frontier + base -->
+<line x1="78" y1="338" x2="410" y2="338" stroke="#b06a12" stroke-width="1" stroke-dasharray="5 4"/>
+<rect x="92" y="342" width="312" height="30" fill="#e6e2d8" stroke="#16120b" stroke-width="1.4"/><text x="104" y="355" font-size="9.5" fill="#16120b">Mathlib  ·  Shatters · VCDim · GrowthFunction</text><text x="104" y="367" font-size="7.5" fill="#8a8273">the only VC primitives Mathlib ships — three bare definitions</text>
+<!-- domain-crossing left axis -->
+<g font-size="7.5" fill="#8a8273"><text x="6" y="312">combinatorics</text><text x="6" y="208">+ metric · DST</text><text x="6" y="156" fill="#2f6b4a">+ measure thy</text><text x="6" y="95" fill="#3b4a93">+ category thy</text></g>
+<!-- beyond-Mathlib arrow -->
+<line x1="424" y1="336" x2="424" y2="70" stroke="#b06a12" stroke-width="1.4"/><path d="M420,78 L424,66 L428,78" fill="none" stroke="#b06a12" stroke-width="1.4"/><text transform="translate(442,260) rotate(-90)" font-size="8.5" fill="#b06a12">beyond Mathlib · SoTA</text>` }),
+              W.proof({ n:'arg.3', cell:'novel_discovery',
+                claim:'A new proof route for the compression direction: multiplicative-weights approximate minimax replaces Moran–Yehudayoff’s exact Sion minimax step, turning an existence argument into a constructive iterative scheme — with an original quantitative parameter design (margin 13/24 from slack budget 1/12 + 1/24 + 1/8).',
+                code:'theorem vcdim_finite_imp_compression :\n    VCDim C < ⊤ → ∃ FiniteCompressionScheme C\n  -- MWU approximate minimax; measure-theory-free pipeline\n  -- (FinitePMF + boolTestExpectation + empiricalPMF)',
+                source:'design-lab/learning-theory/FLT_Proofs/Compression/ApproxMinimax.lean ∷ vcdim_finite_imp_compression' }),
+              W.proof({ n:'arg.4', cell:'established_result',
+                claim:'The three-paradigm separation, each direction carried by a constructive witness and sharing no proof infrastructure: PAC ⊅ Online (threshold class on ℕ), Gold ⊅ PAC (finite-subset indicators), Online ⊆ PAC (unconditional).',
+                code:'theorem pac_not_implies_online   -- threshold class on ℕ\ntheorem ex_not_implies_pac        -- Gold ⊅ PAC, finite subsets\ntheorem online_imp_pac            -- Online ⊆ PAC, unconditional',
+                source:'design-lab/learning-theory/FLT_Proofs/Separation/{PACOnline,GoldPAC,OnlinePAC}.lean' }),
+              W.proof({ n:'arg.5', cell:'established_result',
+                claim:'PAC-Bayes (McAllester) — the first frequentist–Bayesian bridge formalized in Lean 4: a KL-penalized Gibbs generalization bound via per-hypothesis Hoeffding, a union bound, and Jensen over the posterior.',
+                code:'theorem pac_bayes_finite (P Q : FinPMF H) (S : Sample) :\n    gibbsError Q ≤ empGibbsError Q S\n      + sqrt ((KL Q P + log (2√m/δ)) / (2m))',
+                source:'design-lab/learning-theory/FLT_Proofs/PACBayes/McAllester.lean ∷ pac_bayes_finite' }),
+            ],
+            note:'Formalized and sealed (four CI tiers, incl. Comparator gold-standard + independent leanchecker replay). The fundamental theorem’s constructive direction routes through ~3,027 lines of symmetrization — a 15:1 forward/backward asymmetry — because PAC crosses from combinatorics into measure theory. That crossing is exactly what forces the §04 Agents measurability theory.' }),
+          P({ title:'Measurements · ZPM', repo:'design-lab · measurements', vis:'internal', status:'active',
+            direction:'The agent’s self-measurement toolkit — divergences, concentration, kernel embeddings. Pinsker with the sharp constant converts information loss into decision error.',
+            witnesses:[ W.proof({ cell:'established_result',
+              code:'theorem pinsker_proof (P Q : Measure α)\n    [IsProbabilityMeasure P] [IsProbabilityMeasure Q]\n    (hac : P.AbsolutelyContinuous Q) :\n    tvDistReal P Q ≤ Real.sqrt (klDivReal P Q / 2)',
+              source:'design-lab/measurements/ZPM/InformationTheory/Pinsker/General.lean ∷ pinsker_proof' }) ] }),
+          P({ title:'Statistics · SLT', repo:'design-lab · statistics', vis:'internal', status:'active',
+            direction:'The concentration backbone: an Efron-Stein variance bound for any square-integrable function of independent inputs — the device behind most modern concentration arguments.',
+            witnesses:[ W.proof({ cell:'established_result',
+              code:'theorem efronStein (f : (Fin n → Ω) → ℝ)\n    (hf : MemLp f 2 μˢ) :\n    variance f μˢ ≤\n      ∑ i, ∫ x, (f x - condExpExceptCoord i f x)^2 ∂μˢ',
+              source:'design-lab/statistics/SLT/proofs/EfronStein.lean ∷ efronStein' }) ] }),
+          P({ title:'Reinforcement Learning · RLTheory', repo:'design-lab · rl', vis:'internal', status:'active',
+            direction:'Convergence of stochastic approximation under a Lyapunov drift — Q-learning converges almost surely under Markov sampling.',
+            witnesses:[ W.proof({ cell:'established_result',
+              code:'theorem ae_tendsto_of_QLearning_markov\n    (spec : QLearningSpec) (h : spec.Ergodic) :\n    ∀ᵐ ω, Tendsto (fun n ↦ Q n ω) atTop\n      (𝓝 spec.optimalQ)',
+              source:'design-lab/rl/RLTheory/Algorithm/QLearning.lean ∷ ae_tendsto_of_QLearning_markov' }) ] }),
+          P({ title:'Neural Networks · NN', repo:'design-lab · neural-networks', vis:'internal', status:'active',
+            direction:'Certified network execution — TorchLean: typed tensors, verified reverse-mode autograd, IEEE-754 semantics, and interval-bound certificate checking.',
+            witnesses:[ W.fig({ cell:'supporting_argument',
+              src:'current/assets/ace1ca54_verification-bounds.png',
+              alt:'Interval-bound propagation and alpha-CROWN pipeline: a perturbation set propagated through affine and ReLU relaxations to certified output bounds.',
+              source:'design-lab/neural-networks/home_page/.../verification-bounds.png' }) ] }),
+          tbd({ title:'proof-and-theorem-library', repo:'noumenal-ai/proof-and-theorem-library', vis:'internal', status:'active',
+            note:'Reusable mechanized theorems and proof witnesses — the shared library the corpus draws on. Direction / witnesses to be specified.' }),
+          P({ title:'formal-learning-theory-book', repo:'Zetetic-Dhruv/formal-learning-theory-book', vis:'open', status:'open',
+            direction:'A 202-page textbook of formal learning theory with a 142-node concept graph — the settled core, written down.',
+            note:'Witnesses pending (figures / concept graph).' }),
+          tbd({ title:'TRACES', repo:'noumenal-ai/TRACES', vis:'private', status:'active',
+            note:'An empirical reserve of datasets with natural out-of-distribution shift, structured for mechanism-discovery benchmarking. Private — witness exposure to decide.' }),
+        ],
+      },
+    ];
+
+    const jsonText =
+`{
+  "id": "knowledge.design-lab.learning-theory.flt",
+  "ingredient": "knowledge",
+  "ingredient_index": 6,
+  "project": "design-lab",
+  "library": "learning-theory",
+  "repo": "noumenal-ai/design-lab",
+  "visibility": "internal",
+  "status": "active",
+  "direction": "The Fundamental Theorem of Statistical Learning as one sealed five-way equivalence.",
+  "witness": {
+    "type": "proof",
+    "gates": { "Pl": 1, "Coh": 1, "Comp": 1, "Inv": 1 },
+    "cell": "established_result",
+    "source": "design-lab/learning-theory/FLT_Proofs/Theorem/PAC.lean::fundamental_theorem"
+  },
+  "also_cited_in": ["formalization"],
+  "trust_base": ["lean4-kernel", "propext", "Classical.choice", "Quot.sound", "mathlib@<pin>"],
+  "render": { "human": "text/html", "agent": "application/json" }
+}`;
+
+    // ── the figure cycles through distinct incomplete open cubes (LeWitt) ──
+    const h = 58;
+    const EDGE = [
+      `translate3d(0,${-h}px,${-h}px)`,
+      `translate3d(0,${-h}px,${h}px)`,
+      `translate3d(0,${h}px,${-h}px)`,
+      `translate3d(0,${h}px,${h}px)`,
+      `translate3d(${-h}px,0,${-h}px) rotateZ(90deg)`,
+      `translate3d(${-h}px,0,${h}px) rotateZ(90deg)`,
+      `translate3d(${h}px,0,${-h}px) rotateZ(90deg)`,
+      `translate3d(${h}px,0,${h}px) rotateZ(90deg)`,
+      `translate3d(${-h}px,${-h}px,0) rotateY(90deg)`,
+      `translate3d(${-h}px,${h}px,0) rotateY(90deg)`,
+      `translate3d(${h}px,${-h}px,0) rotateY(90deg)`,
+      `translate3d(${h}px,${h}px,0) rotateY(90deg)`,
+    ];
+    const FRAMES = [
+      [0,1,2,4,5,6,7,8,9,10,11],
+      [0,1,2,4,5,7,8,10,11],
+      [0,1,2,4,5,6,8,10],
+      [0,1,2,4,5,8,9],
+      [0,1,4,5,8,9],
+      [8,1,7,11,2],
+      [0,1,4,8],
+      [0,4,8],
+    ];
+    const fi = ((this.state.frame % FRAMES.length) + FRAMES.length) % FRAMES.length;
+    const present = FRAMES[fi];
+    const ry = fi * 30;
+    const rx = (fi % 2) ? -20 : -27;
+    const bars = EDGE.map((t, i) => {
+      const on = present.indexOf(i) !== -1;
+      return React.createElement('div', { key: i, style: {
+        position:'absolute', left:0, top:0, width:'116px', height:'2px',
+        marginLeft:'-58px', marginTop:'-1px', borderRadius:'1px', background:'#efe3c4',
+        boxShadow: on ? '0 0 6px rgba(240,222,150,.4)' : 'none',
+        opacity: on ? 1 : 0.1, transform: t,
+        transition: 'opacity 1s ease, box-shadow 1s ease',
+      }});
+    });
+    const cubeInner = React.createElement('div',
+      { style: { perspective:'660px', width:'264px', height:'264px', display:'flex', alignItems:'center', justifyContent:'center' } },
+      React.createElement('div', { style: {
+        width:0, height:0, position:'relative', transformStyle:'preserve-3d',
+        transform:`rotateX(${rx}deg) rotateY(${ry}deg)`,
+        transition:'transform 1.4s cubic-bezier(.5,0,.2,1)',
+      }}, bars)
+    );
+
+    return {
+      spine, sections, cubeInner,
+      showJson: this.state.showJson,
+      jsonText,
+      toggleJson: () => this.setState(s => ({ showJson: !s.showJson })),
+    };
+  }
+}
+</script>
 </body>
 </html>
