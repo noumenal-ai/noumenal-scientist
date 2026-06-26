@@ -1,0 +1,44 @@
+[
+  {
+    "id": "substrate",
+    "n": "01",
+    "name": "Substrate",
+    "tagline": "geometric · symbolic · neural",
+    "def": "What a hypothesis is made of — the representational medium a world-model lives in."
+  },
+  {
+    "id": "formalization",
+    "n": "02",
+    "name": "Formalization",
+    "tagline": "causal · statistical",
+    "def": "How raw structure becomes a model that finite data can test."
+  },
+  {
+    "id": "measurement",
+    "n": "03",
+    "name": "Measurement",
+    "tagline": "belief · concentration · progress",
+    "def": "Numbers the scientist can compute on itself — and a progress meter that does not bend under pressure."
+  },
+  {
+    "id": "agents",
+    "n": "04",
+    "name": "Agents",
+    "tagline": "learn · imagine · act",
+    "def": "The loop that proposes and probes — learning, imagined experiments, and intervention under uncertainty."
+  },
+  {
+    "id": "reasoning",
+    "n": "05",
+    "name": "Reasoning",
+    "tagline": "deductive · inductive · RSI",
+    "def": "Deriving the certain and generalizing the uncertain — and auditing the path that got there."
+  },
+  {
+    "id": "knowledge",
+    "n": "06",
+    "name": "Knowledge",
+    "tagline": "the verified corpus",
+    "def": "What is actually known, laid over the frontier."
+  }
+]

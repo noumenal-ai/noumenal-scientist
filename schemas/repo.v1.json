@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://noumenal-ai.github.io/noumenal-scientist/schemas/repo.v1.json",
+  "title": "Noumenal repo manifest (noumenal.json)",
+  "description": "Place this file at the root of a repo to opt it into the Noumenal site. The aggregator (cron + manual) reads it, validates each witness, pulls live proof code for PUBLIC repos, and regenerates the cards.",
+  "type": "object",
+  "required": ["noumenal", "version", "repo", "cards"],
+  "additionalProperties": true,
+  "properties": {
+    "noumenal": { "const": true, "description": "Opt-in flag. Must be true or the repo is ignored." },
+    "version": { "const": 1 },
+    "repo": { "type": "string", "pattern": "^[^/]+/[^/]+$", "description": "owner/name GitHub slug" },
+    "cards": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/card" } }
+  },
+  "$defs": {
+    "card": {
+      "type": "object",
+      "required": ["ingredient", "title"],
+      "additionalProperties": true,
+      "properties": {
+        "order": { "type": "integer", "description": "global ordering hint within its section" },
+        "ingredient": { "enum": ["substrate", "formalization", "measurement", "agents", "reasoning", "knowledge"] },
+        "title": { "type": "string" },
+        "repo": { "type": "string", "description": "display string shown on the card (e.g. 'design-lab · causality')" },
+        "vis": { "type": "string", "enum": ["open", "internal", "private", "planned", "field-validated"] },
+        "status": { "type": "string" },
+        "alsoIn": { "type": "string", "description": "other ingredients this project also appears in" },
+        "direction": { "type": "string", "description": "the research direction (one paragraph, standard vocabulary)" },
+        "note": { "type": "string" },
+        "tbd": { "type": "boolean", "description": "true => rendered as a pending card with no witnesses" },
+        "witnesses": { "type": "array", "items": { "$ref": "#/$defs/witness" } }
+      }
+    },
+    "witness": {
+      "type": "object",
+      "required": ["type"],
+      "additionalProperties": true,
+      "properties": {
+        "type": { "enum": ["proof", "diagram", "figure", "empirical"] },
+        "cell": { "type": "string" },
+        "n": { "type": "string" },
+        "claim": { "type": "string" },
+        "source": { "type": "string", "description": "human-readable provenance shown under the witness" },
+        "code": { "type": "string", "description": "proof: the Lean snippet (fallback / private repos)" },
+        "file": { "type": "string", "description": "proof: real in-repo path to the .lean (PUBLIC repos get this pulled live and validated)" },
+        "name": { "type": "string", "description": "proof: the declaration name to pull/validate" },
+        "vb": { "type": "string", "description": "diagram: SVG viewBox" },
+        "svg": { "type": "string", "description": "diagram: raw inner SVG (monochrome, hand-drawn)" },
+        "src": { "type": "string", "description": "figure: image URL or data URI" },
+        "alt": { "type": "string" },
+        "flag": { "type": "string" },
+        "headline": { "type": "string", "description": "empirical: the headline result" },
+        "metrics": { "type": "array" },
+        "stats": { "type": "array" }
+      }
+    }
+  }
+}

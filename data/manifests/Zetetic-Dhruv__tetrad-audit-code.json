@@ -1,0 +1,55 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "Zetetic-Dhruv/tetrad-audit-code",
+  "cards": [
+    {
+      "order": 16,
+      "ingredient": "reasoning",
+      "title": "Discovery Tetrad",
+      "repo": "tetrad-audit-code + tetrad-audit-dataset",
+      "vis": "open",
+      "status": "open",
+      "alsoIn": "",
+      "direction": "A process-level audit over reasoning itself: separate the goal from the witness offered for it, score each by four gates, and read out a 25-cell outcome vocabulary for completed discovery traces.",
+      "note": "",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "empirical",
+          "cell": "established_result",
+          "headline": "Five heterogeneous substrates (FLT, SLT, FirstProof, AI-Scientist v1 & v2) audited under one frozen instrument — judge + schema + validator — with zero schema failures.",
+          "metrics": [],
+          "stats": [
+            {
+              "v": "282",
+              "k": "goal records"
+            },
+            {
+              "v": "288",
+              "k": "witness records"
+            },
+            {
+              "v": "50",
+              "k": "step records"
+            },
+            {
+              "v": "620",
+              "k": "evaluated units"
+            },
+            {
+              "v": "25",
+              "k": "outcome cells"
+            },
+            {
+              "v": "70",
+              "k": "sophism flags"
+            }
+          ],
+          "note": "Goal vs witness, each scored by the four gates → a 16-cell goal map and a 9-cell witness cascade. This atlas is laid out in that grammar; the audit code and dataset are folded here as one card.",
+          "source": "tetrad-audit-dataset · validate_outputs.py → 282 files, 0 failures"
+        }
+      ]
+    }
+  ]
+}

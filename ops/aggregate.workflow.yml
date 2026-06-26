@@ -1,0 +1,48 @@
+name: Aggregate Noumenal cards
+
+# Regenerates the project cards on the site from each repo's noumenal.json.
+# Opt-in: a repo appears iff it has a root noumenal.json with {"noumenal": true}.
+# PUBLIC repos get their proof code pulled live and validated from the real .lean;
+# PRIVATE repos show their curated snippet, marked private.
+
+on:
+  schedule:
+    - cron: '*/20 * * * *'   # every ~20 min (GitHub schedules are best-effort)
+  workflow_dispatch: {}       # manual "Run workflow" button
+
+permissions:
+  contents: write
+
+concurrency:
+  group: aggregate
+  cancel-in-progress: false
+
+jobs:
+  aggregate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Aggregate manifests and regenerate index.html
+        env:
+          # GH_AGGREGATOR_TOKEN: a fine-grained PAT (or GitHub App token) with
+          #   contents:read on the contributing repos across noumenal-ai +
+          #   Zetetic-Dhruv (incl. PRIVATE ones). Falls back to GITHUB_TOKEN,
+          #   which can only read this repo + public repos.
+          GH_TOKEN: ${{ secrets.GH_AGGREGATOR_TOKEN || secrets.GITHUB_TOKEN }}
+        run: node scripts/aggregate.mjs --live
+      - name: Verify round-trip integrity
+        run: node scripts/roundtrip.mjs check || echo "::warning::cards changed vs last golden (expected when a manifest updates)"
+      - name: Commit if changed
+        run: |
+          if [ -n "$(git status --porcelain index.html data/)" ]; then
+            git config user.name "noumenal-bot"
+            git config user.email "noumenal-bot@users.noreply.github.com"
+            git add index.html data/
+            git commit -m "chore: regenerate cards from repo manifests [skip ci]"
+            git push
+          else
+            echo "no card changes"
+          fi

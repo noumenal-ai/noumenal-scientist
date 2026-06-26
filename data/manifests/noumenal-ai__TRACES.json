@@ -1,0 +1,20 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "noumenal-ai/TRACES",
+  "cards": [
+    {
+      "order": 27,
+      "ingredient": "knowledge",
+      "title": "TRACES",
+      "repo": "noumenal-ai/TRACES",
+      "vis": "private",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "",
+      "note": "An empirical reserve of datasets with natural out-of-distribution shift, structured for mechanism-discovery benchmarking. Private — witness exposure to decide.",
+      "tbd": true,
+      "witnesses": []
+    }
+  ]
+}

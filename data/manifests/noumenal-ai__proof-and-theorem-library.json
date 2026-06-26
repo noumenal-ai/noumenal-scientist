@@ -1,0 +1,20 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "noumenal-ai/proof-and-theorem-library",
+  "cards": [
+    {
+      "order": 25,
+      "ingredient": "knowledge",
+      "title": "proof-and-theorem-library",
+      "repo": "noumenal-ai/proof-and-theorem-library",
+      "vis": "internal",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "",
+      "note": "Reusable mechanized theorems and proof witnesses — the shared library the corpus draws on. Direction / witnesses to be specified.",
+      "tbd": true,
+      "witnesses": []
+    }
+  ]
+}

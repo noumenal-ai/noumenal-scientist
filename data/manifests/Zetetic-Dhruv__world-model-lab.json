@@ -1,0 +1,35 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "Zetetic-Dhruv/world-model-lab",
+  "cards": [
+    {
+      "order": 8,
+      "ingredient": "agents",
+      "title": "world-model-lab",
+      "repo": "Zetetic-Dhruv/world-model-lab",
+      "vis": "open",
+      "status": "open",
+      "alsoIn": "",
+      "direction": "Episode-frame leakage in a predictive world-model is an intrinsic floor: the Bayes-risk gap between frame- and episode-level splits equals an explained-variance functional, so more frames cannot close it.",
+      "note": "The figure is empirical, not transported — the proof is what makes the leak a property of the partition rather than the run.",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "code": "theorem bayesRisk_gap [IsProbabilityMeasure μ]\n    (hm : m₁ ≤ m₂) (hX : MemLp X 2 μ) :\n    bayesRisk m₁ X μ - bayesRisk m₂ X μ\n      = μ[Var[μ[X | m₂]; μ | m₁]]",
+          "source": "world-model-lab/projects/lewm/lean4/LewmValidity.lean ∷ bayesRisk_gap"
+        },
+        {
+          "type": "figure",
+          "cell": "merely_true",
+          "src": "current/assets/323020c8_fig_trajectory_overlay.png",
+          "alt": "JEPA training trajectories — effective rank, KSG mutual information, validation prediction loss, and linear-probe R² across 100 epochs on dm_control Reacher, 64px vs 128px.",
+          "source": "Machine Errors/JEPA/.../runs/sweep_traj100/reacher/fig_trajectory_overlay.png",
+          "flag": ""
+        }
+      ]
+    }
+  ]
+}

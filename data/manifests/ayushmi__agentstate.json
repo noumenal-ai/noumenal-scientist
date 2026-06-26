@@ -1,0 +1,20 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "ayushmi/agentstate",
+  "cards": [
+    {
+      "order": 15,
+      "ingredient": "reasoning",
+      "title": "AgentState",
+      "repo": "ayushmi/agentstate",
+      "vis": "open",
+      "status": "open",
+      "alsoIn": "",
+      "direction": "A clear reasoning target: hash-chained agent state with four verification layers and claim-checking, so every committed state is independently re-checkable.",
+      "note": "Rust / Go — a code witness, not Lean. Witness form to decide.",
+      "tbd": false,
+      "witnesses": []
+    }
+  ]
+}

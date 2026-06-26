@@ -1,0 +1,20 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "Zetetic-Dhruv/metis",
+  "cards": [
+    {
+      "order": 11,
+      "ingredient": "agents",
+      "title": "metis",
+      "repo": "Zetetic-Dhruv/metis",
+      "vis": "private",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "",
+      "note": "Typed argmax-routing autodidact; gated knowledge commits over an append-only DAG. Private — witness exposure to decide.",
+      "tbd": true,
+      "witnesses": []
+    }
+  ]
+}

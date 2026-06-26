@@ -1,0 +1,59 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "Zetetic-Dhruv/First-Proof-Benchmark-Results",
+  "cards": [
+    {
+      "order": 17,
+      "ingredient": "reasoning",
+      "title": "First-Proof Benchmark Results",
+      "repo": "Zetetic-Dhruv/First-Proof-Benchmark-Results",
+      "vis": "open",
+      "status": "open",
+      "alsoIn": "",
+      "direction": "Treat proof search as navigation over an explicit ignorance partition: score every step on four gates in real time, log what is not yet known, and let the next move be discovered from the measurement rather than planned.",
+      "note": "",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "empirical",
+          "cell": "established_result",
+          "headline": "GPT-5.2 · 8 h unattended · ~$32 · 4 / 10 theorem-level proofs accepted · 85 steps audited (Harvard First Proof benchmark).",
+          "metrics": [
+            {
+              "label": "Assumption compliance",
+              "pct": 100,
+              "frac": "85/85"
+            },
+            {
+              "label": "Inference validity",
+              "pct": 98,
+              "frac": "83/85"
+            },
+            {
+              "label": "Goal completion",
+              "pct": 76,
+              "frac": "65/85"
+            },
+            {
+              "label": "Generalization robustness",
+              "pct": 69,
+              "frac": "59/85"
+            }
+          ],
+          "stats": [],
+          "note": "The four gates mirror the Tetrad — compliance→Pl, inference→Coh, goal→Comp, robustness→Inv. The 29-point validity→robustness drop is the finding: the model rarely errs locally; it fails when a special case will not transport.",
+          "source": "First-Proof-Benchmark-Results · doi:10.5281/zenodo.18629234"
+        },
+        {
+          "type": "figure",
+          "cell": "supporting_argument",
+          "src": "current/assets/fp_comparison_grid.svg",
+          "alt": "Problem-by-problem results across submissions: this work, OpenAI, Aletheia (Google), and the benchmark authors.",
+          "source": "First-Proof-Benchmark-Results/assets/comparison_grid.svg",
+          "flag": ""
+        }
+      ]
+    }
+  ]
+}

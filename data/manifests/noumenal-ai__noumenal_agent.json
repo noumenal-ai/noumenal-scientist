@@ -1,0 +1,20 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "noumenal-ai/noumenal_agent",
+  "cards": [
+    {
+      "order": 12,
+      "ingredient": "agents",
+      "title": "noumenal_agent",
+      "repo": "noumenal-ai/noumenal_agent",
+      "vis": "private",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "",
+      "note": "Agent runtime for the discovery loop. Private — witness exposure to decide.",
+      "tbd": true,
+      "witnesses": []
+    }
+  ]
+}

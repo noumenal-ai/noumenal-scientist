@@ -1,0 +1,54 @@
+[
+  {
+    "order": 4,
+    "ingredient": "formalization",
+    "title": "Causal world model · UMTI",
+    "repo": "no published repo",
+    "vis": "field-validated",
+    "status": "active",
+    "alsoIn": "Agents",
+    "direction": "",
+    "note": "Mechanism inference via kernel / sigma-algebra duality. Direction and repo to be specified.",
+    "tbd": true,
+    "witnesses": []
+  },
+  {
+    "order": 7,
+    "ingredient": "measurement",
+    "title": "Conformal Counterfactuals",
+    "repo": "no published repo",
+    "vis": "planned",
+    "status": "planned",
+    "alsoIn": "",
+    "direction": "",
+    "note": "Open / planned — in the stack, not yet started. Four-claim package: theorem, world-model wrapper, Atari-100k, DMControl.",
+    "tbd": true,
+    "witnesses": []
+  },
+  {
+    "order": 13,
+    "ingredient": "agents",
+    "title": "PAC-Bayes Self-Modifying",
+    "repo": "no published repo",
+    "vis": "preprint",
+    "status": "preprint",
+    "alsoIn": "",
+    "direction": "A PAC-Bayes bound and anytime-certificate format for self-improving agents, demonstrated on a continually self-improving language agent.",
+    "note": "Preprint — witness pending.",
+    "tbd": false,
+    "witnesses": []
+  },
+  {
+    "order": 14,
+    "ingredient": "agents",
+    "title": "Causal world model · UMTI",
+    "repo": "no published repo",
+    "vis": "field-validated",
+    "status": "active",
+    "alsoIn": "Formalization",
+    "direction": "",
+    "note": "Direction to be specified.",
+    "tbd": true,
+    "witnesses": []
+  }
+]

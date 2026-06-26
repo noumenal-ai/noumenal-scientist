@@ -1,0 +1,20 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "Zetetic-Dhruv/formal-learning-theory-book",
+  "cards": [
+    {
+      "order": 26,
+      "ingredient": "knowledge",
+      "title": "formal-learning-theory-book",
+      "repo": "Zetetic-Dhruv/formal-learning-theory-book",
+      "vis": "open",
+      "status": "open",
+      "alsoIn": "",
+      "direction": "A 202-page textbook of formal learning theory with a 142-node concept graph — the settled core, written down.",
+      "note": "Witnesses pending (figures / concept graph).",
+      "tbd": false,
+      "witnesses": []
+    }
+  ]
+}
