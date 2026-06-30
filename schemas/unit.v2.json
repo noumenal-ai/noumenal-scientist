@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://noumenal-ai.github.io/noumenal-scientist/schemas/unit.v2.json",
+  "title": "Noumenal journal manifest (noumenal.json, version 2 — units)",
+  "description": "The Verified ML Journal structure. The citable atom is a (statement, proof, witness) triple. A unit is ACCEPTED iff the three-check gate passes: PROOF (kernel) AND FAITHFULNESS (certified gloss) AND WITNESS (executed value inside a kernel-certified interval). Tier (T0/T1/T2) is DERIVED, never declared. SUBSTRATE EXCEPTION: the proof leg and the witness leg carry TWO INDEPENDENT dependency closures, each terminating in its own named trust base; there is no shared-substrate edge joining experiment to theory. v1 card manifests still render; v2 is the authoring contract the staging skill emits and CI re-verifies.",
+  "type": "object",
+  "required": ["noumenal", "version", "repo", "units"],
+  "additionalProperties": true,
+  "properties": {
+    "noumenal": { "const": true },
+    "version": { "const": 2 },
+    "repo": { "type": "string", "pattern": "^[^/]+/[^/]+$" },
+    "units": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/unit" } }
+  },
+  "$defs": {
+    "unit": {
+      "type": "object",
+      "required": ["id", "ingredient", "title", "statement", "proof", "gloss"],
+      "additionalProperties": true,
+      "description": "One self-contained (statement, proof, witness) triple. NOTE: there is intentionally NO unit-level `substrate` field; proof.closure and witness.closure are independent (the substrate exception).",
+      "properties": {
+        "id": { "type": "string" },
+        "ingredient": { "enum": ["substrate", "formalization", "measurement", "agents", "reasoning", "knowledge"] },
+        "title": { "type": "string" },
+        "tier": { "enum": ["T0", "T1", "T2"], "description": "DERIVED by the skill, RE-DERIVED authoritatively by CI. T0 = kernel-checked proof, axiom-audited. T1 = + an executable witness that runs. T2 = + the executed value lands in the certified interval on held-out inputs." },
+        "status": { "enum": ["still-green", "ported-to-HEAD", "superseded-by"], "default": "still-green" },
+        "superseded_by": { "type": "string", "description": "DOI of the unit that supersedes this one (when status = superseded-by)" },
+
+        "statement": {
+          "type": "object",
+          "required": ["text", "decl"],
+          "properties": {
+            "text": { "type": "string", "description": "the claim in standard prose" },
+            "decl": { "type": "string", "description": "the Lean declaration name" },
+            "signature": { "type": "string", "description": "the type signature" }
+          }
+        },
+
+        "proof": {
+          "type": "object",
+          "description": "Leg 1 (kernel). The theory leg, with its OWN closure + base.",
+          "required": ["module", "decl", "sorry_free", "axiom_manifest", "base"],
+          "properties": {
+            "module": { "type": "string", "description": "in-repo path to the .lean" },
+            "decl": { "type": "string" },
+            "code": { "type": "string", "description": "the declaration text (public repos: pulled + validated live)" },
+            "sorry_free": { "type": "boolean", "description": "false => this is an open ChallengeCrown, not an accepted unit" },
+            "axiom_manifest": { "type": "array", "items": { "type": "string" }, "description": "from #print_axioms on this declaration" },
+            "base": { "$ref": "#/$defs/base", "description": "the theory leg's named trust base" },
+            "closure": { "type": "array", "items": { "type": "string" }, "description": "theory dependency closure: DOIs this proof imports. INDEPENDENT of witness.closure." }
+          }
+        },
+
+        "witness": {
+          "type": "object",
+          "description": "Leg 3 (sandbox). The experiment leg, with its OWN closure + base. kind=none => tier T0 (no witness).",
+          "required": ["kind"],
+          "properties": {
+            "kind": { "enum": ["interval", "figure", "empirical", "none"] },
+            "binding": { "type": "string", "description": "in-repo path to the executed-binding / experiment artifact" },
+            "interval_decl": { "type": "string", "description": "the interval-membership theorem name (kernel-checked, not asserted)" },
+            "interval": { "type": "object", "properties": { "lo": {}, "hi": {} }, "description": "the certified interval [lo, hi] the executed value must land in" },
+            "sandbox": { "type": "string", "description": "how the witness runs (and inside what bounds)" },
+            "svg": { "type": "string" }, "vb": { "type": "string" }, "src": { "type": "string" },
+            "headline": { "type": "string" }, "metrics": { "type": "array" },
+            "base": { "$ref": "#/$defs/base", "description": "the EXPERIMENT leg's named trust base — SEPARATE from proof.base" },
+            "closure": { "type": "array", "items": { "type": "string" }, "description": "experiment dependency closure: DOIs the witness imports. INDEPENDENT of proof.closure; no shared-substrate edge." }
+          }
+        },
+
+        "gloss": {
+          "type": "object",
+          "description": "Leg 2 (faithfulness). Author drafts, editor certifies. No gloss, no DOI.",
+          "required": ["text"],
+          "properties": {
+            "text": { "type": "string", "description": "the reviewed natural-language gloss: what the theorem means" },
+            "certified_by": { "type": ["string", "null"], "default": null, "description": "editor handle once faithfulness is certified; null until then" }
+          }
+        },
+
+        "checks": {
+          "type": "object",
+          "description": "The three-check gate. Authoritative values are written by CI re-verification; the skill fills in its local pre-check.",
+          "properties": {
+            "proof": { "enum": ["pass", "fail", "pending"] },
+            "faithfulness": { "enum": ["pass", "fail", "pending"] },
+            "witness": { "enum": ["pass", "fail", "na"] },
+            "accepted": { "type": "boolean", "description": "proof==pass AND faithfulness==pass AND (tier==T0 ? true : witness==pass)" }
+          }
+        },
+
+        "doi": { "type": ["string", "null"], "default": null, "description": "minted on Zenodo deposit (the immutable snapshot: pinned toolchain + lockfile)" }
+      }
+    },
+    "base": {
+      "type": "object",
+      "description": "A NAMED trust base — 'verified modulo a named base, not from nothing'.",
+      "properties": {
+        "kernel": { "type": "string", "description": "e.g. lean4@4.x.0" },
+        "axioms": { "type": "array", "items": { "type": "string" }, "description": "whitelist actually used (subset of {propext, Classical.choice, Quot.sound} for the kernel-clean base)" },
+        "mathlib": { "type": "string", "description": "pinned commit / toolchain pin" },
+        "ffi": { "type": "array", "items": { "type": "string" }, "description": "enumerated FFI / oracle boundaries" },
+        "runtime": { "type": "string", "description": "for the witness base: the execution runtime / sandbox image" }
+      }
+    }
+  }
+}

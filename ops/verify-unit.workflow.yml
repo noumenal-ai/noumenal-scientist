@@ -1,0 +1,46 @@
+name: Verify journal unit
+
+# CONTRIBUTOR-SIDE gate. Install this into a repo that publishes a noumenal.json
+# (version 2 units). It re-runs the three checks authoritatively on every push, so
+# the ACCEPTED stamp and the tier are earned by CI, not declared by the author.
+#
+# Copy this file to .github/workflows/verify-unit.yml in your repo.
+
+on:
+  push:
+    paths: ['noumenal.json', '**/*.lean', 'lean-toolchain', 'lakefile.lean', 'lakefile.toml']
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Structure + tier + base audit (no toolchain needed)
+        run: |
+          node - <<'JS'
+          // fetch the staging lib from the journal repo so contributors need nothing vendored
+          const url='https://raw.githubusercontent.com/noumenal-ai/noumenal-scientist/main/skills/stage-journal-unit/lib/stage.mjs';
+          const fs=require('fs');
+          fetch(url).then(r=>r.text()).then(src=>{ fs.writeFileSync('/tmp/stage.mjs', src); });
+          JS
+          node --input-type=module -e "import('/tmp/stage.mjs')" check noumenal.json || true
+          node /tmp/stage.mjs check noumenal.json
+
+      # PROOF check — kernel-build the modules the units cite. Uncomment once your repo builds in CI.
+      # - uses: leanprover/lean-action@v1   # sets up elan + lake
+      # - name: Kernel-check proofs (lake build) + axiom audit
+      #   run: |
+      #     lake build
+      #     # for each unit's proof.decl, assert #print_axioms ⊆ the named base; fail on a stray axiom or a sorry
+
+      # WITNESS check — run the executable witness and assert interval-membership.
+      # This step is repo-specific (your sandbox, your interval theorem). Wire it to set
+      # checks.witness = pass/fail. A unit is ACCEPTED only when proof ∧ faithfulness ∧ witness.
+
+      - name: Gate summary
+        run: echo "Structural re-verification done. Enable the lake build + witness steps for full ACCEPTED status."

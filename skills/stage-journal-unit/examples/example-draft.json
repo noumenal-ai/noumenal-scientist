@@ -1,0 +1,37 @@
+{
+  "repo": "noumenal-ai/design-lab",
+  "units": [
+    {
+      "id": "flt.fundamental-theorem",
+      "ingredient": "formalization",
+      "title": "Fundamental Theorem of Statistical Learning",
+      "statement": {
+        "text": "A concept class is PAC-learnable exactly when it has finite VC dimension, with finite compression, vanishing Rademacher complexity, and the Sauer-Shelah growth bound all equivalent.",
+        "decl": "fundamental_theorem",
+        "signature": "PACLearnable C ↔ FiniteCompression C ↔ RademacherVanishes C ↔ FiniteSampleGrowth C"
+      },
+      "proof": {
+        "module": "learning-theory/FLT_Proofs/Theorem/PAC.lean",
+        "decl": "fundamental_theorem",
+        "sorry_free": true,
+        "axiom_manifest": ["propext", "Classical.choice", "Quot.sound"],
+        "base": { "kernel": "lean4@4.15.0", "axioms": ["propext", "Classical.choice", "Quot.sound"], "mathlib": "mathlib@<pin>", "ffi": [] },
+        "closure": []
+      },
+      "witness": {
+        "kind": "interval",
+        "binding": "transformers/TLT_Proofs/Bridge/Certificate/CertifiedTransformerBound.lean",
+        "interval_decl": "certified_executed_generalization_dudley",
+        "interval": { "lo": "0", "hi": "B" },
+        "sandbox": "IEEE binary32, executed coordinate-by-coordinate",
+        "base": { "runtime": "lean-native + IEEE32", "kernel": "lean4@4.15.0", "ffi": [] },
+        "closure": []
+      },
+      "gloss": {
+        "text": "The five characterizations of learnability are one object viewed five ways, and the executed binding lands inside the certified bound, so the result is both proved and runnable.",
+        "certified_by": null
+      },
+      "checks": { "proof": "pass", "faithfulness": "pass", "witness": "pass" }
+    }
+  ]
+}

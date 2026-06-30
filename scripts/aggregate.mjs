@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { genProjectsBlock, validateManifest } from './lib.mjs';
+import { genProjectsBlock, validateManifest, unitToCard } from './lib.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SITE = path.resolve(HERE, '..');
@@ -81,9 +81,12 @@ if (LIVE) {
   }
 }
 
-// ---- assemble ordered card list ----
+// ---- assemble ordered card list (accept v1 cards AND v2 units) ----
 const cards = [];
-for (const m of manifests.values()) for (const c of (m.cards || [])) cards.push(c);
+for (const m of manifests.values()) {
+  if (m.version === 2) { (m.units || []).forEach((u, i) => cards.push(unitToCard(u, m.repo, i))); }
+  else { for (const c of (m.cards || [])) cards.push(c); }
+}
 for (const e of extras) cards.push(e);
 
 // ---- codegen + inject between sentinels ----

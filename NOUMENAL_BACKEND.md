@@ -86,6 +86,42 @@ losslessly from the original hand-built page). To hand ownership to a repo, copy
 manifest to that repo's root as `noumenal.json` (adding `file`/`name` to proof witnesses for
 public repos). The aggregator then prefers the repo's published copy over the staged one.
 
+## The Verified ML Journal layer (v2 units)
+
+A `noumenal.json` can be a v1 card list (above) or a v2 **unit** list. A unit is the journal's
+citable atom: a `(statement, proof, witness)` triple. It is **ACCEPTED** only when three checks
+pass together — **PROOF** (the Lean kernel checks the proof), **FAITHFULNESS** (a human-certified
+gloss), **WITNESS** (the executed value lands inside a kernel-certified interval). **Tier** (T0 →
+T1 → T2) is *derived*, never declared, and re-derived by CI. Schema:
+[`schemas/unit.v2.json`](schemas/unit.v2.json). The aggregator renders v1 cards and v2 units
+together; the round-trip gate is unchanged.
+
+**Substrate exception (by design).** The proof leg and the witness leg carry **two independent
+dependency closures**, each terminating in its own named trust base. There is no shared-substrate
+edge joining experiment to theory: a contributor may bring a theory verified on their Lean and an
+experiment certified in their own sandbox. This is what keeps the format open rather than forcing
+every repo onto one substrate. The validator rejects any unit-level `substrate`/`shared_closure`.
+
+**How structure is preserved without dictating repo layout.** Structure is enforced by
+*verification*, not by file format. (1) The **staging skill** generates the manifest from a repo
+in any layout. (2) **CI re-runs the three checks** against the real artifacts; the tier is derived,
+so nobody can inflate it. Repo layout is free; the triple + three checks + named base + derived
+tier are invariant.
+
+## The staging skill (for contributors)
+
+`skills/stage-journal-unit/` is a Claude Code skill a contributor runs in their own repo to stage a
+result into the journal: discover the unit → kernel-check the proof and audit axioms
+(`#print_axioms`) → run the witness against its interval → draft the gloss → **derive** the tier →
+emit a v2 `noumenal.json` → opt in. It is honesty-enforcing: a hidden `sorry` is staged as an open
+ChallengeCrown, never as accepted; the base is named, not hidden.
+
+- Shipped in this repo (clone and invoke `/stage-journal-unit`), AND installable standalone:
+  `curl -fsSL https://raw.githubusercontent.com/noumenal-ai/noumenal-scientist/main/skills/stage-journal-unit/install.sh | bash`
+- Contributors add [`ops/verify-unit.workflow.yml`](ops/verify-unit.workflow.yml) to their repo's
+  `.github/workflows/` for the authoritative CI gate (the journal aggregator re-checks too).
+- Validate/derive locally: `node skills/stage-journal-unit/lib/stage.mjs check noumenal.json`.
+
 ## Local commands
 
 ```

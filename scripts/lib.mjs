@@ -70,6 +70,36 @@ export function validateManifest(m, slug) {
   return errs;
 }
 
+// Map a v2 journal unit -> the dc-runtime card shape (so units render next to v1 cards).
+export function unitToCard(u, repoSlug, order) {
+  const witnesses = [];
+  if (u.proof && (u.proof.code || u.proof.decl)) witnesses.push({
+    type: 'proof', cell: u.checks?.accepted ? 'established_result' : 'open_step',
+    code: u.proof.code || `theorem ${u.proof.decl} := …`,
+    source: `${u.proof.module} ∷ ${u.proof.decl}`, file: u.proof.module, name: u.proof.decl
+  });
+  const w = u.witness;
+  if (w && w.kind && w.kind !== 'none') {
+    if (w.kind === 'interval') witnesses.push({ type: 'empirical', cell: 'established_result',
+      headline: w.sandbox || 'executed value lands in the certified interval',
+      metrics: [], note: `interval [${w.interval?.lo ?? '·'}, ${w.interval?.hi ?? '·'}]${w.interval_decl ? ' via ' + w.interval_decl : ''}`,
+      source: w.binding || '' });
+    else if (w.kind === 'figure' && w.svg) witnesses.push({ type: 'diagram', cell: 'supporting_argument',
+      vb: w.vb, svg: w.svg, claim: u.gloss?.text || '', source: w.binding || '' });
+    else if (w.kind === 'empirical') witnesses.push({ type: 'empirical', cell: 'established_result',
+      headline: w.headline || '', metrics: w.metrics || [], source: w.binding || '' });
+  }
+  const open = u.proof?.sorry_free === false;
+  return {
+    order: 9000 + (order || 0), ingredient: u.ingredient, title: u.title, repo: repoSlug,
+    vis: (u.proof?.base?.ffi?.length) ? 'internal' : 'open',
+    status: open ? 'open challenge' : (u.tier ? `${u.tier} · ${u.status || 'still-green'}` : 'pending'),
+    alsoIn: '', direction: u.gloss?.text || u.statement?.text || '',
+    note: u.checks?.accepted ? '' : (open ? 'Open ChallengeCrown — the proof obligation is still live.' : 'Pending CI re-verification.'),
+    tbd: open, witnesses,
+  };
+}
+
 // Build `PROJECTS_BY_SECTION` JS from an ordered list of cards (each has .ingredient).
 export function genProjectsBlock(cards, sectionIds) {
   const bySec = Object.fromEntries(sectionIds.map(id => [id, []]));
