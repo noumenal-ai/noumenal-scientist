@@ -22,6 +22,7 @@ const page = sections.map(s => ({
   id: s.id, name: s.name, tagline: s.tagline, def: s.def,
   cards: (s.projects || []).map(p => ({
     title: p.title, repo: p.repo, visibility: p.vis, status: p.status,
+    author: p.author || undefined,
     also_in: p.alsoIn || undefined, direction: p.direction || undefined, note: p.note || undefined,
     witnesses: (p.witnesses || []).map(w => {
       if (w.isProof) return { type: 'proof', cell: w.cell, claim: w.claim || undefined, code: w.code, source: w.source };
