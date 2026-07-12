@@ -28,8 +28,44 @@
      "visibility": "internal",
      "status": "active",
      "also_in": "Formalization · Knowledge",
-     "note": "Its libraries live in §06 Knowledge and surface here as witnesses; the Substrate direction is still to be specified.",
-     "witnesses": []
+     "direction": "Design Lab grows the verified Lean 4 substrate itself: the Mathlib-adjacent pure mathematics the six libraries force into existence. Choquet capacitability, a constructive approximate minimax theorem from multiplicative weights, the sharp core of Pinsker's inequality, and the ergodic theory of finite Markov chains are all proved once, at the substrate layer, and every library above compiles against them.",
+     "witnesses": [
+      {
+       "type": "proof",
+       "cell": "established_result",
+       "claim": "Choquet capacitability, landed at the substrate layer: analytic sets are null-measurable.",
+       "code": "theorem MeasureTheory.AnalyticSet.nullMeasurableSet\n    {α : Type*}\n    [TopologicalSpace α] [MeasurableSpace α] [BorelSpace α] [PolishSpace α]\n    {μ : MeasureTheory.Measure α} [MeasureTheory.IsFiniteMeasure μ]\n    {s : Set α} (hs : MeasureTheory.AnalyticSet s) :\n    MeasureTheory.NullMeasurableSet s μ",
+       "source": "design-lab/measurements/ZPM/MeasureTheory/AnalyticMeasurability/NullMeasurable.lean ∷ MeasureTheory.AnalyticSet.nullMeasurableSet"
+      },
+      {
+       "type": "proof",
+       "cell": "novel_discovery",
+       "claim": "A constructive approximate minimax theorem via multiplicative weights, replacing Sion's exact minimax.",
+       "code": "theorem mwu_approx_minimax\n    {R C : Type*} [Fintype R] [Fintype C] [Nonempty R] [Nonempty C]\n    [DecidableEq R] [DecidableEq C]\n    (M : R → C → Bool) (v ε : ℝ) (hε : 0 < ε)\n    (hrow : ∀ q : FinitePMF C, ∃ r : R,\n      v ≤ ∑ c, q.prob c * (if M r c then (1 : ℝ) else 0)) :\n    ∃ p : FinitePMF R, ∀ c : C, v - ε ≤ boolGamePayoff M p c",
+       "source": "design-lab/learning-theory/FLT_Proofs/PureMath/ApproxMinimax.lean ∷ mwu_approx_minimax"
+      },
+      {
+       "type": "proof",
+       "cell": "established_result",
+       "claim": "The sharp inequality at the core of Pinsker's bound, fully proved.",
+       "code": "theorem two_sq_sub_le_klDivReal\n    (P Q : Measure α) [IsProbabilityMeasure P] [IsProbabilityMeasure Q]\n    (hac : P.AbsolutelyContinuous Q) (h_int : Integrable (llr P Q) P)\n    (A : Set α) (hA : MeasurableSet A) :\n    2 * (P.real A - Q.real A)^2 ≤ klDivReal P Q",
+       "source": "design-lab/measurements/ZPM/InformationTheory/Pinsker/General.lean ∷ two_sq_sub_le_klDivReal"
+      },
+      {
+       "type": "proof",
+       "cell": "established_result",
+       "claim": "Irreducible aperiodic finite Markov chains have a unique stationary distribution.",
+       "code": "theorem stationary_distribution_uniquely_exists\n  (P : Matrix S S ℝ) [RowStochastic P] [Aperiodic P] [Irreducible P]\n  : ∃! μ : S → ℝ, StochasticVec μ ∧ Stationary μ P",
+       "source": "design-lab/rl/RLTheory/Data/Matrix/Stochastic.lean ∷ stationary_distribution_uniquely_exists"
+      },
+      {
+       "type": "proof",
+       "cell": "supporting_argument",
+       "claim": "Doeblin minorization for ergodic stochastic matrices, the engine behind geometric mixing.",
+       "code": "theorem smat_minorizable_with_large_pow\n  [Nonempty S] (P : Matrix S S ℝ)\n  [RowStochastic P] [Irreducible P] [Aperiodic P] :\n  ∃ N, 1 ≤ N ∧ DoeblinMinorization (P ^ N)",
+       "source": "design-lab/rl/RLTheory/Data/Matrix/Stochastic.lean ∷ smat_minorizable_with_large_pow"
+      }
+     ]
     },
     {
      "title": "Belief geometry · GEO1",
@@ -80,8 +116,37 @@
      "visibility": "internal",
      "status": "active",
      "also_in": "Substrate · Knowledge",
-     "note": "Formalization direction to be specified.",
-     "witnesses": []
+     "direction": "Design Lab formalizes the statistical machinery a learning system runs on, and the statistics of auditing one. Stochastic approximation converges under martingale-difference noise and under i.i.d. sampling with Robbins-Monro step sizes, and the admission chain's multiple-testing control is itself a theorem: alpha-spending stays under budget and corrections can only make admission harder.",
+     "witnesses": [
+      {
+       "type": "proof",
+       "cell": "established_result",
+       "claim": "General stochastic approximation convergence under martingale-difference noise.",
+       "code": "theorem ae_tendsto_of_iterates_mds_noise\n  {x : ℕ → Ω → E d}\n  (hx : Iterates x x₀ f e₁ e₂ α)\n  (he₁MDS : ∀ n, μ[e₁ (n + 1)|ℱ n] =ᵐ[μ] 0)\n  (hα : RobbinsMonro (α := α))\n  [LyapunovFunction φ φ' f] :\n  ∀ᵐ ω ∂μ, Tendsto (fun n => x n ω) atTop (𝓝 z)",
+       "source": "design-lab/rl/RLTheory/StochasticApproximation/MartingaleDifference.lean ∷ ae_tendsto_of_iterates_mds_noise"
+      },
+      {
+       "type": "proof",
+       "cell": "established_result",
+       "claim": "Linear TD converges almost surely with i.i.d. samples and Robbins-Monro step sizes.",
+       "code": "theorem ae_tendsto_of_linearTD_iid\n  (hw : LinearTDIterates (spec := spec) (w := w))\n  (hα : RobbinsMonro spec.α) :\n  ∀ᵐ ω ∂ spec.iid_samples,\n    Tendsto (fun n => w n ω) atTop (𝓝 spec.td_fixed_point)",
+       "source": "design-lab/rl/RLTheory/Algorithm/LinearTD.lean ∷ ae_tendsto_of_linearTD_iid"
+      },
+      {
+       "type": "proof",
+       "cell": "novel_discovery",
+       "claim": "Cross-round alpha-spending sums strictly below budget: family-wise error control for the audit chain.",
+       "code": "theorem alphaSpendingUnderBudget (n : Nat) : geomSumPow2 n < 2 ^ n",
+       "source": "design-lab/metis/Metis/Gates/GateSoundness.lean ∷ alphaSpendingUnderBudget"
+      },
+      {
+       "type": "proof",
+       "cell": "supporting_argument",
+       "claim": "Monotone fail-safe: multiplicity corrections make admission strictly harder, never easier.",
+       "code": "theorem thresholdFactor_mono {K C C' r r' : Nat} (hC : C ≤ C') (hr : r ≤ r') :\n    thresholdFactor K C r ≤ thresholdFactor K C' r'",
+       "source": "design-lab/metis/Metis/Gates/GateSoundness.lean ∷ thresholdFactor_mono"
+      }
+     ]
     },
     {
      "title": "Causality DAG",
@@ -893,6 +958,23 @@
    "tagline": "the verified corpus",
    "def": "What is actually known, laid over the frontier.",
    "cards": [
+    {
+     "title": "Design Lab",
+     "repo": "noumenal-ai/design-lab",
+     "visibility": "internal",
+     "status": "active",
+     "also_in": "Substrate · Formalization",
+     "direction": "The monorepo as a single knowledge object: six verified libraries over one pinned toolchain, 17,127 indexed declarations measured 2026-06-15, about 3,700 of them in-house, each carrying a sorry count and an axiom audit against the named base. The per-library results below are regions of this one corpus.",
+     "witnesses": [
+      {
+       "type": "figure",
+       "cell": "supporting_argument",
+       "claim": "The module dependency hypergraph of the corpus: one connected object, not a folder of files.",
+       "alt": "Module dependency hypergraph for the full learning-theory kernel across 8 layers (L0–L7) and 354 theorems, with shaded proof-method regions for PAC, Online, Gold, and descriptive set theory pipelines",
+       "source": "Noumenal/design-lab/learning-theory/assets/hypergraph_overview.png"
+      }
+     ]
+    },
     {
      "title": "Causality",
      "repo": "design-lab · causality",
