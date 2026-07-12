@@ -50,7 +50,8 @@
           "code": "theorem smat_minorizable_with_large_pow\n  [Nonempty S] (P : Matrix S S \u211d)\n  [RowStochastic P] [Irreducible P] [Aperiodic P] :\n  \u2203 N, 1 \u2264 N \u2227 DoeblinMinorization (P ^ N)",
           "source": "design-lab/rl/RLTheory/Data/Matrix/Stochastic.lean \u2237 smat_minorizable_with_large_pow"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 2,
@@ -92,7 +93,8 @@
           "code": "theorem thresholdFactor_mono {K C C' r r' : Nat} (hC : C \u2264 C') (hr : r \u2264 r') :\n    thresholdFactor K C r \u2264 thresholdFactor K C' r'",
           "source": "design-lab/metis/Metis/Gates/GateSoundness.lean \u2237 thresholdFactor_mono"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 3,
@@ -112,7 +114,8 @@
           "code": "theorem Transportability_proved :\n    Transportability := by\n  sorry",
           "source": "design-lab/causality/Causality/Proofs/Modern/Transportability.lean \u2237 Transportability_proved"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 10,
@@ -175,7 +178,8 @@
           "n": "arg.4",
           "claim": "Why an agent needs this: BorelRouterCode abstracts conditional interpolation \u2014 attention, mixture-of-experts routing, and transfer \u2014 as Borel-parameterized concept classes, so the measurability guarantee transports to the routed/neurosymbolic learners of \u00a704. Interpolation and amalgamation closures are corollaries."
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 18,
@@ -195,7 +199,8 @@
           "code": "theorem CounterfactualID_proved :\n    CounterfactualID := by\n  sorry",
           "source": "design-lab/causality/Causality/Proofs/Modern/CounterfactualID.lean \u2237 CounterfactualID_proved"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 19,
@@ -256,7 +261,8 @@
           "code": "theorem binCascadeGrade_ssubset_succ : grade L \u228a grade (L+1)  \u2200L  (depth)\ntheorem constArityGrade_ssubset_succ : arity n \u228a arity (n+1)  \u2200n  (width)\ntheorem affineArgmaxCell_FO / quadraticArgmaxCell_SO_semialgebraic :\n    affine routing = first-order; quadratic (self-attn) = second-order",
           "source": "design-lab/transformers/TLT_Proofs/TemperedDesignLaw/MuxDepthLadderGeneral.lean \u00b7 MuxWidth.lean \u00b7 FOSOMembership.lean"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 20,
@@ -321,7 +327,8 @@
           "n": "arg.5",
           "claim": "PAC-Bayes (McAllester) \u2014 the first frequentist\u2013Bayesian bridge formalized in Lean 4: a KL-penalized Gibbs generalization bound via per-hypothesis Hoeffding, a union bound, and Jensen over the posterior."
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 21,
@@ -341,7 +348,8 @@
           "code": "theorem pinsker_proof (P Q : Measure \u03b1)\n    [IsProbabilityMeasure P] [IsProbabilityMeasure Q]\n    (hac : P.AbsolutelyContinuous Q) :\n    tvDistReal P Q \u2264 Real.sqrt (klDivReal P Q / 2)",
           "source": "design-lab/measurements/ZPM/InformationTheory/Pinsker/General.lean \u2237 pinsker_proof"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 22,
@@ -361,7 +369,8 @@
           "code": "theorem efronStein (f : (Fin n \u2192 \u03a9) \u2192 \u211d)\n    (hf : MemLp f 2 \u03bc\u02e2) :\n    variance f \u03bc\u02e2 \u2264\n      \u2211 i, \u222b x, (f x - condExpExceptCoord i f x)^2 \u2202\u03bc\u02e2",
           "source": "design-lab/statistics/SLT/proofs/EfronStein.lean \u2237 efronStein"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 23,
@@ -381,7 +390,8 @@
           "code": "theorem ae_tendsto_of_QLearning_markov\n    (spec : QLearningSpec) (h : spec.Ergodic) :\n    \u2200\u1d50 \u03c9, Tendsto (fun n \u21a6 Q n \u03c9) atTop\n      (\ud835\udcdd spec.optimalQ)",
           "source": "design-lab/rl/RLTheory/Algorithm/QLearning.lean \u2237 ae_tendsto_of_QLearning_markov"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 24,
@@ -403,7 +413,8 @@
           "source": "design-lab/neural-networks/home_page/.../verification-bounds.png",
           "flag": ""
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 9120,
@@ -457,7 +468,8 @@
           "code": "theorem pac_bayes_finite {X : Type u} [MeasurableSpace X]\n    {H : Type*} [Fintype H] [Nonempty H]\n    (D : MeasureTheory.Measure X) [MeasureTheory.IsProbabilityMeasure D]\n    (c : Concept X Bool) (hc_meas : Measurable c)\n    (hs : H \u2192 Concept X Bool) (hhs_meas : \u2200 h, Measurable (hs h))\n    (P : FinitePMF H) (hP_pos : \u2200 h, 0 < P.prob h)\n    (m : \u2115) (hm : 0 < m) (\u03b4 : \u211d) (h\u03b4 : 0 < \u03b4) (h\u03b41 : \u03b4 \u2264 1) :\n    MeasureTheory.Measure.pi (fun _ : Fin m => D)\n      { S : Fin m \u2192 X | \u2200 (Q : FinitePMF H),\n          gibbsError Q hs c D \u2264 gibbsEmpError Q hs c S +\n            Real.sqrt ((crossEntropyFinitePMF Q P + Real.log (1 / \u03b4)) / (2 * \u2191m)) }\n      \u2265 ENNReal.ofReal (1 - \u03b4)",
           "source": "design-lab/learning-theory/FLT_Proofs/Theorem/PACBayes.lean \u2237 pac_bayes_finite"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 9130,
@@ -511,7 +523,8 @@
           "code": "theorem versionSpaceLearner_measurableBatchLearner\n    {X : Type u} [MeasurableSpace X] [MeasurableSingletonClass X]\n    (enum : \u2115 \u2192 Concept X Bool)\n    (h_meas : \u2200 n, Measurable (enum n)) :\n    MeasurableBatchLearner X (versionSpaceLearner enum)",
           "source": "design-lab/learning-theory/FLT_Proofs/Learner/VersionSpace.lean \u2237 versionSpaceLearner_measurableBatchLearner"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 9140,
@@ -565,7 +578,8 @@
           "code": "theorem smooth_half_sq_Lp (hp : 2 \u2264 p) :\n  \u2200 (x y : LpSpace p d),\n    half_sq_Lp y \u2264 half_sq_Lp x + \u27eatoL2 (half_sq_Lp' x), toL2 (y - x)\u27eb + (p - 1) * half_sq_Lp (y - x)",
           "source": "design-lab/rl/RLTheory/StochasticApproximation/LpSpace.lean \u2237 smooth_half_sq_Lp"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 9150,
@@ -619,7 +633,8 @@
           "code": "theorem kernelMeanEmbedding_reproducing\n    (P : Measure X) [IsFiniteMeasure P]\n    (hcont : Continuous (fun x => kerFun H x (1 : \u211d)))\n    (f : H) :\n    @inner \u211d H _ (kernelMeanEmbedding (H := H) P) f = \u222b x, f x \u2202P",
           "source": "design-lab/measurements/ZPM/Analysis/InnerProductSpace/KernelMeanEmbedding/Reproducing.lean \u2237 kernelMeanEmbedding_reproducing"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 9160,
@@ -673,7 +688,8 @@
           "source": "Noumenal/design-lab/neural-networks/home_page/assets/media/examples/showcase/verification-bounds.png",
           "claim": "Bound propagation with affine and ReLU relaxations turns a perturbation input set into certified output bounds with margin, backed by Lean-checkable certificates."
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 17,
@@ -695,7 +711,8 @@
           "source": "Noumenal/design-lab/learning-theory/assets/hypergraph_overview.png",
           "claim": "The module dependency hypergraph of the corpus: one connected object, not a folder of files."
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     }
   ]
 }

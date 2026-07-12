@@ -1,0 +1,21 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "noumenal-ai/TorchLean",
+  "cards": [
+    {
+      "order": 9570,
+      "alsoIn": "",
+      "note": "",
+      "tbd": false,
+      "witnesses": [],
+      "status": "active",
+      "ingredient": "substrate",
+      "title": "TorchLean",
+      "repo": "noumenal-ai/TorchLean",
+      "vis": "open",
+      "author": "Robert Joseph et al.",
+      "direction": "A Lean 4 framework for writing, running, inspecting, and verifying neural-network programs: typed tensors and model APIs, a shared graph IR, runtime and autograd support, finite-precision semantics, certificate checkers, and CUDA runtime boundaries, with examples across modern and scientific ML."
+    }
+  ]
+}

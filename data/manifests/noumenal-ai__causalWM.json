@@ -1,0 +1,35 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "noumenal-ai/causalWM",
+  "cards": [
+    {
+      "order": 9500,
+      "alsoIn": "",
+      "note": "One causal core with pluggable perception per dataset, trained in two stages.",
+      "tbd": false,
+      "witnesses": [],
+      "status": "active",
+      "ingredient": "formalization",
+      "title": "Causal world model \u00b7 causalWM",
+      "repo": "noumenal-ai/causalWM",
+      "vis": "private",
+      "author": "Chethan",
+      "direction": "A causal world model: object-centric slot representations, an explicitly inferred causal interaction graph, and latent-space rollouts where the inferred adjacency matrix is the sole gate on cross-object influence. Interventions and counterfactuals become checkable: knock out an edge and the rollout changes accordingly."
+    },
+    {
+      "order": 9501,
+      "alsoIn": "Formalization",
+      "note": "",
+      "tbd": false,
+      "witnesses": [],
+      "status": "active",
+      "ingredient": "agents",
+      "title": "causalWM \u00b7 interventions at rollout",
+      "repo": "noumenal-ai/causalWM",
+      "vis": "private",
+      "author": "Chethan",
+      "direction": "The agent-facing face of the causal world model: rolling futures forward in latent space under interventions, with cross-object influence carried only through the inferred graph."
+    }
+  ]
+}

@@ -12,14 +12,15 @@
       "status": "active",
       "alsoIn": "",
       "direction": "",
-      "note": "An empirical reserve of datasets with natural out-of-distribution shift, structured for mechanism-discovery benchmarking. Private — witness exposure to decide.",
+      "note": "An empirical reserve of datasets with natural out-of-distribution shift, structured for mechanism-discovery benchmarking. Private \u2014 witness exposure to decide.",
       "tbd": true,
-      "witnesses": []
+      "witnesses": [],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 9020,
       "ingredient": "knowledge",
-      "title": "Benchmark Curation · Conformance as Typechecking",
+      "title": "Benchmark Curation \u00b7 Conformance as Typechecking",
       "repo": "noumenal-ai/TRACES",
       "vis": "private",
       "status": "active",
@@ -33,8 +34,8 @@
           "cell": "novel_discovery",
           "n": "arg.1",
           "claim": "Admission rules for a dataset manifest, machine-checked as a single conjunction of propositions.",
-          "code": "def WellFormed (m : DatasetManifest) : Prop :=\n  A1_NaturalShift m ∧ A4_KUInManifest m ∧ A6_RegimeClassified m ∧\n  A7_ProvenancePreserved m ∧ A10_RepresentationalCommitments m",
-          "source": "TRACES/Lean4/Traces/Axioms.lean ∷ WellFormed"
+          "code": "def WellFormed (m : DatasetManifest) : Prop :=\n  A1_NaturalShift m \u2227 A4_KUInManifest m \u2227 A6_RegimeClassified m \u2227\n  A7_ProvenancePreserved m \u2227 A10_RepresentationalCommitments m",
+          "source": "TRACES/Lean4/Traces/Axioms.lean \u2237 WellFormed"
         },
         {
           "type": "proof",
@@ -42,23 +43,23 @@
           "n": "arg.2",
           "claim": "Regime-schema consistency stated as a content-bearing decidable proposition.",
           "code": "def A6_RegimeClassified (m : DatasetManifest) : Prop :=\n  m.regimeMatchesSchema",
-          "source": "TRACES/Lean4/Traces/Axioms.lean ∷ A6_RegimeClassified"
+          "source": "TRACES/Lean4/Traces/Axioms.lean \u2237 A6_RegimeClassified"
         },
         {
           "type": "proof",
           "cell": "novel_discovery",
           "n": "arg.3",
           "claim": "Corpus-level referential integrity stated as a universally quantified proposition.",
-          "code": "def allPairsMembersExist (c : Corpus) : Prop :=\n  ∀ p ∈ c.pairs, ∀ mname ∈ p.members,\n    ∃ m ∈ c.manifests, m.name = mname",
-          "source": "TRACES/Lean4/Traces/Corpus.lean ∷ Corpus.allPairsMembersExist"
+          "code": "def allPairsMembersExist (c : Corpus) : Prop :=\n  \u2200 p \u2208 c.pairs, \u2200 mname \u2208 p.members,\n    \u2203 m \u2208 c.manifests, m.name = mname",
+          "source": "TRACES/Lean4/Traces/Corpus.lean \u2237 Corpus.allPairsMembersExist"
         },
         {
           "type": "proof",
           "cell": "supporting_argument",
           "n": "arg.4",
           "claim": "The natural-shift admission criterion, stated as a decidable proposition.",
-          "code": "def A1_NaturalShift (m : DatasetManifest) : Prop :=\n  m.dataOrigin.primary ≠ DataOriginPrimary.synthetic",
-          "source": "TRACES/Lean4/Traces/Axioms.lean ∷ A1_NaturalShift"
+          "code": "def A1_NaturalShift (m : DatasetManifest) : Prop :=\n  m.dataOrigin.primary \u2260 DataOriginPrimary.synthetic",
+          "source": "TRACES/Lean4/Traces/Axioms.lean \u2237 A1_NaturalShift"
         },
         {
           "type": "proof",
@@ -66,14 +67,15 @@
           "n": "arg.5",
           "claim": "The dependent-type encoding eliminated two classes of ill-formed manifest states, leaving this axiom tautological.",
           "code": "def A8_DataOriginTransparent (_m : DatasetManifest) : Prop := True",
-          "source": "TRACES/Lean4/Traces/Axioms.lean ∷ A8_DataOriginTransparent"
+          "source": "TRACES/Lean4/Traces/Axioms.lean \u2237 A8_DataOriginTransparent"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 9030,
       "ingredient": "knowledge",
-      "title": "Distribution Shift · Environment Pairs",
+      "title": "Distribution Shift \u00b7 Environment Pairs",
       "repo": "noumenal-ai/TRACES",
       "vis": "private",
       "status": "active",
@@ -87,23 +89,24 @@
           "cell": "established_result",
           "n": "arg.1",
           "claim": "The environment pair as the primitive experimental unit for out-of-distribution evaluation.",
-          "code": "def A2_PairPrimitive (p : DatasetPair) : Prop :=\n  p.trainEnv ≠ [] ∧ p.oodTestEnv ≠ [] ∧ p.trainEnv ≠ p.oodTestEnv",
-          "source": "TRACES/Lean4/Traces/Axioms.lean ∷ A2_PairPrimitive"
+          "code": "def A2_PairPrimitive (p : DatasetPair) : Prop :=\n  p.trainEnv \u2260 [] \u2227 p.oodTestEnv \u2260 [] \u2227 p.trainEnv \u2260 p.oodTestEnv",
+          "source": "TRACES/Lean4/Traces/Axioms.lean \u2237 A2_PairPrimitive"
         },
         {
           "type": "proof",
           "cell": "established_result",
           "n": "arg.2",
           "claim": "Member arity for each pair type is enforced as a proof carried in the data structure.",
-          "code": "def PairType.memberArity : PairType → (List String → Prop)\n  | .intraDatasetEnvSplit => fun l => l.length = 1\n  | _                     => fun l => 2 ≤ l.length",
-          "source": "TRACES/Lean4/Traces/Pair.lean ∷ PairType.memberArity"
+          "code": "def PairType.memberArity : PairType \u2192 (List String \u2192 Prop)\n  | .intraDatasetEnvSplit => fun l => l.length = 1\n  | _                     => fun l => 2 \u2264 l.length",
+          "source": "TRACES/Lean4/Traces/Pair.lean \u2237 PairType.memberArity"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 9040,
       "ingredient": "knowledge",
-      "title": "Provenance · Typed Records",
+      "title": "Provenance \u00b7 Typed Records",
       "repo": "noumenal-ai/TRACES",
       "vis": "private",
       "status": "active",
@@ -117,8 +120,8 @@
           "cell": "established_result",
           "n": "arg.1",
           "claim": "Digest well-formedness is enforced at construction through a SHA-256 refinement subtype.",
-          "code": "def mkChecksum (path sha : String) (h : isSha256 sha = true := by native_decide) :\n    Checksum :=\n  ⟨path, ⟨sha, h⟩⟩",
-          "source": "TRACES/Lean4/Traces/Schema.lean ∷ mkChecksum"
+          "code": "def mkChecksum (path sha : String) (h : isSha256 sha = true := by native_decide) :\n    Checksum :=\n  \u27e8path, \u27e8sha, h\u27e9\u27e9",
+          "source": "TRACES/Lean4/Traces/Schema.lean \u2237 mkChecksum"
         },
         {
           "type": "proof",
@@ -126,9 +129,10 @@
           "n": "arg.2",
           "claim": "A level-indexed record with a dependent boundary field replaces three duplicate structures.",
           "code": "structure EpistemicState (level : EpistemicLevel) where\n  facts hypotheses intuitions unknowns : List String := []\n  boundary : level.BoundaryType",
-          "source": "TRACES/Lean4/Traces/Schema.lean ∷ EpistemicState"
+          "source": "TRACES/Lean4/Traces/Schema.lean \u2237 EpistemicState"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     }
   ]
 }

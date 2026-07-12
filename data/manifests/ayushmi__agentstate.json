@@ -12,9 +12,10 @@
       "status": "open",
       "alsoIn": "",
       "direction": "A clear reasoning target: hash-chained agent state with four verification layers and claim-checking, so every committed state is independently re-checkable.",
-      "note": "Rust / Go — a code witness, not Lean. Witness form to decide.",
+      "note": "Rust / Go \u2014 a code witness, not Lean. Witness form to decide.",
       "tbd": false,
-      "witnesses": []
+      "witnesses": [],
+      "author": "Ayush Mittal"
     }
   ]
 }

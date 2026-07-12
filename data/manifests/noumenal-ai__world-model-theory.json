@@ -1,0 +1,21 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "noumenal-ai/world-model-theory",
+  "cards": [
+    {
+      "order": 9550,
+      "alsoIn": "",
+      "note": "Every claim on the companion site is a theorem in Lean 4: noumenal-ai.github.io/world-model-theory.",
+      "tbd": false,
+      "witnesses": [],
+      "status": "active",
+      "ingredient": "formalization",
+      "title": "World-Model Theory",
+      "repo": "noumenal-ai/world-model-theory",
+      "vis": "open",
+      "author": "Dhruv Gupta",
+      "direction": "A specification theory of world models, machine-checked in Lean 4: declare what a latent is for, a target family, a readout budget, and a dynamics law, and the theory determines which distinctions the latent must keep, which transitions descend to it, and which representation is forced. Developed across eight arguments, from the readout characterization to a scoped conclusion for JEPA-class systems."
+    }
+  ]
+}

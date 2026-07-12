@@ -1,0 +1,21 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "noumenal-ai/noumenal-edge",
+  "cards": [
+    {
+      "order": 9520,
+      "alsoIn": "",
+      "note": "",
+      "tbd": false,
+      "witnesses": [],
+      "status": "active",
+      "ingredient": "agents",
+      "title": "noumenal-edge",
+      "repo": "noumenal-ai/noumenal-edge",
+      "vis": "private",
+      "author": "Ayush Mittal",
+      "direction": "The edge runtime for autonomous industrial operations: read the world, run a signed policy, check the safety envelope, dispatch an action, and prove what happened, over a signed, deterministic, append-only event log with a tick-loop kernel."
+    }
+  ]
+}

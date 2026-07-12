@@ -1,0 +1,21 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "noumenal-ai/noumenal_api",
+  "cards": [
+    {
+      "order": 9530,
+      "alsoIn": "",
+      "note": "",
+      "tbd": false,
+      "witnesses": [],
+      "status": "active",
+      "ingredient": "agents",
+      "title": "noumenal_api",
+      "repo": "noumenal-ai/noumenal_api",
+      "vis": "private",
+      "author": "Amit Timalsina",
+      "direction": "The orchestrator for Noumenal: the service layer that coordinates runs across the agent runtime and the data plane."
+    }
+  ]
+}

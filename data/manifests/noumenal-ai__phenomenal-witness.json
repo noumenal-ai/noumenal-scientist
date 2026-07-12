@@ -1,0 +1,21 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "noumenal-ai/phenomenal-witness",
+  "cards": [
+    {
+      "order": 9510,
+      "alsoIn": "",
+      "note": "Claims are stratified proved / measured / open in the repository's reviewer guide; a proved spectral converse for the identified general functional landed 2026-07-05.",
+      "tbd": false,
+      "witnesses": [],
+      "status": "active",
+      "ingredient": "measurement",
+      "title": "Witness-cost learnability",
+      "repo": "noumenal-ai/phenomenal-witness",
+      "vis": "private",
+      "author": "Ayush Mittal",
+      "direction": "A guarantee is epistemically hollow without a checkable witness: learnability is witness-limited. The program defines WitCost, the minimum witness information needed to certify a frame-relative improvement under calibration, proves an exchange law in clean regimes, and validates a non-circular instrument that measures the cost and can falsify it, including a measured lift where an interventional frame certifies what an observational frame provably cannot."
+    }
+  ]
+}

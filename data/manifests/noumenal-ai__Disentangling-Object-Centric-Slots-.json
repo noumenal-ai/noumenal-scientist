@@ -1,0 +1,21 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "noumenal-ai/Disentangling-Object-Centric-Slots-",
+  "cards": [
+    {
+      "order": 9590,
+      "alsoIn": "",
+      "note": "",
+      "tbd": false,
+      "witnesses": [],
+      "status": "active",
+      "ingredient": "substrate",
+      "title": "C-JEPA \u00b7 slot disentanglement",
+      "repo": "noumenal-ai/Disentangling-Object-Centric-Slots-",
+      "vis": "private",
+      "author": "Akshat Thapa",
+      "direction": "Within-slot disentanglement and single-factor representational intervention in object-centric world models: a JEPA training loop with a mechanism-sparsity penalty, and studies characterizing how far causal representation learning is reachable on frozen object-centric slots, and where it is not."
+    }
+  ]
+}

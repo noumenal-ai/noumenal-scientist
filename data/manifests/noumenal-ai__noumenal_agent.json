@@ -11,10 +11,11 @@
       "vis": "private",
       "status": "active",
       "alsoIn": "",
-      "direction": "",
-      "note": "Agent runtime for the discovery loop. Private — witness exposure to decide.",
-      "tbd": true,
-      "witnesses": []
+      "direction": "AI that runs operations: actions are the output, multimodal data (multivariate time series plus video) is the input, and process and control understanding is the substrate. The bar is important actions done at high accuracy and usefulness.",
+      "note": "Private production monorepo; the runtime drives ingest, run, poll, and steer flows end to end.",
+      "tbd": false,
+      "witnesses": [],
+      "author": "Amit Timalsina \u00b7 Ayush Mittal"
     }
   ]
 }

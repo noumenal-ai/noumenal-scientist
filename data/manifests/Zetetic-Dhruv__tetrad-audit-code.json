@@ -18,7 +18,7 @@
         {
           "type": "empirical",
           "cell": "established_result",
-          "headline": "Five heterogeneous substrates (FLT, SLT, FirstProof, AI-Scientist v1 & v2) audited under one frozen instrument — judge + schema + validator — with zero schema failures.",
+          "headline": "Five heterogeneous substrates (FLT, SLT, FirstProof, AI-Scientist v1 & v2) audited under one frozen instrument \u2014 judge + schema + validator \u2014 with zero schema failures.",
           "metrics": [],
           "stats": [
             {
@@ -46,15 +46,16 @@
               "k": "sophism flags"
             }
           ],
-          "note": "Goal vs witness, each scored by the four gates → a 16-cell goal map and a 9-cell witness cascade. This atlas is laid out in that grammar; the audit code and dataset are folded here as one card.",
-          "source": "tetrad-audit-dataset · validate_outputs.py → 282 files, 0 failures"
+          "note": "Goal vs witness, each scored by the four gates \u2192 a 16-cell goal map and a 9-cell witness cascade. This atlas is laid out in that grammar; the audit code and dataset are folded here as one card.",
+          "source": "tetrad-audit-dataset \u00b7 validate_outputs.py \u2192 282 files, 0 failures"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 9020,
       "ingredient": "reasoning",
-      "title": "PAC Learnability · Characterizations",
+      "title": "PAC Learnability \u00b7 Characterizations",
       "repo": "Zetetic-Dhruv/tetrad-audit-code",
       "vis": "open",
       "status": "active",
@@ -68,39 +69,40 @@
           "cell": "established_result",
           "n": "arg.1",
           "claim": "Five-way equivalence: PAC learnability, finite VC dimension, finite compression, Rademacher, and growth conditions coincide.",
-          "code": "theorem fundamental_theorem (X : Type u) [MeasurableSpace X]\n    [MeasurableSingletonClass X]\n    (C : ConceptClass X Bool)\n    [MeasurableConceptClass X C] :\n    (PACLearnable X C ↔ VCDim X C < ⊤) ∧\n    ((VCDim X C < ⊤) ↔ ∃ (k : ℕ) (cs : CompressionSchemeWithInfo0 X Bool C), cs.size = k) ∧ ...",
-          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/PAC.lean ∷ fundamental_theorem"
+          "code": "theorem fundamental_theorem (X : Type u) [MeasurableSpace X]\n    [MeasurableSingletonClass X]\n    (C : ConceptClass X Bool)\n    [MeasurableConceptClass X C] :\n    (PACLearnable X C \u2194 VCDim X C < \u22a4) \u2227\n    ((VCDim X C < \u22a4) \u2194 \u2203 (k : \u2115) (cs : CompressionSchemeWithInfo0 X Bool C), cs.size = k) \u2227 ...",
+          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/PAC.lean \u2237 fundamental_theorem"
         },
         {
           "type": "proof",
           "cell": "supporting_argument",
           "n": "arg.2",
           "claim": "A concept class is PAC learnable iff its VC dimension is finite.",
-          "code": "theorem vc_characterization (X : Type u) [MeasurableSpace X]\n    [MeasurableSingletonClass X]\n    (C : ConceptClass X Bool)\n    [MeasurableConceptClass X C] :\n    PACLearnable X C ↔ VCDim X C < ⊤ :=",
-          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/PAC.lean ∷ vc_characterization"
+          "code": "theorem vc_characterization (X : Type u) [MeasurableSpace X]\n    [MeasurableSingletonClass X]\n    (C : ConceptClass X Bool)\n    [MeasurableConceptClass X C] :\n    PACLearnable X C \u2194 VCDim X C < \u22a4 :=",
+          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/PAC.lean \u2237 vc_characterization"
         },
         {
           "type": "proof",
           "cell": "established_result",
           "n": "arg.3",
           "claim": "Moran-Yehudayoff equivalence: finite VC dimension iff a finite sample compression scheme with side information exists.",
-          "code": "theorem fundamental_vc_compression_with_info\n    (X : Type u) (C : ConceptClass X Bool) :\n    (VCDim X C < ⊤) ↔\n    (∃ (k : ℕ) (cs : CompressionSchemeWithInfo0 X Bool C), cs.size = k) :=",
-          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Complexity/Compression.lean ∷ fundamental_vc_compression_with_info"
+          "code": "theorem fundamental_vc_compression_with_info\n    (X : Type u) (C : ConceptClass X Bool) :\n    (VCDim X C < \u22a4) \u2194\n    (\u2203 (k : \u2115) (cs : CompressionSchemeWithInfo0 X Bool C), cs.size = k) :=",
+          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Complexity/Compression.lean \u2237 fundamental_vc_compression_with_info"
         },
         {
           "type": "proof",
           "cell": "novel_discovery",
           "n": "arg.4",
           "claim": "Given a non-Borel analytic set, the null-measurable-target condition is separated from the Borel-target condition for PAC learning.",
-          "code": "theorem analytic_nonborel_set_gives_measTarget_separation\n    (A : Set ℝ)\n    (hA_an : MeasureTheory.AnalyticSet A)\n    (hA_non : ¬ MeasurableSet A) :\n    KrappWirthSeparationMeasTarget :=",
-          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/BorelAnalyticSeparation.lean ∷ analytic_nonborel_set_gives_measTarget_separation"
+          "code": "theorem analytic_nonborel_set_gives_measTarget_separation\n    (A : Set \u211d)\n    (hA_an : MeasureTheory.AnalyticSet A)\n    (hA_non : \u00ac MeasurableSet A) :\n    KrappWirthSeparationMeasTarget :=",
+          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/BorelAnalyticSeparation.lean \u2237 analytic_nonborel_set_gives_measTarget_separation"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 9030,
       "ingredient": "reasoning",
-      "title": "Online and Limit Learning · Mistake Bounds",
+      "title": "Online and Limit Learning \u00b7 Mistake Bounds",
       "repo": "Zetetic-Dhruv/tetrad-audit-code",
       "vis": "open",
       "status": "active",
@@ -114,34 +116,35 @@
           "cell": "established_result",
           "n": "arg.1",
           "claim": "A concept class is online learnable iff its Littlestone dimension is finite.",
-          "code": "theorem littlestone_characterization (X : Type) (C : ConceptClass X Bool) :\n    OnlineLearnable X Bool C ↔ LittlestoneDim X C < ⊤ :=",
-          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/Online.lean ∷ littlestone_characterization"
+          "code": "theorem littlestone_characterization (X : Type) (C : ConceptClass X Bool) :\n    OnlineLearnable X Bool C \u2194 LittlestoneDim X C < \u22a4 :=",
+          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/Online.lean \u2237 littlestone_characterization"
         },
         {
           "type": "proof",
           "cell": "established_result",
           "n": "arg.2",
           "claim": "The optimal mistake bound equals the Littlestone dimension for nonempty concept classes.",
-          "code": "theorem optimal_mistake_bound_eq_ldim (X : Type)\n    (C : ConceptClass X Bool) (hne : C.Nonempty) :\n    (↑(OptimalMistakeBound X C) : WithBot (WithTop ℕ)) = LittlestoneDim X C :=",
-          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/Online.lean ∷ optimal_mistake_bound_eq_ldim"
+          "code": "theorem optimal_mistake_bound_eq_ldim (X : Type)\n    (C : ConceptClass X Bool) (hne : C.Nonempty) :\n    (\u2191(OptimalMistakeBound X C) : WithBot (WithTop \u2115)) = LittlestoneDim X C :=",
+          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/Online.lean \u2237 optimal_mistake_bound_eq_ldim"
         },
         {
           "type": "proof",
           "cell": "established_result",
           "n": "arg.3",
           "claim": "No learner can EX-identify a class containing all finite sets plus an infinite set.",
-          "code": "theorem gold_theorem (X : Type u) [Countable X] [DecidableEq X]\n    (C : ConceptClass X Bool)\n    (h_finite : ∀ (S : Finset X), (fun x => decide (x ∈ S)) ∈ C)\n    (h_infinite : ∃ c ∈ C, Set.Infinite { x | c x = true }) :\n    ¬ EXLearnable X C :=",
-          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/Gold.lean ∷ gold_theorem"
+          "code": "theorem gold_theorem (X : Type u) [Countable X] [DecidableEq X]\n    (C : ConceptClass X Bool)\n    (h_finite : \u2200 (S : Finset X), (fun x => decide (x \u2208 S)) \u2208 C)\n    (h_infinite : \u2203 c \u2208 C, Set.Infinite { x | c x = true }) :\n    \u00ac EXLearnable X C :=",
+          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/Gold.lean \u2237 gold_theorem"
         },
         {
           "type": "proof",
           "cell": "established_result",
           "n": "arg.4",
           "claim": "A class is EX-learnable iff some learner makes only finitely many mind changes on every text presentation.",
-          "code": "theorem mind_change_characterization (X : Type u)\n    (C : ConceptClass X Bool) :\n    EXLearnable X C ↔\n      ∃ (L : GoldLearner X Bool),\n        ∀ (c : Concept X Bool), c ∈ C →\n          ∀ (T : TextPresentation X c),\n            MindChangeOrdinal X L c T.toDataStream < Ordinal.omega0 :=",
-          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/Gold.lean ∷ mind_change_characterization"
+          "code": "theorem mind_change_characterization (X : Type u)\n    (C : ConceptClass X Bool) :\n    EXLearnable X C \u2194\n      \u2203 (L : GoldLearner X Bool),\n        \u2200 (c : Concept X Bool), c \u2208 C \u2192\n          \u2200 (T : TextPresentation X c),\n            MindChangeOrdinal X L c T.toDataStream < Ordinal.omega0 :=",
+          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/Gold.lean \u2237 mind_change_characterization"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     },
     {
       "order": 9040,
@@ -160,18 +163,19 @@
           "cell": "established_result",
           "n": "arg.1",
           "claim": "McAllester bound for a finite hypothesis class: Gibbs error at most empirical Gibbs error plus sqrt((H_cross(Q, P) + log(1/delta)) / (2m)).",
-          "code": "theorem pac_bayes_finite {X : Type u} [MeasurableSpace X]\n    {H : Type*} [Fintype H] [Nonempty H]\n    (D : MeasureTheory.Measure X) [MeasureTheory.IsProbabilityMeasure D]\n    (c : Concept X Bool) (hc_meas : Measurable c)\n    (hs : H → Concept X Bool) (hhs_meas : ∀ h, Measurable (hs h))\n    (P : FinitePMF H) (hP_pos : ∀ h, 0 < P.prob h)\n    (m : ℕ) (hm : 0 < m) (δ : ℝ) (hδ : 0 < δ) (hδ1 : δ ≤ 1) :\n    MeasureTheory.Measure.pi (fun _ : Fin m => D)\n      { S : Fin m → X |\n        ∀ (Q : FinitePMF H),\n          gibbsError Q hs c D ≤\n            gibbsEmpError Q hs c S +\n            Real.sqrt ((crossEntropyFinitePMF Q P + Real.log (1 / δ)) / (2 * ↑m)) }\n      ≥ ENNReal.ofReal (1 - δ) :=",
-          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/PACBayes.lean ∷ pac_bayes_finite"
+          "code": "theorem pac_bayes_finite {X : Type u} [MeasurableSpace X]\n    {H : Type*} [Fintype H] [Nonempty H]\n    (D : MeasureTheory.Measure X) [MeasureTheory.IsProbabilityMeasure D]\n    (c : Concept X Bool) (hc_meas : Measurable c)\n    (hs : H \u2192 Concept X Bool) (hhs_meas : \u2200 h, Measurable (hs h))\n    (P : FinitePMF H) (hP_pos : \u2200 h, 0 < P.prob h)\n    (m : \u2115) (hm : 0 < m) (\u03b4 : \u211d) (h\u03b4 : 0 < \u03b4) (h\u03b41 : \u03b4 \u2264 1) :\n    MeasureTheory.Measure.pi (fun _ : Fin m => D)\n      { S : Fin m \u2192 X |\n        \u2200 (Q : FinitePMF H),\n          gibbsError Q hs c D \u2264\n            gibbsEmpError Q hs c S +\n            Real.sqrt ((crossEntropyFinitePMF Q P + Real.log (1 / \u03b4)) / (2 * \u2191m)) }\n      \u2265 ENNReal.ofReal (1 - \u03b4) :=",
+          "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/PACBayes.lean \u2237 pac_bayes_finite"
         },
         {
           "type": "proof",
           "cell": "established_result",
           "n": "arg.2",
           "claim": "Efron-Stein: the variance of a function of n independent variables is bounded by summed conditional variance terms.",
-          "code": "theorem efronStein (f : (Fin n → Ω) → ℝ) (hf : MemLp f 2 μˢ) :\n    variance f μˢ ≤ ∑ i : Fin n, ∫ x, (f x - condExpExceptCoord (μs := μs) i f x)^2 ∂μˢ :=",
-          "source": "Synthetic Discovery/empirical_analysis/slt/proofs/EfronStein.lean ∷ efronStein"
+          "code": "theorem efronStein (f : (Fin n \u2192 \u03a9) \u2192 \u211d) (hf : MemLp f 2 \u03bc\u02e2) :\n    variance f \u03bc\u02e2 \u2264 \u2211 i : Fin n, \u222b x, (f x - condExpExceptCoord (\u03bcs := \u03bcs) i f x)^2 \u2202\u03bc\u02e2 :=",
+          "source": "Synthetic Discovery/empirical_analysis/slt/proofs/EfronStein.lean \u2237 efronStein"
         }
-      ]
+      ],
+      "author": "Dhruv Gupta"
     }
   ]
 }

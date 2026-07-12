@@ -43,9 +43,21 @@ function witnessJS(w) {
   return `${ctor}({ ${fields} })`;
 }
 
+// author -> accent color (the page's own palette; keyed by FIRST named author)
+export const AUTHOR_COLORS = {
+  'Dhruv Gupta': '#3b4a93', 'Ayush Mittal': '#b06a12', 'Amit Timalsina': '#2f6b4a',
+  'Chethan': '#8a3a5a', 'Robert Joseph': '#5f574a', 'Akshat Thapa': '#2a6b73',
+  'Noumenal Research': '#8a8273',
+};
+export function authorColor(author) {
+  if (!author) return '#8a8273';
+  const first = author.split('·')[0].trim().replace(/ et al\.?$/, '');
+  return AUTHOR_COLORS[first] || '#8a8273';
+}
+
 export function cardJS(c) {
   const fn = c.tbd ? 'tbd' : 'P';
-  const head = `title:${j(c.title)}, repo:${j(c.repo)}, vis:${j(c.vis)}, status:${j(c.status)}, alsoIn:${j(c.alsoIn||'')}, direction:${j(c.direction||'')}, note:${j(c.note||'')}`;
+  const head = `title:${j(c.title)}, repo:${j(c.repo)}, vis:${j(c.vis)}, status:${j(c.status)}, alsoIn:${j(c.alsoIn||'')}, author:${j(c.author||'')}, authorColor:${j(authorColor(c.author))}, direction:${j(c.direction||'')}, note:${j(c.note||'')}`;
   if (!c.witnesses || c.witnesses.length === 0) return `${fn}({ ${head} })`;
   const ws = c.witnesses.map(w => '            ' + witnessJS(w)).join(',\n');
   return `${fn}({ ${head}, witnesses:[\n${ws}\n          ] })`;

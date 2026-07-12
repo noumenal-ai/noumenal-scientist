@@ -12,9 +12,10 @@
       "status": "active",
       "alsoIn": "",
       "direction": "",
-      "note": "Typed argmax-routing autodidact; gated knowledge commits over an append-only DAG. Private — witness exposure to decide.",
+      "note": "Typed argmax-routing autodidact; gated knowledge commits over an append-only DAG. Private \u2014 witness exposure to decide.",
       "tbd": true,
-      "witnesses": []
+      "witnesses": [],
+      "author": "Dhruv Gupta"
     }
   ]
 }

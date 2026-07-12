@@ -1,0 +1,21 @@
+{
+  "noumenal": true,
+  "version": 1,
+  "repo": "noumenal-ai/world-models",
+  "cards": [
+    {
+      "order": 9580,
+      "alsoIn": "",
+      "note": "",
+      "tbd": false,
+      "witnesses": [],
+      "status": "active",
+      "ingredient": "agents",
+      "title": "World Models \u00b7 Build your world",
+      "repo": "noumenal-ai/world-models",
+      "vis": "private",
+      "author": "Amit Timalsina",
+      "direction": "Noumenal's first product surface: build a world model of an operation and run it."
+    }
+  ]
+}

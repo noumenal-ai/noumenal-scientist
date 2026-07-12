@@ -11,10 +11,11 @@
       "vis": "open",
       "status": "open",
       "alsoIn": "",
-      "direction": "A 202-page textbook of formal learning theory with a 142-node concept graph — the settled core, written down.",
+      "direction": "A 202-page textbook of formal learning theory with a 142-node concept graph \u2014 the settled core, written down.",
       "note": "Witnesses pending (figures / concept graph).",
       "tbd": false,
-      "witnesses": []
+      "witnesses": [],
+      "author": "Dhruv Gupta"
     }
   ]
 }

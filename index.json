@@ -101,6 +101,22 @@
        "source": "GEO1 · Figure 7.1 / §7 (redrawn)"
       }
      ]
+    },
+    {
+     "title": "TorchLean",
+     "repo": "noumenal-ai/TorchLean",
+     "visibility": "open",
+     "status": "active",
+     "direction": "A Lean 4 framework for writing, running, inspecting, and verifying neural-network programs: typed tensors and model APIs, a shared graph IR, runtime and autograd support, finite-precision semantics, certificate checkers, and CUDA runtime boundaries, with examples across modern and scientific ML.",
+     "witnesses": []
+    },
+    {
+     "title": "C-JEPA · slot disentanglement",
+     "repo": "noumenal-ai/Disentangling-Object-Centric-Slots-",
+     "visibility": "private",
+     "status": "active",
+     "direction": "Within-slot disentanglement and single-factor representational intervention in object-centric world models: a JEPA training loop with a mechanism-sparsity penalty, and studies characterizing how far causal representation learning is reachable on frozen object-centric slots, and where it is not.",
+     "witnesses": []
     }
    ]
   },
@@ -165,12 +181,21 @@
      ]
     },
     {
-     "title": "Causal world model · UMTI",
-     "repo": "no published repo",
-     "visibility": "field-validated",
+     "title": "Causal world model · causalWM",
+     "repo": "noumenal-ai/causalWM",
+     "visibility": "private",
      "status": "active",
-     "also_in": "Agents",
-     "note": "Mechanism inference via kernel / sigma-algebra duality. Direction and repo to be specified.",
+     "direction": "A causal world model: object-centric slot representations, an explicitly inferred causal interaction graph, and latent-space rollouts where the inferred adjacency matrix is the sole gate on cross-object influence. Interventions and counterfactuals become checkable: knock out an edge and the rollout changes accordingly.",
+     "note": "One causal core with pluggable perception per dataset, trained in two stages.",
+     "witnesses": []
+    },
+    {
+     "title": "World-Model Theory",
+     "repo": "noumenal-ai/world-model-theory",
+     "visibility": "open",
+     "status": "active",
+     "direction": "A specification theory of world models, machine-checked in Lean 4: declare what a latent is for, a target family, a readout budget, and a dynamics law, and the theory determines which distinctions the latent must keep, which transitions descend to it, and which representation is forced. Developed across eight arguments, from the readout characterization to a scoped conclusion for JEPA-class systems.",
+     "note": "Every claim on the companion site is a theorem in Lean 4: noumenal-ai.github.io/world-model-theory.",
      "witnesses": []
     }
    ]
@@ -333,6 +358,15 @@
        "source": "verifiable_RSI/audit-compression-progress/AuditCP/AuditCP/EntropyFloor.lean ∷ klDivFinitePMF_nonneg"
       }
      ]
+    },
+    {
+     "title": "Witness-cost learnability",
+     "repo": "noumenal-ai/phenomenal-witness",
+     "visibility": "private",
+     "status": "active",
+     "direction": "A guarantee is epistemically hollow without a checkable witness: learnability is witness-limited. The program defines WitCost, the minimum witness information needed to certify a frame-relative improvement under calibration, proves an exchange law in clean regimes, and validates a non-circular instrument that measures the cost and can falsify it, including a measured lift where an interventional frame certifies what an observational frame provably cannot.",
+     "note": "Claims are stratified proved / measured / open in the repository's reviewer guide; a proved spectral converse for the identified general functional landed 2026-07-05.",
+     "witnesses": []
     }
    ]
   },
@@ -470,7 +504,8 @@
      "repo": "noumenal-ai/noumenal_agent",
      "visibility": "private",
      "status": "active",
-     "note": "Agent runtime for the discovery loop. Private — witness exposure to decide.",
+     "direction": "AI that runs operations: actions are the output, multimodal data (multivariate time series plus video) is the input, and process and control understanding is the substrate. The bar is important actions done at high accuracy and usefulness.",
+     "note": "Private production monorepo; the runtime drives ingest, run, poll, and steer flows end to end.",
      "witnesses": []
     },
     {
@@ -480,15 +515,6 @@
      "status": "preprint",
      "direction": "A PAC-Bayes bound and anytime-certificate format for self-improving agents, demonstrated on a continually self-improving language agent.",
      "note": "Preprint — witness pending.",
-     "witnesses": []
-    },
-    {
-     "title": "Causal world model · UMTI",
-     "repo": "no published repo",
-     "visibility": "field-validated",
-     "status": "active",
-     "also_in": "Formalization",
-     "note": "Direction to be specified.",
      "witnesses": []
     },
     {
@@ -691,6 +717,39 @@
        "source": "transformer-learning-theory/TLT_Proofs/Bridge/Lipschitz/AttentionLipschitzOnBall.lean ∷ attnOut_lipschitz_on_ball"
       }
      ]
+    },
+    {
+     "title": "causalWM · interventions at rollout",
+     "repo": "noumenal-ai/causalWM",
+     "visibility": "private",
+     "status": "active",
+     "also_in": "Formalization",
+     "direction": "The agent-facing face of the causal world model: rolling futures forward in latent space under interventions, with cross-object influence carried only through the inferred graph.",
+     "witnesses": []
+    },
+    {
+     "title": "noumenal-edge",
+     "repo": "noumenal-ai/noumenal-edge",
+     "visibility": "private",
+     "status": "active",
+     "direction": "The edge runtime for autonomous industrial operations: read the world, run a signed policy, check the safety envelope, dispatch an action, and prove what happened, over a signed, deterministic, append-only event log with a tick-loop kernel.",
+     "witnesses": []
+    },
+    {
+     "title": "noumenal_api",
+     "repo": "noumenal-ai/noumenal_api",
+     "visibility": "private",
+     "status": "active",
+     "direction": "The orchestrator for Noumenal: the service layer that coordinates runs across the agent runtime and the data plane.",
+     "witnesses": []
+    },
+    {
+     "title": "World Models · Build your world",
+     "repo": "noumenal-ai/world-models",
+     "visibility": "private",
+     "status": "active",
+     "direction": "Noumenal's first product surface: build a world model of an operation and run it.",
+     "witnesses": []
     }
    ]
   },
@@ -1597,6 +1656,24 @@
        "source": "Noumenal/design-lab/neural-networks/home_page/assets/media/examples/showcase/verification-bounds.png"
       }
      ]
+    },
+    {
+     "title": "causal-worlds",
+     "repo": "noumenal-ai/causal-worlds",
+     "visibility": "open",
+     "status": "active",
+     "direction": "Turn a plain-language description of an operation into a fictional but coherent causal world with a declared ground-truth causal graph, then benchmark whether a causal-discovery method can recover it. Because the structure is declared, not learned, every generated world is an answer key.",
+     "note": "Published on PyPI with CI; MIT licensed.",
+     "witnesses": []
+    },
+    {
+     "title": "Mathesis",
+     "repo": "noumenal-ai/mathesis-bank",
+     "visibility": "open",
+     "status": "active",
+     "direction": "An evidence bank for machine-checked machine-learning theory, modeled on GenBank and the Protein Data Bank rather than a journal: a Dictionary of definitions, Claims frozen before any proof is attempted, and Results, kernel-checked demonstrations that discharge them, each with a stable accession identifier.",
+     "note": "Commentary, applications, and overlay journals build on top of accessions instead of gating publication behind one editorial judgment.",
+     "witnesses": []
     }
    ]
   }
