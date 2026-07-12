@@ -5,6 +5,7 @@
    {
     "alsoIn": "Formalization · Knowledge",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Design Lab grows the verified Lean 4 substrate itself: the Mathlib-adjacent pure mathematics the six libraries force into existence. Choquet capacitability, a constructive approximate minimax theorem from multiplicative weights, the sharp core of Pinsker's inequality, and the ergodic theory of finite Markov chains are all proved once, at the substrate layer, and every library above compiles against them.",
     "hasWitness": true,
@@ -66,6 +67,7 @@
    {
     "alsoIn": "Measurement",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Belief geometry as the representational medium a theory is made of. The original move is a role assignment — as general relativity assigned manifolds to spacetime, GEO1 assigns the belief simplex the role of native epistemic state space: a theory is first a region, trajectory, obstruction, and repair policy in that geometry, and equations or causal graphs are charts exported only after it stabilizes.",
     "hasWitness": true,
@@ -130,6 +132,7 @@
    {
     "alsoIn": "",
     "author": "Robert Joseph et al.",
+    "authorBg": "#efece2",
     "authorColor": "#5f574a",
     "direction": "A Lean 4 framework for writing, running, inspecting, and verifying neural-network programs: typed tensors and model APIs, a shared graph IR, runtime and autograd support, finite-precision semantics, certificate checkers, and CUDA runtime boundaries, with examples across modern and scientific ML.",
     "hasWitness": false,
@@ -145,6 +148,7 @@
    {
     "alsoIn": "",
     "author": "Akshat Thapa",
+    "authorBg": "#e6f0f0",
     "authorColor": "#2a6b73",
     "direction": "Within-slot disentanglement and single-factor representational intervention in object-centric world models: a JEPA training loop with a mechanism-sparsity penalty, and studies characterizing how far causal representation learning is reachable on frozen object-centric slots, and where it is not.",
     "hasWitness": false,
@@ -165,6 +169,7 @@
    {
     "alsoIn": "Substrate · Knowledge",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Design Lab formalizes the statistical machinery a learning system runs on, and the statistics of auditing one. Stochastic approximation converges under martingale-difference noise and under i.i.d. sampling with Robbins-Monro step sizes, and the admission chain's multiple-testing control is itself a theorem: alpha-spending stays under budget and corrections can only make admission harder.",
     "hasWitness": true,
@@ -217,6 +222,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "A Lean-audited inheritance graph of Pearl (2009) plus ten post-2009 extensions — every modern result carried as a conjecture with a tracked proof obligation.",
     "hasWitness": true,
@@ -241,6 +247,7 @@
    {
     "alsoIn": "",
     "author": "Chethan",
+    "authorBg": "#f4eaef",
     "authorColor": "#8a3a5a",
     "direction": "A causal world model: object-centric slot representations, an explicitly inferred causal interaction graph, and latent-space rollouts where the inferred adjacency matrix is the sole gate on cross-object influence. Interventions and counterfactuals become checkable: knock out an edge and the rollout changes accordingly.",
     "hasWitness": false,
@@ -256,6 +263,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "A specification theory of world models, machine-checked in Lean 4: declare what a latent is for, a target family, a readout budget, and a dynamics law, and the theory determines which distinctions the latent must keep, which transitions descend to it, and which representation is forced. Developed across eight arguments, from the readout characterization to a scoped conclusion for JEPA-class systems.",
     "hasWitness": false,
@@ -276,6 +284,7 @@
    {
     "alsoIn": "Substrate",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "What the scientist computes on a belief state: belief and plausibility as readouts, identifiability as the complement of a collision set, residual dependence after fixing the shared variables, and the capacity regularity that lets continuous records be measured at all. Diagnostics native to the geometry, not bolted on after a model is chosen.",
     "hasWitness": true,
@@ -364,6 +373,7 @@
    {
     "alsoIn": "",
     "author": "Ayush Mittal · Dhruv Gupta",
+    "authorBg": "#f6ede1",
     "authorColor": "#b06a12",
     "direction": "A path-independent progress meter: cumulative compression progress along any audit trajectory telescopes to the endpoint difference, so relabelling, splitting, or padding cannot move it.",
     "hasWitness": true,
@@ -390,6 +400,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "",
     "hasWitness": false,
@@ -405,6 +416,7 @@
    {
     "alsoIn": "",
     "author": "Ayush Mittal · Dhruv Gupta",
+    "authorBg": "#f6ede1",
     "authorColor": "#b06a12",
     "direction": "Cumulative signed compression progress on an audit loss telescopes to a difference of endpoint values, a potential-function argument that quantifies Goodhart's law as a false-positive budget on an intrinsic reward signal. Whenever the audit loss stays above a floor, cumulative signed progress admits a finite budget. Both statements are machine-checked in Lean 4.",
     "hasWitness": true,
@@ -445,6 +457,7 @@
    {
     "alsoIn": "",
     "author": "Ayush Mittal · Dhruv Gupta",
+    "authorBg": "#f6ede1",
     "authorColor": "#b06a12",
     "direction": "When the audit is scored on a finite panel with uniform deviation Delta between empirical and true losses, cumulative progress on the empirical audit exceeds true progress by at most 2*Delta. The budget is horizon-free by endpoint reduction, placing the result in the setting of adaptive data analysis and reusable-holdout overfitting.",
     "hasWitness": true,
@@ -473,6 +486,7 @@
    {
     "alsoIn": "",
     "author": "Ayush Mittal · Dhruv Gupta",
+    "authorBg": "#f6ede1",
     "authorColor": "#b06a12",
     "direction": "Log-loss audit is bounded below by the entropy of the data: the cross-entropy decomposition H(Q,P) = H(Q) + KL(Q||P) and Gibbs' inequality yield H(Q) <= H(Q,P), so an incompressible noise component pays only a finite audit-progress budget. The conditional version bounds compression progress on noisy components by the initial excess over the conditional entropy H(Y|X); the floor is derived rather than assumed, with the composition machine-checked end to end. This bears on the noisy-TV problem in curiosity-driven intrinsic motivation.",
     "hasWitness": true,
@@ -537,6 +551,7 @@
    {
     "alsoIn": "",
     "author": "Ayush Mittal",
+    "authorBg": "#f6ede1",
     "authorColor": "#b06a12",
     "direction": "A guarantee is epistemically hollow without a checkable witness: learnability is witness-limited. The program defines WitCost, the minimum witness information needed to certify a frame-relative improvement under calibration, proves an exchange law in clean regimes, and validates a non-circular instrument that measures the cost and can falsify it, including a measured lift where an interventional frame certifies what an observational frame provably cannot.",
     "hasWitness": false,
@@ -557,6 +572,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Episode-frame leakage in a predictive world-model is an intrinsic floor: the Bayes-risk gap between frame- and episode-level splits equals an explained-variance functional, so more frames cannot close it.",
     "hasWitness": true,
@@ -591,6 +607,7 @@
    {
     "alsoIn": "Knowledge",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "The open neurosymbolic-routing programme: where in a transformer does continuous, certifiable neural computation hand off to discrete symbolic routing — and what does an agent pay in learnability and design budget for crossing that line? The learner model, read along attention’s temperature axis. (Its settled certificate + expressivity theorems live in §06 Knowledge.)",
     "hasWitness": true,
@@ -659,6 +676,7 @@
    {
     "alsoIn": "Knowledge",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "When is a learned rule an admissible measurable policy? The novel measurability theory the Fundamental Theorem forced — the σ-algebra precondition an agent must respect to even state a generalization certificate, the exact boundary at which it fails, and the routing abstraction that carries it to attention. (The settled characterization theorems live in §06 Knowledge.)",
     "hasWitness": true,
@@ -735,6 +753,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "",
     "hasWitness": false,
@@ -750,6 +769,7 @@
    {
     "alsoIn": "",
     "author": "Amit Timalsina · Ayush Mittal",
+    "authorBg": "#e8f0ea",
     "authorColor": "#2f6b4a",
     "direction": "AI that runs operations: actions are the output, multimodal data (multivariate time series plus video) is the input, and process and control understanding is the substrate. The bar is important actions done at high accuracy and usefulness.",
     "hasWitness": false,
@@ -765,6 +785,7 @@
    {
     "alsoIn": "",
     "author": "Noumenal Research",
+    "authorBg": "#efece4",
     "authorColor": "#8a8273",
     "direction": "A PAC-Bayes bound and anytime-certificate format for self-improving agents, demonstrated on a continually self-improving language agent.",
     "hasWitness": false,
@@ -780,6 +801,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "The generalization bound is proved for the transformer program as it executes in IEEE binary32 arithmetic, with the certified attention head bound coordinate-for-coordinate to the literal scaledDotProductAttention kernel. Rounding error enters through a backward-error bound for binary32 sequential summation, derived rather than assumed, and propagates through non-expansive layer stacks with an envelope that grows linearly in depth, not exponentially.",
     "hasWitness": true,
@@ -844,6 +866,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Splitting clustered trajectory data at the frame level instead of the episode level leaves a Bayes L2 risk gap equal to an explained-variance functional of the two nested sigma-algebras; the gap does not vanish and cannot be closed by adding data within episodes. In the one-way random-effects model the variance of the grand mean decomposes exactly so that the effective sample size is the group count G, not the frame count G*m, and the Hoeffding tail of the between-group component is identical across models that differ only in frame count. A finite construction shows the method-of-moments variance-component estimate is negative with probability at least (1-2p)^G even though the true variance is 2p > 0.",
     "hasWitness": true,
@@ -910,6 +933,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Softmax routing keeps the uniform-convergence bad events of attention Borel, while argmax routing produces bad events that are analytic but not Borel: a strict descriptive-complexity drop located at the softmax/argmax boundary, with routing temperature acting as the toggle at every depth. The dichotomy is governed by the parameter space: sigma-compact spaces admit no such pathology, while Polish non-sigma-compact spaces carry a binary attention router whose bad event is analytic and non-Borel. The same measurability condition is the precondition on which the positive executed certificates stand.",
     "hasWitness": true,
@@ -986,6 +1010,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "True mutual information is invariant under coordinatewise measurable reparametrization, but the KSG k-nearest-neighbor estimator is not: its radius core scales linearly under uniform similarity transformations. Per-axis standardization restores invariance of the radius statistic under the full diagonal-rescaling group. These estimator-geometry failure modes, together with training non-stationarity, are witnessed on a real JEPA world model by tracking effective rank, KSG mutual-information estimates, validation prediction loss, and linear probe R^2 across training at 64px and 128px resolution on dm_control Reacher.",
     "hasWitness": true,
@@ -1043,6 +1068,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "The capacity bound covers the full multi-head encoder stack, multi-head attention with feed-forward blocks, layer normalization, and residual connections, with depth-graded constants that are linear in head count and free of sequence length. The Dudley entropy-integral bound is discharged to a closed affine form with the optimal constant, and the Lipschitz constant for softmax attention on a bounded query/key ball does not depend on sequence length. The certified capacity bound is packaged as a design law: a map out of configuration space indexed by TransformerConfig.",
     "hasWitness": true,
@@ -1107,6 +1133,7 @@
    {
     "alsoIn": "Formalization",
     "author": "Chethan",
+    "authorBg": "#f4eaef",
     "authorColor": "#8a3a5a",
     "direction": "The agent-facing face of the causal world model: rolling futures forward in latent space under interventions, with cross-object influence carried only through the inferred graph.",
     "hasWitness": false,
@@ -1122,6 +1149,7 @@
    {
     "alsoIn": "",
     "author": "Ayush Mittal",
+    "authorBg": "#f6ede1",
     "authorColor": "#b06a12",
     "direction": "The edge runtime for autonomous industrial operations: read the world, run a signed policy, check the safety envelope, dispatch an action, and prove what happened, over a signed, deterministic, append-only event log with a tick-loop kernel.",
     "hasWitness": false,
@@ -1137,6 +1165,7 @@
    {
     "alsoIn": "",
     "author": "Amit Timalsina",
+    "authorBg": "#e8f0ea",
     "authorColor": "#2f6b4a",
     "direction": "The orchestrator for Noumenal: the service layer that coordinates runs across the agent runtime and the data plane.",
     "hasWitness": false,
@@ -1152,6 +1181,7 @@
    {
     "alsoIn": "",
     "author": "Amit Timalsina",
+    "authorBg": "#e8f0ea",
     "authorColor": "#2f6b4a",
     "direction": "Noumenal's first product surface: build a world model of an operation and run it.",
     "hasWitness": false,
@@ -1172,6 +1202,7 @@
    {
     "alsoIn": "",
     "author": "Ayush Mittal",
+    "authorBg": "#f6ede1",
     "authorColor": "#b06a12",
     "direction": "A clear reasoning target: hash-chained agent state with four verification layers and claim-checking, so every committed state is independently re-checkable.",
     "hasWitness": false,
@@ -1187,6 +1218,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "A process-level audit over reasoning itself: separate the goal from the witness offered for it, score each by four gates, and read out a 25-cell outcome vocabulary for completed discovery traces.",
     "hasWitness": true,
@@ -1240,6 +1272,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Treat proof search as navigation over an explicit ignorance partition: score every step on four gates in real time, log what is not yet known, and let the next move be discovered from the measurement rather than planned.",
     "hasWitness": true,
@@ -1299,6 +1332,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Symmetrization arguments for PAC learning need the bad event to be measurable, and the Borel condition can be weakened to null-measurability. For a Borel-parameterized concept class the ghost-gap witness set is Borel, its projection over parameters is analytic by Suslin's projection theorem, and analytic sets are null-measurable under finite Borel measures on Polish spaces by Choquet capacitability. Every Borel-parameterized concept class therefore satisfies the null-measurable event-level condition the symmetrization proof requires.",
     "hasWitness": true,
@@ -1376,6 +1410,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "PAC learnability, finite VC dimension, finite sample compression with side information, and the Rademacher and growth-function conditions are equivalent, and the five-way equivalence is formally verified in Lean 4. A constructive separation shows the null-measurable-target condition for PAC learning is strictly weaker than the Krapp-Wirth Borel condition.",
     "hasWitness": true,
@@ -1432,6 +1467,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "The null-measurable condition is strictly separated from the Borel supremum condition: any analytic non-Borel subset of the reals yields a concept class that satisfies the first and fails the second. The weakened condition also carries a closure algebra under concept-class constructors, preserved by piecewise patching and by fiber-product amalgamation of concept families.",
     "hasWitness": true,
@@ -1478,6 +1514,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Online learnability of a concept class is equivalent to finiteness of its Littlestone dimension, and for nonempty classes the optimal mistake bound equals the Littlestone dimension exactly. In the identification-in-the-limit setting, EX-learnability is characterized by a finite mind-change count, and Gold's theorem rules out EX-identification of any class containing all finite sets together with an infinite set; the proof runs through a fully explicit adversarial locking sequence.",
     "hasWitness": true,
@@ -1534,6 +1571,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "The McAllester PAC-Bayes bound is proved from first principles via Hoeffding's inequality and Jensen's inequality: for a finite hypothesis class, with probability at least 1 - delta over m independent samples, the Gibbs error of every posterior Q is at most its empirical Gibbs error plus sqrt((H_cross(Q, P) + log(1/delta)) / (2m)). The Efron-Stein inequality bounds the variance of a function of n independent random variables in a product probability space by the sum of coordinate-wise conditional variance terms.",
     "hasWitness": true,
@@ -1575,6 +1613,7 @@
    {
     "alsoIn": "Substrate · Formalization",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "The monorepo as a single knowledge object: six verified libraries over one pinned toolchain, 17,127 indexed declarations measured 2026-06-15, about 3,700 of them in-house, each carrying a sorry count and an axiom audit against the named base. The per-library results below are regions of this one corpus.",
     "hasWitness": true,
@@ -1602,6 +1641,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Pearl (2009) plus ten modern extensions, Lean-audited as an inheritance DAG; each modern result a tracked conjecture.",
     "hasWitness": true,
@@ -1626,6 +1666,7 @@
    {
     "alsoIn": "Agents",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "The formalized core: a certified, computable generalization bound for the IEEE binary32 transformer that actually runs, and the strict depth/width expressivity hierarchy underneath it. Zero sorry; everything reduces to propext · Classical.choice · Quot.sound. (The open neurosymbolic-routing programme this enables lives in §04 Agents.)",
     "hasWitness": true,
@@ -1700,6 +1741,7 @@
    {
     "alsoIn": "Agents",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "The formalized core: 354 machine-checked theorems, 0 sorry, axioms {propext, Classical.choice, Quot.sound} only — the Fundamental Theorem of Statistical Learning as one sealed five-way equivalence, a new constructive compression route, the three-paradigm separation, and the first Lean PAC-Bayes bridge. (The novel measurability theory this forced — the learner-measurability hierarchy and the Borel-analytic counterexample — lives in §04 Agents.)",
     "hasWitness": true,
@@ -1778,6 +1820,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "The agent’s self-measurement toolkit — divergences, concentration, kernel embeddings. Pinsker with the sharp constant converts information loss into decision error.",
     "hasWitness": true,
@@ -1802,6 +1845,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "The concentration backbone: an Efron-Stein variance bound for any square-integrable function of independent inputs — the device behind most modern concentration arguments.",
     "hasWitness": true,
@@ -1826,6 +1870,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Convergence of stochastic approximation under a Lyapunov drift — Q-learning converges almost surely under Markov sampling.",
     "hasWitness": true,
@@ -1850,6 +1895,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Certified network execution — TorchLean: typed tensors, verified reverse-mode autograd, IEEE-754 semantics, and interval-bound certificate checking.",
     "hasWitness": true,
@@ -1876,6 +1922,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "",
     "hasWitness": false,
@@ -1891,6 +1938,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "A 202-page textbook of formal learning theory with a 142-node concept graph — the settled core, written down.",
     "hasWitness": false,
@@ -1906,6 +1954,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "",
     "hasWitness": false,
@@ -1921,6 +1970,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Corpus admission is stated as typechecking: a dataset manifest is well-formed only when a conjunction of machine-checked propositions holds over it. Constraints that could be enforced at the type level were, which eliminated two classes of ill-formed manifest states; the remaining content-bearing rules, natural-shift origin, regime-schema consistency, and corpus-level referential integrity, are stated as propositions over the manifest and the corpus.",
     "hasWitness": true,
@@ -1987,6 +2037,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Every analytic subset of a Polish space is capacitable: a Choquet capacity evaluated on an analytic set equals the supremum of its values over compact subsets. Analytic sets are also null-measurable with respect to every finite Borel measure on a Polish space, a foundational bridge for RKHS kernel learning theory.",
     "hasWitness": true,
@@ -2023,6 +2074,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "The primitive experimental unit for out-of-distribution evaluation is a directed pair: a training environment and a distinct test environment under shift. Structural constraints on pairs, such as the number of member datasets each pair type admits, are carried as proofs in the data structure.",
     "hasWitness": true,
@@ -2059,6 +2111,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Pinsker's inequality holds with the sharp constant: the total variation distance between probability measures is at most the square root of half the KL divergence. On the kernel side, the mean embedding reproduces integrals, squared MMD vanishes exactly when two measures coincide, and HSIC vanishes exactly when a joint law equals the product of its marginals, in each case under a characteristic kernel.",
     "hasWitness": true,
@@ -2125,6 +2178,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "File-level and epistemic provenance are both typed. A checksum is a refinement subtype whose SHA-256 digest format is verified when the value is constructed, and the epistemic state recorded for each dataset holds facts, hypotheses, intuitions, and unknowns in a single level-indexed structure, extending datasheet-style dataset documentation to epistemics.",
     "hasWitness": true,
@@ -2161,6 +2215,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Multiplicative weights reaches an approximate minimax solution: O(log N / ε²) rounds produce a mixed strategy with payoff at least v - ε against every pure column. The Sauer-Shelah lemma bounds the size of a set family with bounded VC dimension, and Assouad's dual bound gives VC dimension at most 2^{d+1} - 1 for the transpose when the original matrix has VC dimension at most d. A Chebyshev argument amplifies k ≥ 9/δ independent events, each of probability at least 2/3, into a majority holding with probability at least 1 - δ.",
     "hasWitness": true,
@@ -2217,6 +2272,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "The five-way fundamental theorem of statistical learning is machine-checked in full, with PAC learnability, finite VC dimension, and finite sample compression among the equivalent characterizations, and no open proof obligations remain. The compression characterization runs through a constructive approximate minimax theorem obtained from multiplicative weights in place of Sion's exact minimax. Machine-verified alongside it are sharp combinatorial results, the exact VC dimension of halfspaces in R^n and Assouad's dual VC bound for binary matrices, and a McAllester PAC-Bayes bound that supplies a frequentist to Bayesian bridge.",
     "hasWitness": true,
@@ -2283,6 +2339,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "PAC learning has a measurability core: uniform convergence arguments need the bad events to be regular enough to measure. Choquet's capacitability theorem yields that analytic sets are null-measurable, bridging capacity theory to learning, and a strict separation witness shows the null-measurable regularity condition for PAC bad events is distinct from the Borel one. The condition is preserved under amalgamation of concept classes over standard Borel parameter spaces, and a concrete version space learner is verified to pass the measurability gate.",
     "hasWitness": true,
@@ -2349,6 +2406,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Q-learning converges almost surely to the optimal Q-function, and linear TD to its fixed point, under Markovian sampling with inverse-polynomial step sizes, all machine-checked. The proofs share a single Lyapunov-based recursive error bound and bottom out in the Robbins-Siegmund almost-supermartingale convergence theorem. For Q-learning the Lyapunov candidate is the squared l_p norm, whose smoothness with constant p - 1 is proved separately.",
     "hasWitness": true,
@@ -2415,6 +2473,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "Machine-verified zero conditions for standard discrepancy measures: MMD vanishes exactly when two distributions are equal, provided the kernel is characteristic; HSIC vanishes exactly when the joint distribution factorizes into its marginals, again under a characteristic-kernel hypothesis on the product space; and mutual information is zero if and only if independence holds, under an absolute continuity hypothesis. Pinsker's inequality with its sharp constant bounds total variation by the square root of half the KL divergence, and the reproducing property of the kernel mean embedding grounds the RKHS results.",
     "hasWitness": true,
@@ -2481,6 +2540,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "TorchLean is a typed, executable neural network framework whose robustness certificates are checkable in Lean: typed tensors and a shared graph IR feed verified reverse-mode autograd and IEEE-754 semantics, and bound propagation with affine and ReLU relaxations carries a perturbation set through the network to certified output bounds. Supporting analysis is formalized alongside: ReLU is 1-Lipschitz in L2 for tensors of any shape, a per-step squared-norm contraction bound holds for gradient steps on strongly monotone Lipschitz operators, and one-dimensional ridge regression has an explicit uniform stability constant.",
     "hasWitness": true,
@@ -2549,6 +2609,7 @@
    {
     "alsoIn": "",
     "author": "Amit Timalsina",
+    "authorBg": "#e8f0ea",
     "authorColor": "#2f6b4a",
     "direction": "Turn a plain-language description of an operation into a fictional but coherent causal world with a declared ground-truth causal graph, then benchmark whether a causal-discovery method can recover it. Because the structure is declared, not learned, every generated world is an answer key.",
     "hasWitness": false,
@@ -2564,6 +2625,7 @@
    {
     "alsoIn": "",
     "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
     "authorColor": "#3b4a93",
     "direction": "An evidence bank for machine-checked machine-learning theory, modeled on GenBank and the Protein Data Bank rather than a journal: a Dictionary of definitions, Claims frozen before any proof is attempted, and Results, kernel-checked demonstrations that discharge them, each with a stable accession identifier.",
     "hasWitness": false,
