@@ -30,6 +30,106 @@
           "flag": ""
         }
       ]
+    },
+    {
+      "order": 9020,
+      "ingredient": "agents",
+      "title": "Split Leakage · Effective Sample Size",
+      "repo": "Zetetic-Dhruv/world-model-lab",
+      "vis": "open",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "Splitting clustered trajectory data at the frame level instead of the episode level leaves a Bayes L2 risk gap equal to an explained-variance functional of the two nested sigma-algebras; the gap does not vanish and cannot be closed by adding data within episodes. In the one-way random-effects model the variance of the grand mean decomposes exactly so that the effective sample size is the group count G, not the frame count G*m, and the Hoeffding tail of the between-group component is identical across models that differ only in frame count. A finite construction shows the method-of-moments variance-component estimate is negative with probability at least (1-2p)^G even though the true variance is 2p > 0.",
+      "note": "",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.1",
+          "claim": "The frame-vs-episode leakage gap equals an intrinsic explained-variance functional of the two sigma-algebras.",
+          "code": "theorem bayesRisk_gap [IsProbabilityMeasure μ]\n    (hm₁₂ : m₁ ≤ m₂) (hm₂ : m₂ ≤ m₀) (hX : MemLp X 2 μ) :\n    bayesRisk m₁ X μ - bayesRisk m₂ X μ = μ[Var[μ[X | m₂]; μ | m₁]]",
+          "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity.lean ∷ bayesRisk_gap"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.2",
+          "claim": "The episode-frame risk gap does not vanish and is not closeable by adding data within episodes.",
+          "code": "theorem frame_split_inconsistent [IsProbabilityMeasure μ]\n    (hX : MemLp X 2 μ) (hXm : StronglyMeasurable X) :\n    bayesRisk (⊥ : MeasurableSpace Ω) X μ - bayesRisk m₀ X μ = variance X μ",
+          "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity.lean ∷ frame_split_inconsistent"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.3",
+          "claim": "Exact one-way random-effects variance decomposition: effective sample size is the group count G, not the frame count G*m.",
+          "code": "theorem variance_grandMean_eq :\n    variance M.grandMean M.μ = M.σb ^ 2 / M.G + M.σw ^ 2 / (M.G * M.m)",
+          "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity.lean ∷ variance_grandMean_eq"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.4",
+          "claim": "The Hoeffding tail of the between-group component is identical across models that differ only in frame count m.",
+          "code": "theorem betweenMean_tail_indep_frames {Ω ι : Type*} [MeasurableSpace Ω]\n    (M₁ M₂ : OneWayRandomEffects Ω ι)\n    (hμ : M₁.μ = M₂.μ) (hf : M₁.f = M₂.f) (hSb : M₁.Sb = M₂.Sb) (hG : M₁.G = M₂.G) :\n    M₁.betweenMean = M₂.betweenMean\n      ∧ … ∧ ∀ t : ℝ, M₁.μ.real {ω | t ≤ |M₁.betweenMean ω - …|}\n            = M₂.μ.real {ω | t ≤ |M₂.betweenMean ω - …|}",
+          "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity/EffectiveSampleSize.lean ∷ betweenMean_tail_indep_frames"
+        },
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.5",
+          "claim": "A finite probability space where the variance-component estimate is negative with probability at least (1-2p)^G while the true variance is 2p > 0.",
+          "code": "theorem negative_r2_prob_floor {p : ℝ} (hp0 : 0 < p) (hp1 : p < 1 / 2)\n    {w : ℝ} (hw : 0 < w) :\n    0 < variance effectVal (singlePMF hp0.le hp1.le).toMeasure ∧\n      ENNReal.ofReal ((1 - 2 * p) ^ G)\n        ≤ (jointPMF G hp0.le hp1.le).toMeasure {c | sigmaHatB w c < 0} ∧\n      0 < (1 - 2 * p) ^ G",
+          "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity/NegativeRSquared.lean ∷ negative_r2_prob_floor"
+        }
+      ]
+    },
+    {
+      "order": 9030,
+      "ingredient": "agents",
+      "title": "Mutual Information · Estimator Invariance",
+      "repo": "Zetetic-Dhruv/world-model-lab",
+      "vis": "open",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "True mutual information is invariant under coordinatewise measurable reparametrization, but the KSG k-nearest-neighbor estimator is not: its radius core scales linearly under uniform similarity transformations. Per-axis standardization restores invariance of the radius statistic under the full diagonal-rescaling group. These estimator-geometry failure modes, together with training non-stationarity, are witnessed on a real JEPA world model by tracking effective rank, KSG mutual-information estimates, validation prediction loss, and linear probe R^2 across training at 64px and 128px resolution on dm_control Reacher.",
+      "note": "",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.1",
+          "claim": "True mutual information is invariant under coordinatewise measurable reparametrization.",
+          "code": "theorem mutualInformationReal_map_prodCongr\n    (e₁ : α ≃ᵐ α') (e₂ : β ≃ᵐ β') (P : Measure (α × β))\n    [IsProbabilityMeasure P]\n    (hP : P ≪ (P.map Prod.fst).prod (P.map Prod.snd)) :\n    mutualInformationReal (P.map (e₁.prodCongr e₂)) = mutualInformationReal P",
+          "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity/EstimatorGeometry.lean ∷ mutualInformationReal_map_prodCongr"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.2",
+          "claim": "The KSG radius core scales linearly under uniform similarity, so the estimator is not reparametrization-invariant.",
+          "code": "theorem ksgRadiusStat_map_smul {c : ℝ} (hcpos : 0 < c) {S : Finset (ℝ × ℝ)}\n    (hS : 2 ≤ S.card) :\n    ksgRadiusStat (S.map (scaleEmb hcpos.ne')) (two_le_card_map_scaleEmb hcpos.ne' hS)\n      = c * ksgRadiusStat S hS",
+          "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity/EstimatorGeometry.lean ∷ ksgRadiusStat_map_smul"
+        },
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.3",
+          "claim": "Per-axis standardization restores invariance under the full diagonal-rescaling group.",
+          "code": "theorem standardizedRadiusStat_diagEmb_invariant {c₁ c₂ : ℝ} (h₁pos : 0 < c₁) (h₂pos : 0 < c₂)\n    {S : Finset (ℝ × ℝ)} (hS : 2 ≤ S.card) (hnd : NonDegenerate S hS) :\n    standardizedRadiusStat (S.map (diagEmb h₁pos.ne' h₂pos.ne')) _ _\n      = standardizedRadiusStat S hS hnd",
+          "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity/EstimatorGeometry.lean ∷ standardizedRadiusStat_diagEmb_invariant"
+        },
+        {
+          "type": "figure",
+          "cell": "supporting_argument",
+          "src": "assets/323020c8_fig_trajectory_overlay.png",
+          "alt": "Overlay of 64px vs 128px training trajectories for effective rank, KSG mutual-information estimate, validation prediction loss, and linear probe R^2 across epochs 0-99 on dm_control Reacher",
+          "source": "Projects/Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/runs/sweep_traj100/reacher/fig_trajectory_overlay.png",
+          "claim": "Effective rank, KSG mutual-information estimate, validation prediction loss, and linear probe R^2 across epochs 0-99 on dm_control Reacher, overlaid for 64px and 128px training runs."
+        }
+      ]
     }
   ]
 }

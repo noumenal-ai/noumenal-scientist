@@ -15,6 +15,120 @@
       "note": "An empirical reserve of datasets with natural out-of-distribution shift, structured for mechanism-discovery benchmarking. Private — witness exposure to decide.",
       "tbd": true,
       "witnesses": []
+    },
+    {
+      "order": 9020,
+      "ingredient": "knowledge",
+      "title": "Benchmark Curation · Conformance as Typechecking",
+      "repo": "noumenal-ai/TRACES",
+      "vis": "private",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "Corpus admission is stated as typechecking: a dataset manifest is well-formed only when a conjunction of machine-checked propositions holds over it. Constraints that could be enforced at the type level were, which eliminated two classes of ill-formed manifest states; the remaining content-bearing rules, natural-shift origin, regime-schema consistency, and corpus-level referential integrity, are stated as propositions over the manifest and the corpus.",
+      "note": "",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.1",
+          "claim": "Admission rules for a dataset manifest, machine-checked as a single conjunction of propositions.",
+          "code": "def WellFormed (m : DatasetManifest) : Prop :=\n  A1_NaturalShift m ∧ A4_KUInManifest m ∧ A6_RegimeClassified m ∧\n  A7_ProvenancePreserved m ∧ A10_RepresentationalCommitments m",
+          "source": "TRACES/Lean4/Traces/Axioms.lean ∷ WellFormed"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.2",
+          "claim": "Regime-schema consistency stated as a content-bearing decidable proposition.",
+          "code": "def A6_RegimeClassified (m : DatasetManifest) : Prop :=\n  m.regimeMatchesSchema",
+          "source": "TRACES/Lean4/Traces/Axioms.lean ∷ A6_RegimeClassified"
+        },
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.3",
+          "claim": "Corpus-level referential integrity stated as a universally quantified proposition.",
+          "code": "def allPairsMembersExist (c : Corpus) : Prop :=\n  ∀ p ∈ c.pairs, ∀ mname ∈ p.members,\n    ∃ m ∈ c.manifests, m.name = mname",
+          "source": "TRACES/Lean4/Traces/Corpus.lean ∷ Corpus.allPairsMembersExist"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.4",
+          "claim": "The natural-shift admission criterion, stated as a decidable proposition.",
+          "code": "def A1_NaturalShift (m : DatasetManifest) : Prop :=\n  m.dataOrigin.primary ≠ DataOriginPrimary.synthetic",
+          "source": "TRACES/Lean4/Traces/Axioms.lean ∷ A1_NaturalShift"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.5",
+          "claim": "The dependent-type encoding eliminated two classes of ill-formed manifest states, leaving this axiom tautological.",
+          "code": "def A8_DataOriginTransparent (_m : DatasetManifest) : Prop := True",
+          "source": "TRACES/Lean4/Traces/Axioms.lean ∷ A8_DataOriginTransparent"
+        }
+      ]
+    },
+    {
+      "order": 9030,
+      "ingredient": "knowledge",
+      "title": "Distribution Shift · Environment Pairs",
+      "repo": "noumenal-ai/TRACES",
+      "vis": "private",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "The primitive experimental unit for out-of-distribution evaluation is a directed pair: a training environment and a distinct test environment under shift. Structural constraints on pairs, such as the number of member datasets each pair type admits, are carried as proofs in the data structure.",
+      "note": "",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.1",
+          "claim": "The environment pair as the primitive experimental unit for out-of-distribution evaluation.",
+          "code": "def A2_PairPrimitive (p : DatasetPair) : Prop :=\n  p.trainEnv ≠ [] ∧ p.oodTestEnv ≠ [] ∧ p.trainEnv ≠ p.oodTestEnv",
+          "source": "TRACES/Lean4/Traces/Axioms.lean ∷ A2_PairPrimitive"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.2",
+          "claim": "Member arity for each pair type is enforced as a proof carried in the data structure.",
+          "code": "def PairType.memberArity : PairType → (List String → Prop)\n  | .intraDatasetEnvSplit => fun l => l.length = 1\n  | _                     => fun l => 2 ≤ l.length",
+          "source": "TRACES/Lean4/Traces/Pair.lean ∷ PairType.memberArity"
+        }
+      ]
+    },
+    {
+      "order": 9040,
+      "ingredient": "knowledge",
+      "title": "Provenance · Typed Records",
+      "repo": "noumenal-ai/TRACES",
+      "vis": "private",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "File-level and epistemic provenance are both typed. A checksum is a refinement subtype whose SHA-256 digest format is verified when the value is constructed, and the epistemic state recorded for each dataset holds facts, hypotheses, intuitions, and unknowns in a single level-indexed structure, extending datasheet-style dataset documentation to epistemics.",
+      "note": "Discharging the digest check with native_decide rather than kernel reduction widens the trusted base; the development documents this trust-boundary extension explicitly.",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.1",
+          "claim": "Digest well-formedness is enforced at construction through a SHA-256 refinement subtype.",
+          "code": "def mkChecksum (path sha : String) (h : isSha256 sha = true := by native_decide) :\n    Checksum :=\n  ⟨path, ⟨sha, h⟩⟩",
+          "source": "TRACES/Lean4/Traces/Schema.lean ∷ mkChecksum"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.2",
+          "claim": "A level-indexed record with a dependent boundary field replaces three duplicate structures.",
+          "code": "structure EpistemicState (level : EpistemicLevel) where\n  facts hypotheses intuitions unknowns : List String := []\n  boundary : level.BoundaryType",
+          "source": "TRACES/Lean4/Traces/Schema.lean ∷ EpistemicState"
+        }
+      ]
     }
   ]
 }

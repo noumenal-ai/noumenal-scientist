@@ -15,6 +15,136 @@
       "note": "Reusable mechanized theorems and proof witnesses — the shared library the corpus draws on. Direction / witnesses to be specified.",
       "tbd": true,
       "witnesses": []
+    },
+    {
+      "order": 9020,
+      "ingredient": "knowledge",
+      "title": "Analytic Sets · Capacitability",
+      "repo": "noumenal-ai/proof-and-theorem-library",
+      "vis": "internal",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "Every analytic subset of a Polish space is capacitable: a Choquet capacity evaluated on an analytic set equals the supremum of its values over compact subsets. Analytic sets are also null-measurable with respect to every finite Borel measure on a Polish space, a foundational bridge for RKHS kernel learning theory.",
+      "note": "The capacitability proof mechanizes the Baire-space diagonal construction directly in dependent type theory; the statement follows Kechris, Classical Descriptive Set Theory, Theorem 30.13.",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.1",
+          "claim": "Choquet capacitability: the capacity of an analytic set is the supremum of the capacities of its compact subsets.",
+          "code": "theorem MeasureTheory.AnalyticSet.cap_eq_iSup_isCompact\n    {α : Type*}\n    [TopologicalSpace α] [MeasurableSpace α] [BorelSpace α] [PolishSpace α]\n    {cap : Set α → ENNReal}\n    (hcap : MeasureTheory.IsChoquetCapacity cap)\n    {s : Set α} (hs : MeasureTheory.AnalyticSet s) :\n    cap s = ⨆ (K : Set α), ⨆ (_ : IsCompact K), ⨆ (_ : K ⊆ s), cap K",
+          "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/MeasureTheory/ChoquetCapacity/Capacitability.lean ∷ MeasureTheory.AnalyticSet.cap_eq_iSup_isCompact"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.2",
+          "claim": "Analytic sets are null-measurable under every finite Borel measure on a Polish space.",
+          "code": "theorem MeasureTheory.AnalyticSet.nullMeasurableSet\n    {α : Type*}\n    [TopologicalSpace α] [MeasurableSpace α] [BorelSpace α] [PolishSpace α]\n    {μ : MeasureTheory.Measure α} [MeasureTheory.IsFiniteMeasure μ]\n    {s : Set α} (hs : MeasureTheory.AnalyticSet s) :\n    MeasureTheory.NullMeasurableSet s μ",
+          "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/MeasureTheory/AnalyticMeasurability/NullMeasurable.lean ∷ MeasureTheory.AnalyticSet.nullMeasurableSet"
+        }
+      ]
+    },
+    {
+      "order": 9030,
+      "ingredient": "knowledge",
+      "title": "Distribution Discrepancies",
+      "repo": "noumenal-ai/proof-and-theorem-library",
+      "vis": "internal",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "Pinsker's inequality holds with the sharp constant: the total variation distance between probability measures is at most the square root of half the KL divergence. On the kernel side, the mean embedding reproduces integrals, squared MMD vanishes exactly when two measures coincide, and HSIC vanishes exactly when a joint law equals the product of its marginals, in each case under a characteristic kernel.",
+      "note": "The binary case is proved by an explicit derivative-based monotonicity argument for the Pinsker residual.",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.1",
+          "claim": "Pinsker's inequality with the sharp constant: TV(P,Q) ≤ √(KL(P‖Q)/2).",
+          "code": "theorem pinsker_proof\n    (P Q : Measure α) [IsProbabilityMeasure P] [IsProbabilityMeasure Q]\n    (hac : P.AbsolutelyContinuous Q) (h_int : Integrable (llr P Q) P) :\n    tvDistReal P Q ≤ Real.sqrt (klDivReal P Q / 2)",
+          "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/InformationTheory/Pinsker/General.lean ∷ InformationTheory.pinsker_proof"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.2",
+          "claim": "Binary Pinsker inequality with sharp constant 2, the core lemma behind the measure-theoretic proof.",
+          "code": "theorem binary_pinsker (p q : ℝ) (hp₀ : 0 ≤ p) (hp₁ : p ≤ 1)\n    (hq₀ : 0 < q) (hq₁ : q < 1) :\n    2 * (p - q)^2 ≤ klBin p q",
+          "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/InformationTheory/Pinsker/Binary.lean ∷ InformationTheory.binary_pinsker"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.3",
+          "claim": "Reproducing property of the kernel mean embedding: ⟨μ_P, f⟩ = ∫ f dP.",
+          "code": "theorem kernelMeanEmbedding_reproducing\n    (P : Measure X) [IsFiniteMeasure P]\n    (hcont : Continuous (fun x => kerFun H x (1 : ℝ)))\n    (f : H) :\n    @inner ℝ H _ (kernelMeanEmbedding (H := H) P) f = ∫ x, f x ∂P",
+          "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/Analysis/InnerProductSpace/KernelMeanEmbedding/Reproducing.lean ∷ kernelMeanEmbedding_reproducing"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.4",
+          "claim": "Squared MMD is zero iff the two probability measures are equal, for a characteristic kernel.",
+          "code": "theorem mmdSq_zero_iff\n    (hchar : IsCharacteristic (H := H) (X := X))\n    (P Q : Measure X) :\n    mmdSq (H := H) P Q = 0 ↔ P = Q",
+          "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/Analysis/InnerProductSpace/MMD/Characteristic.lean ∷ mmdSq_zero_iff"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.5",
+          "claim": "HSIC is zero iff the joint distribution equals the product of its marginals, under a characteristic kernel.",
+          "code": "theorem hsicDef_zero_iff_independent\n    (hchar : IsCharacteristic (H := H) (X := X × Y))\n    (P : Measure (X × Y)) :\n    hsicDef (H := H) P = 0 ↔ P = (P.map Prod.fst).prod (P.map Prod.snd)",
+          "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/Analysis/InnerProductSpace/HSIC/ZeroIff.lean ∷ hsicDef_zero_iff_independent"
+        }
+      ]
+    },
+    {
+      "order": 9040,
+      "ingredient": "knowledge",
+      "title": "Minimax and VC Bounds",
+      "repo": "noumenal-ai/proof-and-theorem-library",
+      "vis": "internal",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "Multiplicative weights reaches an approximate minimax solution: O(log N / ε²) rounds produce a mixed strategy with payoff at least v - ε against every pure column. The Sauer-Shelah lemma bounds the size of a set family with bounded VC dimension, and Assouad's dual bound gives VC dimension at most 2^{d+1} - 1 for the transpose when the original matrix has VC dimension at most d. A Chebyshev argument amplifies k ≥ 9/δ independent events, each of probability at least 2/3, into a majority holding with probability at least 1 - δ.",
+      "note": "The Sauer-Shelah proof is routed through Mathlib's shatterer API; the majority amplification lemma is a standard boosting primitive.",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.1",
+          "claim": "MWU approximate minimax: O(log N / ε²) rounds yield a mixed strategy achieving payoff at least v - ε against all pure columns.",
+          "code": "theorem mwu_approx_minimax\n    {R C : Type*} [Fintype R] [Fintype C] [Nonempty R] [Nonempty C]\n    [DecidableEq R] [DecidableEq C]\n    (M : R → C → Bool) (v ε : ℝ) (hε : 0 < ε)\n    (hrow : ∀ q : FintypePMF C, ∃ r : R,\n      v ≤ ∑ c, q.prob c * (if M r c then (1 : ℝ) else 0)) :\n    ∃ p : FintypePMF R, ∀ c : C, v - ε ≤ boolGamePayoff M p c",
+          "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/Probability/Decision/Minimax/MWU/ApproxMinimax.lean ∷ ProbabilityTheory.mwu_approx_minimax"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.2",
+          "claim": "Sauer-Shelah bound on the size of a set family with bounded VC dimension.",
+          "code": "theorem card_toFinsetFamily_le {m n : ℕ} (M : BinaryMatrix m n)\n    {d : ℕ} (hd : M.toFinsetFamily.vcDim ≤ d) :\n    M.toFinsetFamily.card ≤ ∑ k ∈ Finset.Iic d, n.choose k",
+          "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/Combinatorics/SetFamily/DualVC/SauerShelah.lean ∷ BinaryMatrix.card_toFinsetFamily_le"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.3",
+          "claim": "Assouad's dual VC bound: VCDim(Mᵀ) ≤ 2^{d+1} - 1 when VCDim(M) ≤ d.",
+          "code": "theorem assouad_transpose_vcDim {m n : ℕ} (M : BinaryMatrix m n)\n    {d : ℕ} (hd : M.vcDim ≤ d) :\n    M.transpose.vcDim ≤ 2 ^ (d + 1) - 1",
+          "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/Combinatorics/SetFamily/DualVC/Assouad.lean ∷ BinaryMatrix.assouad_transpose_vcDim"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.4",
+          "claim": "Majority amplification: k ≥ 9/δ independent events of probability at least 2/3 give a majority with probability at least 1 - δ.",
+          "code": "lemma ProbabilityTheory.chebyshev_majority_bound\n    {Ω : Type*} [MeasurableSpace Ω] {μ : MeasureTheory.Measure Ω}\n    [MeasureTheory.IsProbabilityMeasure μ]\n    {k : ℕ} {δ : ℝ} (h_delta_pos : 0 < δ)\n    (hk : (9 : ℝ) / δ ≤ k)\n    (events : Fin k → Set Ω)\n    (hevents_meas : ∀ j, MeasurableSet (events j))\n    (hindep : ProbabilityTheory.iIndepSet (fun j => events j) μ)\n    (hprob : ∀ j, μ (events j) ≥ ENNReal.ofReal (2/3)) :\n    μ {ω | k < 2 * (Finset.univ.filter (fun j => ω ∈ events j)).card} ≥\n      ENNReal.ofReal (1 - δ)",
+          "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/Probability/Concentration/ChebyshevMajority.lean ∷ ProbabilityTheory.chebyshev_majority_bound"
+        }
+      ]
     }
   ]
 }

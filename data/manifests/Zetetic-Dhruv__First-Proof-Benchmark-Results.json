@@ -54,6 +54,106 @@
           "flag": ""
         }
       ]
+    },
+    {
+      "order": 9020,
+      "ingredient": "reasoning",
+      "title": "Learner Measurability · Borel-Analytic Bridge",
+      "repo": "Zetetic-Dhruv/First-Proof-Benchmark-Results",
+      "vis": "open",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "Symmetrization arguments for PAC learning need the bad event to be measurable, and the Borel condition can be weakened to null-measurability. For a Borel-parameterized concept class the ghost-gap witness set is Borel, its projection over parameters is analytic by Suslin's projection theorem, and analytic sets are null-measurable under finite Borel measures on Polish spaces by Choquet capacitability. Every Borel-parameterized concept class therefore satisfies the null-measurable event-level condition the symmetrization proof requires.",
+      "note": "These statements are machine-checked in Lean 4 with no open proof obligations. They come from a ten-problem automated proof-search benchmark on research-level mathematics whose outcomes were four accepted, four partial, and two rejected.",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.1",
+          "claim": "The witness set of parameter and sample pairs with gap at least ε/2 is Borel when the evaluator and target are measurable.",
+          "code": "theorem paramWitnessSet_measurable\n    {X : Type u} [MeasurableSpace X]\n    {Θ : Type*} [MeasurableSpace Θ]\n    (e : Θ → Concept X Bool)\n    (he : Measurable (fun p : Θ × X => e p.1 p.2))\n    (c : Concept X Bool) (hc : Measurable c)\n    (m : ℕ) (ε : ℝ) :\n    MeasurableSet (paramWitnessSet e c m ε)",
+          "source": "formal-learning-theory-kernel/FLT_Proofs/Complexity/BorelAnalyticBridge.lean ∷ paramWitnessSet_measurable"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.2",
+          "claim": "The bad event, the existential projection of the witness set over parameters, is analytic by Suslin's projection theorem.",
+          "code": "theorem borel_param_badEvent_analytic\n    {X : Type u} [TopologicalSpace X] [MeasurableSpace X] [BorelSpace X] [PolishSpace X]\n    {Θ : Type*} [MeasurableSpace Θ] [StandardBorelSpace Θ]\n    (e : Θ → Concept X Bool)\n    (he : Measurable (fun p : Θ × X => e p.1 p.2))\n    (c : Concept X Bool) (hc : Measurable c)\n    (m : ℕ) (ε : ℝ) :\n    MeasureTheory.AnalyticSet (paramBadEvent e c m ε)",
+          "source": "formal-learning-theory-kernel/FLT_Proofs/Complexity/BorelAnalyticBridge.lean ∷ borel_param_badEvent_analytic"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.3",
+          "claim": "Inner regularity by compact sets for analytic sets, the key lemma underlying the Choquet capacitability argument.",
+          "code": "theorem MeasureTheory.AnalyticSet.exists_isCompact_measureReal_gt\n    {α : Type*}\n    [TopologicalSpace α] [MeasurableSpace α] [BorelSpace α] [PolishSpace α]\n    {μ : MeasureTheory.Measure α} [MeasureTheory.IsFiniteMeasure μ]\n    {s : Set α} (hs : MeasureTheory.AnalyticSet s) :\n    ∀ ε > 0, ∃ K : Set α, IsCompact K ∧ K ⊆ s ∧ μ.real s < μ.real K + ε",
+          "source": "formal-learning-theory-kernel/FLT_Proofs/PureMath/AnalyticMeasurability.lean ∷ MeasureTheory.AnalyticSet.exists_isCompact_measureReal_gt"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.4",
+          "claim": "Analytic sets are null-measurable under finite Borel measures on Polish spaces.",
+          "code": "theorem analyticSet_nullMeasurableSet\n    {α : Type*}\n    [TopologicalSpace α] [MeasurableSpace α] [BorelSpace α] [PolishSpace α]\n    {μ : MeasureTheory.Measure α} [MeasureTheory.IsFiniteMeasure μ]\n    {s : Set α} (hs : MeasureTheory.AnalyticSet s) :\n    MeasureTheory.NullMeasurableSet s μ",
+          "source": "formal-learning-theory-kernel/FLT_Proofs/PureMath/AnalyticMeasurability.lean ∷ analyticSet_nullMeasurableSet"
+        },
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.5",
+          "claim": "Every Borel-parameterized concept class satisfies the null-measurable event-level condition required by symmetrization.",
+          "code": "theorem borel_param_wellBehavedVCMeasTarget\n    {X : Type u} [MeasurableSpace X] [TopologicalSpace X] [PolishSpace X] [BorelSpace X]\n    {Θ : Type*} [MeasurableSpace Θ] [StandardBorelSpace Θ]\n    (e : Θ → Concept X Bool)\n    (he : Measurable (fun p : Θ × X => e p.1 p.2)) :\n    WellBehavedVCMeasTarget X (Set.range e)",
+          "source": "formal-learning-theory-kernel/FLT_Proofs/Complexity/BorelAnalyticBridge.lean ∷ borel_param_wellBehavedVCMeasTarget"
+        },
+        {
+          "type": "figure",
+          "cell": "supporting_argument",
+          "src": "assets/67173c69_proof_outcomes.svg",
+          "alt": "Scatter plot of proof outcomes by problem on two axes: generalization robustness (x) and acceptance status (y), with quadrant labels (Partial/Accepted vs. Large/Compact) and individual problem markers",
+          "source": "Projects/First-Proof-Benchmark-Results/assets/proof_outcomes.svg",
+          "claim": "Proof outcomes on the ten First Proof benchmark problems, four accepted, four partial, two rejected, plotted by generalization robustness and acceptance status."
+        }
+      ]
+    },
+    {
+      "order": 9030,
+      "ingredient": "reasoning",
+      "title": "Concept Classes · Separation and Closure",
+      "repo": "Zetetic-Dhruv/First-Proof-Benchmark-Results",
+      "vis": "open",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "The null-measurable condition is strictly separated from the Borel supremum condition: any analytic non-Borel subset of the reals yields a concept class that satisfies the first and fails the second. The weakened condition also carries a closure algebra under concept-class constructors, preserved by piecewise patching and by fiber-product amalgamation of concept families.",
+      "note": "The separation theorem is parametric: it converts any analytic non-Borel subset of the reals into a separating concept class.",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.1",
+          "claim": "Any analytic non-Borel subset of the reals witnesses a concept class satisfying the null-measurable condition but failing the Borel supremum condition.",
+          "code": "theorem analytic_nonborel_set_gives_measTarget_separation\n    (A : Set ℝ)\n    (hA_an : MeasureTheory.AnalyticSet A)\n    (hA_non : ¬ MeasurableSet A) :\n    KrappWirthSeparationMeasTarget",
+          "source": "formal-learning-theory-kernel/FLT_Proofs/Theorem/BorelAnalyticSeparation.lean ∷ analytic_nonborel_set_gives_measTarget_separation"
+        },
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.2",
+          "claim": "Null-measurable well-behavedness is closed under piecewise patching of concept families.",
+          "code": "theorem patch_borel_param_wellBehavedVCMeasTarget\n    {X : Type u} [MeasurableSpace X] [TopologicalSpace X] [PolishSpace X] [BorelSpace X]\n    {Θ₁ Θ₂ Ρ : Type*}\n    [MeasurableSpace Θ₁] [StandardBorelSpace Θ₁]\n    [MeasurableSpace Θ₂] [StandardBorelSpace Θ₂]\n    [MeasurableSpace Ρ] [StandardBorelSpace Ρ]\n    (e₁ : Θ₁ → Concept X Bool) (e₂ : Θ₂ → Concept X Bool)\n    (r : Ρ → Concept X Bool)\n    ...\n    WellBehavedVCMeasTarget X (Set.range (patchEval e₁ e₂ r))",
+          "source": "formal-learning-theory-kernel/FLT_Proofs/Complexity/BorelAnalyticBridge.lean ∷ patch_borel_param_wellBehavedVCMeasTarget"
+        },
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.3",
+          "claim": "Null-measurable well-behavedness is closed under fiber-product amalgamation of concept families.",
+          "code": "theorem amalgClass_wellBehaved\n    {X : Type u}\n    [MeasurableSpace X] [TopologicalSpace X] [PolishSpace X] [BorelSpace X]\n    {Θ₁ Θ₂ S : Type*}\n    [MeasurableSpace Θ₁] [StandardBorelSpace Θ₁]\n    [MeasurableSpace Θ₂] [StandardBorelSpace Θ₂]\n    [MeasurableSpace S] [StandardBorelSpace S]\n    (π₁ : Θ₁ → S) (π₂ : Θ₂ → S)\n    (hπ₁ : Measurable π₁) (hπ₂ : Measurable π₂)\n    (merge : Θ₁ × Θ₂ → Concept X Bool)\n    (hmerge : Measurable (fun p : (Θ₁ × Θ₂) × X => merge p.1 p.2)) :\n    WellBehavedVCMeasTarget X (amalgClass π₁ π₂ merge)",
+          "source": "formal-learning-theory-kernel/FLT_Proofs/Complexity/Amalgamation.lean ∷ amalgClass_wellBehaved"
+        }
+      ]
     }
   ]
 }

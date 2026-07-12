@@ -339,6 +339,276 @@
           "flag": ""
         }
       ]
+    },
+    {
+      "order": 9120,
+      "ingredient": "knowledge",
+      "title": "Statistical Learning · Fundamental Theorem",
+      "repo": "design-lab · learning-theory",
+      "vis": "internal",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "The five-way fundamental theorem of statistical learning is machine-checked in full, with PAC learnability, finite VC dimension, and finite sample compression among the equivalent characterizations, and no open proof obligations remain. The compression characterization runs through a constructive approximate minimax theorem obtained from multiplicative weights in place of Sion's exact minimax. Machine-verified alongside it are sharp combinatorial results, the exact VC dimension of halfspaces in R^n and Assouad's dual VC bound for binary matrices, and a McAllester PAC-Bayes bound that supplies a frequentist to Bayesian bridge.",
+      "note": "",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.1",
+          "claim": "The five-way fundamental theorem of statistical learning, complete and sorry-free in Lean 4.",
+          "code": "theorem fundamental_theorem (X : Type u) [MeasurableSpace X]\n    [MeasurableSingletonClass X]\n    (C : ConceptClass X Bool)\n    [MeasurableConceptClass X C] :\n    (PACLearnable X C ↔ VCDim X C < ⊤) ∧\n    ((VCDim X C < ⊤) ↔ ∃ (k : ℕ) (cs : CompressionSchemeWithInfo0 X Bool C), cs.size = k) ∧ ...",
+          "source": "design-lab/learning-theory/FLT_Proofs/Theorem/PAC.lean ∷ fundamental_theorem"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.2",
+          "claim": "A constructive approximate minimax theorem via multiplicative weights replaces Sion's exact minimax in the compression characterization.",
+          "code": "theorem mwu_approx_minimax\n    {R C : Type*} [Fintype R] [Fintype C] [Nonempty R] [Nonempty C]\n    [DecidableEq R] [DecidableEq C]\n    (M : R → C → Bool) (v ε : ℝ) (hε : 0 < ε)\n    (hrow : ∀ q : FinitePMF C, ∃ r : R,\n      v ≤ ∑ c, q.prob c * (if M r c then (1 : ℝ) else 0)) :\n    ∃ p : FinitePMF R, ∀ c : C, v - ε ≤ boolGamePayoff M p c",
+          "source": "design-lab/learning-theory/FLT_Proofs/PureMath/ApproxMinimax.lean ∷ mwu_approx_minimax"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.3",
+          "claim": "The VC dimension of halfspaces in R^n equals n exactly (Cover 1965, Dudley 1978).",
+          "code": "theorem vcDim_halfspace_eq (n : ℕ) :\n    VCDim (Fin n → ℝ) (signClass (coordSpace n)) = (n : WithTop ℕ) :=\n  le_antisymm (vcDim_halfspace_le n) (vcDim_halfspace_ge n)",
+          "source": "design-lab/learning-theory/FLT_Proofs/Complexity/IndependentVC/Halfspace.lean ∷ vcDim_halfspace_eq"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.4",
+          "claim": "Assouad's bound on the dual VC dimension of a binary matrix, machine-verified.",
+          "code": "theorem assouad_transpose_vcDim {m n : ℕ} (M : BinaryMatrix m n)\n    {d : ℕ} (hd : M.vcDim ≤ d) :\n    M.transpose.vcDim ≤ 2 ^ (d + 1) - 1",
+          "source": "design-lab/measurements/ZPM/Combinatorics/SetFamily/DualVC/Assouad.lean ∷ assouad_transpose_vcDim"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.5",
+          "claim": "The McAllester PAC-Bayes generalization bound, a frequentist to Bayesian bridge in Lean 4.",
+          "code": "theorem pac_bayes_finite {X : Type u} [MeasurableSpace X]\n    {H : Type*} [Fintype H] [Nonempty H]\n    (D : MeasureTheory.Measure X) [MeasureTheory.IsProbabilityMeasure D]\n    (c : Concept X Bool) (hc_meas : Measurable c)\n    (hs : H → Concept X Bool) (hhs_meas : ∀ h, Measurable (hs h))\n    (P : FinitePMF H) (hP_pos : ∀ h, 0 < P.prob h)\n    (m : ℕ) (hm : 0 < m) (δ : ℝ) (hδ : 0 < δ) (hδ1 : δ ≤ 1) :\n    MeasureTheory.Measure.pi (fun _ : Fin m => D)\n      { S : Fin m → X | ∀ (Q : FinitePMF H),\n          gibbsError Q hs c D ≤ gibbsEmpError Q hs c S +\n            Real.sqrt ((crossEntropyFinitePMF Q P + Real.log (1 / δ)) / (2 * ↑m)) }\n      ≥ ENNReal.ofReal (1 - δ)",
+          "source": "design-lab/learning-theory/FLT_Proofs/Theorem/PACBayes.lean ∷ pac_bayes_finite"
+        }
+      ]
+    },
+    {
+      "order": 9130,
+      "ingredient": "knowledge",
+      "title": "Learner Measurability",
+      "repo": "design-lab · learning-theory",
+      "vis": "internal",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "PAC learning has a measurability core: uniform convergence arguments need the bad events to be regular enough to measure. Choquet's capacitability theorem yields that analytic sets are null-measurable, bridging capacity theory to learning, and a strict separation witness shows the null-measurable regularity condition for PAC bad events is distinct from the Borel one. The condition is preserved under amalgamation of concept classes over standard Borel parameter spaces, and a concrete version space learner is verified to pass the measurability gate.",
+      "note": "The Borel versus null-measurable separation is proved relative to an explicit hypothesis: the existence of an analytic set of reals that is not measurable.",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.1",
+          "claim": "Choquet's capacitability theorem (Kechris 30.13): capacities of analytic sets in Polish spaces are approximated from within by compact sets.",
+          "code": "theorem MeasureTheory.AnalyticSet.cap_eq_iSup_isCompact\n    {α : Type*}\n    [TopologicalSpace α] [MeasurableSpace α] [BorelSpace α] [PolishSpace α]\n    {cap : Set α → ENNReal}\n    (hcap : MeasureTheory.IsChoquetCapacity cap)\n    {s : Set α} (hs : MeasureTheory.AnalyticSet s) :\n    cap s = ⨆ (K : Set α), ⨆ (_ : IsCompact K), ⨆ (_ : K ⊆ s), cap K",
+          "source": "design-lab/measurements/ZPM/MeasureTheory/ChoquetCapacity/Capacitability.lean ∷ MeasureTheory.AnalyticSet.cap_eq_iSup_isCompact"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.2",
+          "claim": "Analytic sets are null-measurable: the bridge from Choquet capacity to PAC learning measurability.",
+          "code": "theorem analyticSet_nullMeasurableSet\n    {α : Type*}\n    [TopologicalSpace α] [MeasurableSpace α] [BorelSpace α] [PolishSpace α]\n    {μ : MeasureTheory.Measure α} [MeasureTheory.IsFiniteMeasure μ]\n    {s : Set α} (hs : MeasureTheory.AnalyticSet s) :\n    MeasureTheory.NullMeasurableSet s μ",
+          "source": "design-lab/learning-theory/FLT_Proofs/PureMath/AnalyticMeasurability.lean ∷ analyticSet_nullMeasurableSet"
+        },
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.3",
+          "claim": "Null-measurable and Borel regularity conditions for PAC bad events are strictly separated, given an analytic non-measurable set of reals.",
+          "code": "theorem exists_measTarget_separation\n    (hex : ∃ A : Set ℝ, MeasureTheory.AnalyticSet A ∧ ¬ MeasurableSet A) :\n    KrappWirthSeparationMeasTarget",
+          "source": "design-lab/learning-theory/FLT_Proofs/Theorem/BorelAnalyticSeparation.lean ∷ exists_measTarget_separation"
+        },
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.4",
+          "claim": "Amalgamation of concept classes over standard Borel parameter spaces preserves null-measurability.",
+          "code": "theorem amalgClass_wellBehaved\n    {X : Type u}\n    [MeasurableSpace X] [TopologicalSpace X] [PolishSpace X] [BorelSpace X]\n    {Θ₁ Θ₂ S : Type*}\n    [MeasurableSpace Θ₁] [StandardBorelSpace Θ₁]\n    [MeasurableSpace Θ₂] [StandardBorelSpace Θ₂]\n    [MeasurableSpace S] [StandardBorelSpace S]\n    (π₁ : Θ₁ → S) (π₂ : Θ₂ → S)\n    (hπ₁ : Measurable π₁) (hπ₂ : Measurable π₂)\n    (merge : Θ₁ × Θ₂ → Concept X Bool)\n    (hmerge : Measurable (fun p : (Θ₁ × Θ₂) × X => merge p.1 p.2)) :\n    WellBehavedVCMeasTarget X (amalgClass π₁ π₂ merge)",
+          "source": "design-lab/learning-theory/FLT_Proofs/Complexity/Amalgamation.lean ∷ amalgClass_wellBehaved"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.5",
+          "claim": "A non-neural version space learner satisfies the batch-learner measurability gate.",
+          "code": "theorem versionSpaceLearner_measurableBatchLearner\n    {X : Type u} [MeasurableSpace X] [MeasurableSingletonClass X]\n    (enum : ℕ → Concept X Bool)\n    (h_meas : ∀ n, Measurable (enum n)) :\n    MeasurableBatchLearner X (versionSpaceLearner enum)",
+          "source": "design-lab/learning-theory/FLT_Proofs/Learner/VersionSpace.lean ∷ versionSpaceLearner_measurableBatchLearner"
+        }
+      ]
+    },
+    {
+      "order": 9140,
+      "ingredient": "knowledge",
+      "title": "Stochastic Approximation · TD and Q-Learning",
+      "repo": "design-lab · rl",
+      "vis": "internal",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "Q-learning converges almost surely to the optimal Q-function, and linear TD to its fixed point, under Markovian sampling with inverse-polynomial step sizes, all machine-checked. The proofs share a single Lyapunov-based recursive error bound and bottom out in the Robbins-Siegmund almost-supermartingale convergence theorem. For Q-learning the Lyapunov candidate is the squared l_p norm, whose smoothness with constant p - 1 is proved separately.",
+      "note": "The Markovian-sampling theorems are stated for inverse-polynomial step-size schedules with exponent in the interval (2/3, 1), as in the theorem hypotheses.",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.1",
+          "claim": "Q-learning converges almost surely to the optimal Q-function under Markovian samples.",
+          "code": "theorem ae_tendsto_of_QLearning_markov\n  {ν : ℝ} (hν : ν ∈ Set.Ioo (2 / 3) 1)\n  (hq : QLearningIterates (spec := spec) (q := q))\n  (hα : spec.α = fun n : ℕ => inv_poly ν 2 n) :\n  ∀ᵐ ω ∂ spec.MRP.markov_samples,\n    Tendsto (fun n => q n ω) atTop (𝓝 spec.optimal_q)",
+          "source": "design-lab/rl/RLTheory/Algorithm/QLearning.lean ∷ ae_tendsto_of_QLearning_markov"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.2",
+          "claim": "Linear TD converges almost surely under Markovian samples and inverse-polynomial step sizes.",
+          "code": "theorem ae_tendsto_of_linearTD_markov\n  {ν : ℝ} (hν : ν ∈ Set.Ioo (2 / 3) 1)\n  (hw : LinearTDIterates (spec := spec) (w := w))\n  (hα : spec.α = fun n : ℕ => inv_poly ν 2 n) :\n  ∀ᵐ ω ∂ spec.markov_samples,\n    Tendsto (fun n => w n ω) atTop (𝓝 spec.td_fixed_point)",
+          "source": "design-lab/rl/RLTheory/Algorithm/LinearTD.lean ∷ ae_tendsto_of_linearTD_markov"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.3",
+          "claim": "The Robbins-Siegmund almost-supermartingale theorem, the foundation of the stochastic approximation proofs.",
+          "code": "theorem ae_tendsto_zero_of_almost_supermartingale\n    (hfnonneg : ∀ n, 0 ≤ᵐ[μ] f n)\n    {T : ℕ → ℝ} (hTpos : ∀ n, 0 < T n)\n    (hAlmostSupermartingale :\n      ∃ C ≥ 0, ∀ n, μ[f (n + 1) | ℱ n] ≤ᵐ[μ] (fun ω => (1 - T n) * f n ω + C * T n ^ 2)) :\n    ∀ᵐ ω ∂μ, Tendsto (fun n => f n ω) atTop (𝓝 0)",
+          "source": "design-lab/rl/RLTheory/Probability/Martingale/Convergence.lean ∷ ae_tendsto_zero_of_almost_supermartingale"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.4",
+          "claim": "A Lyapunov-based recursive error bound shared by all the convergence proofs.",
+          "code": "theorem fundamental_inequality\n  {x : ℕ → Ω → E d}\n  (hx : Iterates x x₀ f e₁ e₂ α)\n  ...\n  [LyapunovFunction φ φ' f] :\n  ∃ B₁ B₂, 0 < B₁ ∧ 0 ≤ B₂ ∧ ∃ n₀, ∀ᵐ ω ∂μ, ∀ n, n ≥ n₀ →\n    φ (x (n + 1) ω - z) ≤ (1 - B₁ * α n) * φ (x n ω - z) +\n      ⟪φ' (x n ω - z), e₁ (n + 1) ω⟫ + B₂ * (α n) ^ 2",
+          "source": "design-lab/rl/RLTheory/StochasticApproximation/Pathwise.lean ∷ fundamental_inequality"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.5",
+          "claim": "Smoothness of the squared l_p norm with constant p - 1, the Lyapunov candidate for Q-learning.",
+          "code": "theorem smooth_half_sq_Lp (hp : 2 ≤ p) :\n  ∀ (x y : LpSpace p d),\n    half_sq_Lp y ≤ half_sq_Lp x + ⟪toL2 (half_sq_Lp' x), toL2 (y - x)⟫ + (p - 1) * half_sq_Lp (y - x)",
+          "source": "design-lab/rl/RLTheory/StochasticApproximation/LpSpace.lean ∷ smooth_half_sq_Lp"
+        }
+      ]
+    },
+    {
+      "order": 9150,
+      "ingredient": "knowledge",
+      "title": "Discrepancies and Independence",
+      "repo": "design-lab · measurements",
+      "vis": "internal",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "Machine-verified zero conditions for standard discrepancy measures: MMD vanishes exactly when two distributions are equal, provided the kernel is characteristic; HSIC vanishes exactly when the joint distribution factorizes into its marginals, again under a characteristic-kernel hypothesis on the product space; and mutual information is zero if and only if independence holds, under an absolute continuity hypothesis. Pinsker's inequality with its sharp constant bounds total variation by the square root of half the KL divergence, and the reproducing property of the kernel mean embedding grounds the RKHS results.",
+      "note": "The mutual information characterization carries explicit absolute continuity and finite KL divergence hypotheses, stated as part of the theorem.",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.1",
+          "claim": "Pinsker's inequality with sharp constant, fully proved: total variation is at most the square root of half the KL divergence.",
+          "code": "theorem pinsker_proof\n    (P Q : Measure α) [IsProbabilityMeasure P] [IsProbabilityMeasure Q]\n    (hac : P.AbsolutelyContinuous Q) (h_int : Integrable (llr P Q) P) :\n    tvDistReal P Q ≤ Real.sqrt (klDivReal P Q / 2)",
+          "source": "design-lab/measurements/ZPM/InformationTheory/Pinsker/General.lean ∷ pinsker_proof"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.2",
+          "claim": "For a characteristic kernel, MMD vanishes exactly when the two distributions are equal.",
+          "code": "theorem mmdSq_zero_iff\n    (hchar : IsCharacteristic (H := H) (X := X))\n    (P Q : Measure X) :\n    mmdSq (H := H) P Q = 0 ↔ P = Q",
+          "source": "design-lab/measurements/ZPM/Analysis/InnerProductSpace/MMD/Characteristic.lean ∷ mmdSq_zero_iff"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.3",
+          "claim": "For a characteristic kernel on the product space, HSIC vanishes exactly when the joint distribution is the product of its marginals.",
+          "code": "theorem hsicDef_zero_iff_independent\n    (hchar : IsCharacteristic (H := H) (X := X × Y))\n    (P : Measure (X × Y)) :\n    hsicDef (H := H) P = 0 ↔ P = (P.map Prod.fst).prod (P.map Prod.snd)",
+          "source": "design-lab/measurements/ZPM/Analysis/InnerProductSpace/HSIC/ZeroIff.lean ∷ hsicDef_zero_iff_independent"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.4",
+          "claim": "Mutual information equals zero if and only if the variables are independent, under an absolute continuity hypothesis.",
+          "code": "theorem mutualInformationReal_eq_zero_iff_product {α β : Type*}\n    [MeasurableSpace α] [MeasurableSpace β]\n    (P : Measure (α × β)) [IsProbabilityMeasure P]\n    (hac : P.AbsolutelyContinuous ((P.map Prod.fst).prod (P.map Prod.snd)))\n    (hfin : InformationTheory.klDiv P ((P.map Prod.fst).prod (P.map Prod.snd)) ≠ ⊤) :\n    mutualInformationReal P = 0 ↔ P = (P.map Prod.fst).prod (P.map Prod.snd)",
+          "source": "design-lab/measurements/ZPM/InformationTheory/MutualInformation/ZeroIffProduct.lean ∷ mutualInformationReal_eq_zero_iff_product"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.5",
+          "claim": "The reproducing property of the kernel mean embedding: inner products against the embedding compute expectations.",
+          "code": "theorem kernelMeanEmbedding_reproducing\n    (P : Measure X) [IsFiniteMeasure P]\n    (hcont : Continuous (fun x => kerFun H x (1 : ℝ)))\n    (f : H) :\n    @inner ℝ H _ (kernelMeanEmbedding (H := H) P) f = ∫ x, f x ∂P",
+          "source": "design-lab/measurements/ZPM/Analysis/InnerProductSpace/KernelMeanEmbedding/Reproducing.lean ∷ kernelMeanEmbedding_reproducing"
+        }
+      ]
+    },
+    {
+      "order": 9160,
+      "ingredient": "knowledge",
+      "title": "Verified Neural Networks · TorchLean",
+      "repo": "design-lab · neural-networks",
+      "vis": "internal",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "TorchLean is a typed, executable neural network framework whose robustness certificates are checkable in Lean: typed tensors and a shared graph IR feed verified reverse-mode autograd and IEEE-754 semantics, and bound propagation with affine and ReLU relaxations carries a perturbation set through the network to certified output bounds. Supporting analysis is formalized alongside: ReLU is 1-Lipschitz in L2 for tensors of any shape, a per-step squared-norm contraction bound holds for gradient steps on strongly monotone Lipschitz operators, and one-dimensional ridge regression has an explicit uniform stability constant.",
+      "note": "",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.1",
+          "claim": "ReLU is 1-Lipschitz in L2 for any tensor shape, proved by structural induction on the shape type.",
+          "code": "theorem relu_lipschitz_general {s : Shape} (x y : Tensor ℝ s) :\n  tensorL2Dist (reluSpec x) (reluSpec y) ≤ tensorL2Dist x y",
+          "source": "design-lab/neural-networks/NN/Proofs/Analysis/Lipschitz.lean ∷ relu_lipschitz_general"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.2",
+          "claim": "A per-step squared-norm contraction bound for gradient steps on strongly monotone Lipschitz operators.",
+          "code": "theorem step_norm_sq_le (η μ : ℝ) (hη : 0 ≤ η) {L : NNReal} (g : E → E)\n    (hmono : StrongMonotone μ g) (hlip : LipschitzWith L g)\n    (x y : E) :\n    ‖step η g x - step η g y‖ ^ 2 ≤ (1 - 2 * η * μ + (η ^ 2) * (L : ℝ) ^ 2) * ‖x - y‖ ^ 2",
+          "source": "design-lab/neural-networks/NN/MLTheory/Optimization/GDLinearConvergence.lean ∷ step_norm_sq_le"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.3",
+          "claim": "Uniform stability of one-dimensional ridge regression with an explicit stability constant.",
+          "code": "theorem ridgeFit1D_sqLoss_uniformStableReplace (hlam : 0 < lam) :\n    UniformStableReplace (Z := BoundedExample X Y) (H := ℝ)\n      (A := fun S => ridgeFit1D (n := n) (X := X) (Y := Y) lam S)\n      (ℓ := fun w z => sqLoss (X := X) (Y := Y) w z)\n      (β := 4 * X ^ 2 * Y ^ 2 * (lam + X ^ 2) ^ 2 / (lam ^ 3 * N (n := n)))",
+          "source": "design-lab/neural-networks/NN/MLTheory/LearningTheory/Stability/RidgeRegression1D/Real.lean ∷ ridgeFit1D_sqLoss_uniformStableReplace"
+        },
+        {
+          "type": "figure",
+          "cell": "supporting_argument",
+          "src": "assets/033d6fa2_torchlean-layout.png",
+          "alt": "Architecture diagram of TorchLean showing the pipeline from typed tensors, shared graph IR, verified reverse-mode autograd, FP32/IEEE-754 semantics, and certificate checking through to Lean proofs, executable models, and formal certificates for verified ML workflows",
+          "source": "Noumenal/design-lab/neural-networks/home_page/assets/media/figures/torchlean-layout.png",
+          "claim": "TorchLean pipeline: typed tensors and a shared graph IR flow through verified reverse-mode autograd, IEEE-754 semantics, and certificate checking to Lean proofs, executable models, and formal certificates."
+        },
+        {
+          "type": "figure",
+          "cell": "supporting_argument",
+          "src": "assets/ace1ca54_verification-bounds.png",
+          "alt": "IBP / α-CROWN pipeline: perturbation input set → bound propagation through a neural network using affine + ReLU relaxations → certified output with lower/upper bounds and margin, with Lean-checkable certificates",
+          "source": "Noumenal/design-lab/neural-networks/home_page/assets/media/examples/showcase/verification-bounds.png",
+          "claim": "Bound propagation with affine and ReLU relaxations turns a perturbation input set into certified output bounds with margin, backed by Lean-checkable certificates."
+        }
+      ]
     }
   ]
 }

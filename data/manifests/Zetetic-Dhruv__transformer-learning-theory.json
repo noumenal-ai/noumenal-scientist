@@ -60,6 +60,178 @@
           "claim": "The handle this gives an agent: the certified capacity is a map out of architecture-configuration space, so every TransformerConfig (four Nats) carries a generalization budget — the design law is capacity ⊕ measurability ⊕ expressivity, and self-improvement is search over that map."
         }
       ]
+    },
+    {
+      "order": 9020,
+      "ingredient": "agents",
+      "title": "Certified Execution",
+      "repo": "Zetetic-Dhruv/transformer-learning-theory",
+      "vis": "open",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "The generalization bound is proved for the transformer program as it executes in IEEE binary32 arithmetic, with the certified attention head bound coordinate-for-coordinate to the literal scaledDotProductAttention kernel. Rounding error enters through a backward-error bound for binary32 sequential summation, derived rather than assumed, and propagates through non-expansive layer stacks with an envelope that grows linearly in depth, not exponentially.",
+      "note": "The linear depth envelope is stated for stacks whose layers have Lipschitz constant at most one and per-layer rounding within a fixed budget.",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.1",
+          "claim": "End-to-end certified generalization bound for the transformer as executed in IEEE binary32 arithmetic.",
+          "code": "theorem certified_executed_generalization_dudley [IsProbabilityMeasure P] {d : ℕ} [Nonempty (Fin d)]\n    (hm : 0 < m) {R : ℝ} (hR : 0 ≤ R) (F : ParamSpace d → V → ℝ) {b : ℝ} (hb : 0 < b)",
+          "source": "transformer-learning-theory/TLT_Proofs/Bridge/Certificate/CertifiedTransformerBound.lean ∷ certified_executed_generalization_dudley",
+          "file": "TLT_Proofs/Bridge/Certificate/CertifiedTransformerBound.lean",
+          "name": "certified_executed_generalization_dudley"
+        },
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.2",
+          "claim": "The certified attention head is bound to the literal scaledDotProductAttention kernel.",
+          "code": "theorem attnHead_executed_certified_generalization {n d p m : ℕ} [NeZero n] [Nonempty (Fin p)]\n    [MeasurableSpace (Fin n → Fin d → ℝ)] [BorelSpace (Fin n → Fin d → ℝ)]",
+          "source": "transformer-learning-theory/TLT_Proofs/Bridge/Certificate/AttentionExecutedCertificate.lean ∷ attnHead_executed_certified_generalization",
+          "file": "TLT_Proofs/Bridge/Certificate/AttentionExecutedCertificate.lean",
+          "name": "attnHead_executed_certified_generalization"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.3",
+          "claim": "Backward-error bound for IEEE binary32 sequential summation, derived as a rounding atom for all block reductions.",
+          "code": "theorem fp32Foldl_error_le_of_sum_bound (xs : List ℝ) (S : ℝ)\n    (hnorm : Fp32FoldlNormal 0 xs)\n    (hun : neuralBpow binaryRadix (-24) * (xs.length : ℝ) < 1)\n    (hS : (xs.map (fun x => |x|)).sum ≤ S)",
+          "source": "transformer-learning-theory/TLT_Proofs/Bridge/Fp32/ClampedReductionRounding.lean ∷ fp32Foldl_error_le_of_sum_bound",
+          "file": "TLT_Proofs/Bridge/Fp32/ClampedReductionRounding.lean",
+          "name": "fp32Foldl_error_le_of_sum_bound"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.4",
+          "claim": "Non-expansive stacks accumulate rounding error linearly in depth, not exponentially.",
+          "code": "theorem execComp_envelope_linear [Nonempty V] {Ls : List (ExecLayer V)} {ρ : ℝ}\n    (hlip : ∀ L ∈ Ls, L.lip ≤ 1) (hrnd : ∀ L ∈ Ls, L.rnd ≤ ρ) (x : V) :\n    dist (execComp Ls x) (idealComp Ls x) ≤ Ls.length * ρ",
+          "source": "transformer-learning-theory/TLT_Proofs/Bridge/Forward/NonExpansiveDepthEnvelope.lean ∷ execComp_envelope_linear",
+          "file": "TLT_Proofs/Bridge/Forward/NonExpansiveDepthEnvelope.lean",
+          "name": "execComp_envelope_linear"
+        }
+      ]
+    },
+    {
+      "order": 9030,
+      "ingredient": "agents",
+      "title": "The Measurability Cliff",
+      "repo": "Zetetic-Dhruv/transformer-learning-theory",
+      "vis": "open",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "Softmax routing keeps the uniform-convergence bad events of attention Borel, while argmax routing produces bad events that are analytic but not Borel: a strict descriptive-complexity drop located at the softmax/argmax boundary, with routing temperature acting as the toggle at every depth. The dichotomy is governed by the parameter space: sigma-compact spaces admit no such pathology, while Polish non-sigma-compact spaces carry a binary attention router whose bad event is analytic and non-Borel. The same measurability condition is the precondition on which the positive executed certificates stand.",
+      "note": "The non-Borel constructions take the classical existence of an analytic non-Borel set of reals as an explicit hypothesis.",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.1",
+          "claim": "Descriptive complexity drops strictly from Borel to analytic at the softmax/argmax boundary.",
+          "code": "theorem measurabilityCliff\n    {d : ℕ} {V : Type*} [MeasurableSpace V]\n    (F : (Fin d → ℝ) → V → ℝ)\n    (hFmeas : ∀ θ, Measurable (F θ)) (hFcont : ∀ x, Continuous fun θ : Fin d → ℝ => F θ x)",
+          "source": "transformer-learning-theory/TLT_Proofs/Boundary/MeasurabilityCliff.lean ∷ measurabilityCliff",
+          "file": "TLT_Proofs/Boundary/MeasurabilityCliff.lean",
+          "name": "measurabilityCliff"
+        },
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.2",
+          "claim": "Temperature as a measurability toggle: soft routing is Borel, argmax routing is non-Borel at every depth.",
+          "code": "theorem temperatureCliff {τ : ℝ} (hτ : 0 ≤ τ) (g : β → ℝ) (hg : Continuous g) [Nonempty β]\n    (h_non_borel : ¬ MeasurableSet (Set.range g)) (L : ℕ)",
+          "source": "transformer-learning-theory/TLT_Proofs/Boundary/TemperatureCliff.lean ∷ temperatureCliff",
+          "file": "TLT_Proofs/Boundary/TemperatureCliff.lean",
+          "name": "temperatureCliff"
+        },
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.3",
+          "claim": "Sigma-compact parameter spaces are tame; Polish non-sigma-compact spaces admit analytic non-Borel bad events.",
+          "code": "theorem attention_router_measurability_dichotomy\n    (hex : ∃ A : Set ℝ, AnalyticSet A ∧ ¬ MeasurableSet A) :\n    (∀ (β : Type) [TopologicalSpace β] [SigmaCompactSpace β] (g : β → ℝ),\n        Continuous g → MeasurableSet (Set.range g)\n          ∧ MeasurableSet (singletonBadEvent (Set.range g)))",
+          "source": "transformer-learning-theory/TLT_Proofs/Boundary/AttentionRouterMeasurabilityDichotomy.lean ∷ attention_router_measurability_dichotomy",
+          "file": "TLT_Proofs/Boundary/AttentionRouterMeasurabilityDichotomy.lean",
+          "name": "attention_router_measurability_dichotomy"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.4",
+          "claim": "A binary attention router over a Polish parameter space whose uniform-convergence bad event is analytic but not Borel.",
+          "code": "theorem attention_nonBorel_badEvent\n    (hex : ∃ A : Set ℝ, MeasureTheory.AnalyticSet A ∧ ¬ MeasurableSet A) :\n    ∃ (β : Type) (_hτ : TopologicalSpace β) (_hP : PolishSpace β)",
+          "source": "transformer-learning-theory/TLT_Proofs/Strictness/AttentionNonBorelWitness.lean ∷ attention_nonBorel_badEvent",
+          "file": "TLT_Proofs/Strictness/AttentionNonBorelWitness.lean",
+          "name": "attention_nonBorel_badEvent"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.5",
+          "claim": "Measurability is the hinge between the positive certificate and the negative cliff.",
+          "code": "theorem executedCertificate_precondition_satisfied_and_violated\n    (T : RealTransformer)\n    {β : Type} [TopologicalSpace β] [PolishSpace β] [MeasurableSpace β] [BorelSpace β]\n    [StandardBorelSpace β] [Nonempty β] (g : β → ℝ) (hg : Continuous g)",
+          "source": "transformer-learning-theory/TLT_Proofs/Bridge/Certificate/MeasurabilityPrecondition.lean ∷ executedCertificate_precondition_satisfied_and_violated",
+          "file": "TLT_Proofs/Bridge/Certificate/MeasurabilityPrecondition.lean",
+          "name": "executedCertificate_precondition_satisfied_and_violated"
+        }
+      ]
+    },
+    {
+      "order": 9040,
+      "ingredient": "agents",
+      "title": "Attention Capacity · Design Laws",
+      "repo": "Zetetic-Dhruv/transformer-learning-theory",
+      "vis": "open",
+      "status": "active",
+      "alsoIn": "",
+      "direction": "The capacity bound covers the full multi-head encoder stack, multi-head attention with feed-forward blocks, layer normalization, and residual connections, with depth-graded constants that are linear in head count and free of sequence length. The Dudley entropy-integral bound is discharged to a closed affine form with the optimal constant, and the Lipschitz constant for softmax attention on a bounded query/key ball does not depend on sequence length. The certified capacity bound is packaged as a design law: a map out of configuration space indexed by TransformerConfig.",
+      "note": "",
+      "tbd": false,
+      "witnesses": [
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.1",
+          "claim": "Depth-graded generalization bound for the true multi-head encoder stack with H heads and L layers.",
+          "code": "theorem transformerEncoderStackMH_certified_generalization {H p m : ℕ} [NeZero n] [Nonempty (Fin p)]\n    [MeasurableSpace (Fin n → Fin d → ℝ)] [BorelSpace (Fin n → Fin d → ℝ)]\n    {P : Measure (Fin n → Fin d → ℝ)} [IsProbabilityMeasure P] (hm : 0 < m)",
+          "source": "transformer-learning-theory/TLT_Proofs/Bridge/Certificate/MultiHeadEncoderStack.lean ∷ transformerEncoderStackMH_certified_generalization",
+          "file": "TLT_Proofs/Bridge/Certificate/MultiHeadEncoderStack.lean",
+          "name": "transformerEncoderStackMH_certified_generalization"
+        },
+        {
+          "type": "proof",
+          "cell": "novel_discovery",
+          "n": "arg.2",
+          "claim": "Architecture design law: certified capacity as a map out of configuration space, indexed by TransformerConfig.",
+          "code": "theorem config_capacity_law (cfg : TransformerConfig) {p m : ℕ} [NeZero n] [Nonempty (Fin p)]\n    [MeasurableSpace (Fin n → Fin cfg.embedDim → ℝ)] [BorelSpace (Fin n → Fin cfg.embedDim → ℝ)]",
+          "source": "transformer-learning-theory/TLT_Proofs/Bridge/Certificate/ConfigDesignLaw.lean ∷ config_capacity_law",
+          "file": "TLT_Proofs/Bridge/Certificate/ConfigDesignLaw.lean",
+          "name": "config_capacity_law"
+        },
+        {
+          "type": "proof",
+          "cell": "established_result",
+          "n": "arg.3",
+          "claim": "Dudley entropy-integral capacity bound with the optimal constant 12√2, discharged to a closed affine form.",
+          "code": "theorem empiricalCapacityReal_le_computable {X : Type*} {d m : ℕ} [Nonempty (Fin d)] (hm : 0 < m)\n    {R : ℝ} (hR : 0 ≤ R) (F : ParamSpace d → X → ℝ) {b : ℝ} (hb : 0 < b) (hFb : ∀ θ x, |F θ x| ≤ b)\n    (S : Fin m → X) {L : ℝ} (hL : 0 < L)",
+          "source": "transformer-learning-theory/TLT_Proofs/Capacity/Chaining/LipschitzCoveringDischarge.lean ∷ empiricalCapacityReal_le_computable",
+          "file": "TLT_Proofs/Capacity/Chaining/LipschitzCoveringDischarge.lean",
+          "name": "empiricalCapacityReal_le_computable"
+        },
+        {
+          "type": "proof",
+          "cell": "supporting_argument",
+          "n": "arg.4",
+          "claim": "Sequence-length-free Lipschitz constant for softmax attention on a bounded query/key ball.",
+          "code": "theorem attnOut_lipschitz_on_ball [NeZero nK] {scale B bV : ℝ} (hscale : 0 < scale) (hB : 0 ≤ B)\n    (hbV0 : 0 ≤ bV) (Q Q' : Fin d → ℝ) (K K' : Fin nK → Fin d → ℝ) (V V' : Fin nK → Fin d → ℝ)\n    (c : Fin d) (hQ' : ∀ e, |Q' e| ≤ B) (hK : ∀ k' e, |K k' e| ≤ B) (hV : ∀ j, |V j c| ≤ bV)",
+          "source": "transformer-learning-theory/TLT_Proofs/Bridge/Lipschitz/AttentionLipschitzOnBall.lean ∷ attnOut_lipschitz_on_ball",
+          "file": "TLT_Proofs/Bridge/Lipschitz/AttentionLipschitzOnBall.lean",
+          "name": "attnOut_lipschitz_on_ball"
+        }
+      ]
     }
   ]
 }

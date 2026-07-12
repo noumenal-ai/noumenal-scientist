@@ -113,7 +113,6 @@
       "isEmpirical": false,
       "isFigure": false,
       "isProof": true,
-      "private": true,
       "source": "design-lab/causality/Causality/Proofs/Modern/Transportability.lean ∷ Transportability_proved"
      }
     ]
@@ -236,12 +235,11 @@
     "witnesses": [
      {
       "cell": "established_result",
-      "code": "theorem cumCP_telescope {ι : Type*} (E : ι → ℝ) (g : ℕ → ι) (T : ℕ) :\n    cumCP E g T = E (g 0) - E (g T)",
+      "code": "theorem cumCP_telescope {ι : Type*}\n    (E : ι → ℝ) (g : ℕ → ι) (T : ℕ) :\n    cumCP E g T = E (g 0) - E (g T)",
       "file": "AuditCP/AuditCP/Telescope.lean",
       "isEmpirical": false,
       "isFigure": false,
       "isProof": true,
-      "live": true,
       "name": "cumCP_telescope",
       "source": "audit-compression-progress/AuditCP/Telescope.lean ∷ cumCP_telescope"
      }
@@ -259,6 +257,132 @@
     "title": "Conformal Counterfactuals",
     "vis": "planned",
     "witnesses": []
+   },
+   {
+    "alsoIn": "",
+    "direction": "Cumulative signed compression progress on an audit loss telescopes to a difference of endpoint values, a potential-function argument that quantifies Goodhart's law as a false-positive budget on an intrinsic reward signal. Whenever the audit loss stays above a floor, cumulative signed progress admits a finite budget. Both statements are machine-checked in Lean 4.",
+    "hasWitness": true,
+    "note": "",
+    "pending": false,
+    "repo": "Zetetic-Dhruv/audit-compression-progress",
+    "status": "active",
+    "tbd": false,
+    "title": "Goodhart Resistance",
+    "vis": "open",
+    "witnesses": [
+     {
+      "cell": "novel_discovery",
+      "claim": "Telescoping identity: signed audit compression progress is exactly Goodhart-resistant.",
+      "code": "theorem cumCP_telescope {ι : Type*} (E : ι → ℝ) (g : ℕ → ι) (T : ℕ) :\n    cumCP E g T = E (g 0) - E (g T)",
+      "file": "AuditCP/AuditCP/Telescope.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "name": "cumCP_telescope",
+      "source": "verifiable_RSI/audit-compression-progress/AuditCP/AuditCP/Telescope.lean ∷ cumCP_telescope"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "Finite budget: cumulative signed progress is bounded whenever the audit loss stays above a floor.",
+      "code": "theorem cumCP_le_of_lb {ι : Type*} (E : ι → ℝ) (g : ℕ → ι) (T : ℕ) {Emin : ℝ}\n    (hlb : Emin ≤ E (g T)) : cumCP E g T ≤ E (g 0) - Emin",
+      "file": "AuditCP/AuditCP/Telescope.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "name": "cumCP_le_of_lb",
+      "source": "verifiable_RSI/audit-compression-progress/AuditCP/AuditCP/Telescope.lean ∷ cumCP_le_of_lb"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "When the audit is scored on a finite panel with uniform deviation Delta between empirical and true losses, cumulative progress on the empirical audit exceeds true progress by at most 2*Delta. The budget is horizon-free by endpoint reduction, placing the result in the setting of adaptive data analysis and reusable-holdout overfitting.",
+    "hasWitness": true,
+    "note": "The theorem takes the uniform deviation bound as a hypothesis; for finite panels it is supplied by finite-class concentration via Hoeffding's inequality and a union bound.",
+    "pending": false,
+    "repo": "Zetetic-Dhruv/audit-compression-progress",
+    "status": "active",
+    "tbd": false,
+    "title": "Finite Audit Panels",
+    "vis": "open",
+    "witnesses": [
+     {
+      "cell": "novel_discovery",
+      "claim": "Finite-panel deviation budget 2*Delta is horizon-free by endpoint reduction.",
+      "code": "theorem finite_audit_goodhart {ι : Type*} {F : Set ι} {Ehat E : ι → ℝ} {Δ : ℝ}\n    (hUD : UniformDev F Ehat E Δ) {g : ℕ → ι} (hg : Admissible g F) (T : ℕ) :\n    cumCP Ehat g T ≤ cumCP E g T + 2 * Δ",
+      "file": "AuditCP/AuditCP/FiniteAudit.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "name": "finite_audit_goodhart",
+      "source": "verifiable_RSI/audit-compression-progress/AuditCP/AuditCP/FiniteAudit.lean ∷ finite_audit_goodhart"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "Log-loss audit is bounded below by the entropy of the data: the cross-entropy decomposition H(Q,P) = H(Q) + KL(Q||P) and Gibbs' inequality yield H(Q) <= H(Q,P), so an incompressible noise component pays only a finite audit-progress budget. The conditional version bounds compression progress on noisy components by the initial excess over the conditional entropy H(Y|X); the floor is derived rather than assumed, with the composition machine-checked end to end. This bears on the noisy-TV problem in curiosity-driven intrinsic motivation.",
+    "hasWitness": true,
+    "note": "",
+    "pending": false,
+    "repo": "Zetetic-Dhruv/audit-compression-progress",
+    "status": "active",
+    "tbd": false,
+    "title": "Entropy Floors",
+    "vis": "open",
+    "witnesses": [
+     {
+      "cell": "novel_discovery",
+      "claim": "Conditional entropy floor: progress on noisy components is bounded by the initial excess over H(Y|X).",
+      "code": "theorem cond_entropy_floor_budget_crossEntropy (μ : FinitePMF X) (Q : X → FinitePMF H)\n    (P : ι → X → FinitePMF H) [hP : ∀ θ, ∀ x, HasPositivePrior (P θ x)] (g : ℕ → ι) (T : ℕ) :\n    cumCP (fun θ => condCrossEntropyFinitePMF μ Q (P θ)) g T\n      ≤ condCrossEntropyFinitePMF μ Q (P (g 0)) - condEntropyFinitePMF μ Q",
+      "file": "AuditCP/AuditCP/EntropyFloor.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "name": "cond_entropy_floor_budget_crossEntropy",
+      "source": "verifiable_RSI/audit-compression-progress/AuditCP/AuditCP/EntropyFloor.lean ∷ cond_entropy_floor_budget_crossEntropy"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Entropy floor H(Q) <= H(Q,P): log-loss audit is bounded below by data entropy.",
+      "code": "theorem entropy_le_crossEntropyFinitePMF {H : Type*} [Fintype H]\n    (Q P : FinitePMF H) [HasPositivePrior P] :\n    entropyFinitePMF Q ≤ crossEntropyFinitePMF Q P",
+      "file": "AuditCP/AuditCP/EntropyFloor.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "name": "entropy_le_crossEntropyFinitePMF",
+      "source": "verifiable_RSI/audit-compression-progress/AuditCP/AuditCP/EntropyFloor.lean ∷ entropy_le_crossEntropyFinitePMF"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Cross-entropy decomposition H(Q,P) = H(Q) + KL(Q||P), mechanized for finite PMFs.",
+      "code": "theorem crossEntropyFinitePMF_eq_entropy_add_kl {H : Type*} [Fintype H]\n    (Q P : FinitePMF H) [HasPositivePrior P] :\n    crossEntropyFinitePMF Q P = entropyFinitePMF Q + klDivFinitePMF Q P",
+      "file": "AuditCP/AuditCP/EntropyFloor.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "name": "crossEntropyFinitePMF_eq_entropy_add_kl",
+      "source": "verifiable_RSI/audit-compression-progress/AuditCP/AuditCP/EntropyFloor.lean ∷ crossEntropyFinitePMF_eq_entropy_add_kl"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Gibbs inequality: KL divergence between finite PMFs is non-negative.",
+      "code": "theorem klDivFinitePMF_nonneg {H : Type*} [Fintype H] (Q P : FinitePMF H)\n    [HasPositivePrior P] : 0 ≤ klDivFinitePMF Q P",
+      "file": "AuditCP/AuditCP/EntropyFloor.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.4",
+      "name": "klDivFinitePMF_nonneg",
+      "source": "verifiable_RSI/audit-compression-progress/AuditCP/AuditCP/EntropyFloor.lean ∷ klDivFinitePMF_nonneg"
+     }
+    ]
    }
   ]
  },
@@ -393,7 +517,6 @@
       "isEmpirical": false,
       "isFigure": false,
       "isProof": true,
-      "private": true,
       "source": "design-lab/learning-theory/FLT_Proofs/Learner/Measurability.lean ∷ MeasurableBatchLearner · measurability_hierarchy_strict"
      },
      {
@@ -424,7 +547,6 @@
       "isEmpirical": false,
       "isFigure": false,
       "isProof": true,
-      "private": true,
       "source": "design-lab/learning-theory/FLT_Proofs/Separation/BorelAnalytic.lean ∷ exists_measTarget_separation"
      },
      {
@@ -435,7 +557,6 @@
       "isFigure": false,
       "isProof": true,
       "n": "arg.4",
-      "private": true,
       "source": "design-lab/learning-theory/FLT_Proofs/Router/BorelRouterCode.lean ∷ interpClassFixed_subset_amalgClass"
      }
     ]
@@ -491,6 +612,323 @@
     "title": "Causal world model · UMTI",
     "vis": "field-validated",
     "witnesses": []
+   },
+   {
+    "alsoIn": "",
+    "direction": "The generalization bound is proved for the transformer program as it executes in IEEE binary32 arithmetic, with the certified attention head bound coordinate-for-coordinate to the literal scaledDotProductAttention kernel. Rounding error enters through a backward-error bound for binary32 sequential summation, derived rather than assumed, and propagates through non-expansive layer stacks with an envelope that grows linearly in depth, not exponentially.",
+    "hasWitness": true,
+    "note": "The linear depth envelope is stated for stacks whose layers have Lipschitz constant at most one and per-layer rounding within a fixed budget.",
+    "pending": false,
+    "repo": "Zetetic-Dhruv/transformer-learning-theory",
+    "status": "active",
+    "tbd": false,
+    "title": "Certified Execution",
+    "vis": "open",
+    "witnesses": [
+     {
+      "cell": "novel_discovery",
+      "claim": "End-to-end certified generalization bound for the transformer as executed in IEEE binary32 arithmetic.",
+      "code": "theorem certified_executed_generalization_dudley [IsProbabilityMeasure P] {d : ℕ} [Nonempty (Fin d)]\n    (hm : 0 < m) {R : ℝ} (hR : 0 ≤ R) (F : ParamSpace d → V → ℝ) {b : ℝ} (hb : 0 < b)",
+      "file": "TLT_Proofs/Bridge/Certificate/CertifiedTransformerBound.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "name": "certified_executed_generalization_dudley",
+      "source": "transformer-learning-theory/TLT_Proofs/Bridge/Certificate/CertifiedTransformerBound.lean ∷ certified_executed_generalization_dudley"
+     },
+     {
+      "cell": "novel_discovery",
+      "claim": "The certified attention head is bound to the literal scaledDotProductAttention kernel.",
+      "code": "theorem attnHead_executed_certified_generalization {n d p m : ℕ} [NeZero n] [Nonempty (Fin p)]\n    [MeasurableSpace (Fin n → Fin d → ℝ)] [BorelSpace (Fin n → Fin d → ℝ)]",
+      "file": "TLT_Proofs/Bridge/Certificate/AttentionExecutedCertificate.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "name": "attnHead_executed_certified_generalization",
+      "source": "transformer-learning-theory/TLT_Proofs/Bridge/Certificate/AttentionExecutedCertificate.lean ∷ attnHead_executed_certified_generalization"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Backward-error bound for IEEE binary32 sequential summation, derived as a rounding atom for all block reductions.",
+      "code": "theorem fp32Foldl_error_le_of_sum_bound (xs : List ℝ) (S : ℝ)\n    (hnorm : Fp32FoldlNormal 0 xs)\n    (hun : neuralBpow binaryRadix (-24) * (xs.length : ℝ) < 1)\n    (hS : (xs.map (fun x => |x|)).sum ≤ S)",
+      "file": "TLT_Proofs/Bridge/Fp32/ClampedReductionRounding.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "name": "fp32Foldl_error_le_of_sum_bound",
+      "source": "transformer-learning-theory/TLT_Proofs/Bridge/Fp32/ClampedReductionRounding.lean ∷ fp32Foldl_error_le_of_sum_bound"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "Non-expansive stacks accumulate rounding error linearly in depth, not exponentially.",
+      "code": "theorem execComp_envelope_linear [Nonempty V] {Ls : List (ExecLayer V)} {ρ : ℝ}\n    (hlip : ∀ L ∈ Ls, L.lip ≤ 1) (hrnd : ∀ L ∈ Ls, L.rnd ≤ ρ) (x : V) :\n    dist (execComp Ls x) (idealComp Ls x) ≤ Ls.length * ρ",
+      "file": "TLT_Proofs/Bridge/Forward/NonExpansiveDepthEnvelope.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.4",
+      "name": "execComp_envelope_linear",
+      "source": "transformer-learning-theory/TLT_Proofs/Bridge/Forward/NonExpansiveDepthEnvelope.lean ∷ execComp_envelope_linear"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "Splitting clustered trajectory data at the frame level instead of the episode level leaves a Bayes L2 risk gap equal to an explained-variance functional of the two nested sigma-algebras; the gap does not vanish and cannot be closed by adding data within episodes. In the one-way random-effects model the variance of the grand mean decomposes exactly so that the effective sample size is the group count G, not the frame count G*m, and the Hoeffding tail of the between-group component is identical across models that differ only in frame count. A finite construction shows the method-of-moments variance-component estimate is negative with probability at least (1-2p)^G even though the true variance is 2p > 0.",
+    "hasWitness": true,
+    "note": "",
+    "pending": false,
+    "repo": "Zetetic-Dhruv/world-model-lab",
+    "status": "active",
+    "tbd": false,
+    "title": "Split Leakage · Effective Sample Size",
+    "vis": "open",
+    "witnesses": [
+     {
+      "cell": "established_result",
+      "claim": "The frame-vs-episode leakage gap equals an intrinsic explained-variance functional of the two sigma-algebras.",
+      "code": "theorem bayesRisk_gap [IsProbabilityMeasure μ]\n    (hm₁₂ : m₁ ≤ m₂) (hm₂ : m₂ ≤ m₀) (hX : MemLp X 2 μ) :\n    bayesRisk m₁ X μ - bayesRisk m₂ X μ = μ[Var[μ[X | m₂]; μ | m₁]]",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity.lean ∷ bayesRisk_gap"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "The episode-frame risk gap does not vanish and is not closeable by adding data within episodes.",
+      "code": "theorem frame_split_inconsistent [IsProbabilityMeasure μ]\n    (hX : MemLp X 2 μ) (hXm : StronglyMeasurable X) :\n    bayesRisk (⊥ : MeasurableSpace Ω) X μ - bayesRisk m₀ X μ = variance X μ",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity.lean ∷ frame_split_inconsistent"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Exact one-way random-effects variance decomposition: effective sample size is the group count G, not the frame count G*m.",
+      "code": "theorem variance_grandMean_eq :\n    variance M.grandMean M.μ = M.σb ^ 2 / M.G + M.σw ^ 2 / (M.G * M.m)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity.lean ∷ variance_grandMean_eq"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "The Hoeffding tail of the between-group component is identical across models that differ only in frame count m.",
+      "code": "theorem betweenMean_tail_indep_frames {Ω ι : Type*} [MeasurableSpace Ω]\n    (M₁ M₂ : OneWayRandomEffects Ω ι)\n    (hμ : M₁.μ = M₂.μ) (hf : M₁.f = M₂.f) (hSb : M₁.Sb = M₂.Sb) (hG : M₁.G = M₂.G) :\n    M₁.betweenMean = M₂.betweenMean\n      ∧ … ∧ ∀ t : ℝ, M₁.μ.real {ω | t ≤ |M₁.betweenMean ω - …|}\n            = M₂.μ.real {ω | t ≤ |M₂.betweenMean ω - …|}",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.4",
+      "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity/EffectiveSampleSize.lean ∷ betweenMean_tail_indep_frames"
+     },
+     {
+      "cell": "novel_discovery",
+      "claim": "A finite probability space where the variance-component estimate is negative with probability at least (1-2p)^G while the true variance is 2p > 0.",
+      "code": "theorem negative_r2_prob_floor {p : ℝ} (hp0 : 0 < p) (hp1 : p < 1 / 2)\n    {w : ℝ} (hw : 0 < w) :\n    0 < variance effectVal (singlePMF hp0.le hp1.le).toMeasure ∧\n      ENNReal.ofReal ((1 - 2 * p) ^ G)\n        ≤ (jointPMF G hp0.le hp1.le).toMeasure {c | sigmaHatB w c < 0} ∧\n      0 < (1 - 2 * p) ^ G",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.5",
+      "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity/NegativeRSquared.lean ∷ negative_r2_prob_floor"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "Softmax routing keeps the uniform-convergence bad events of attention Borel, while argmax routing produces bad events that are analytic but not Borel: a strict descriptive-complexity drop located at the softmax/argmax boundary, with routing temperature acting as the toggle at every depth. The dichotomy is governed by the parameter space: sigma-compact spaces admit no such pathology, while Polish non-sigma-compact spaces carry a binary attention router whose bad event is analytic and non-Borel. The same measurability condition is the precondition on which the positive executed certificates stand.",
+    "hasWitness": true,
+    "note": "The non-Borel constructions take the classical existence of an analytic non-Borel set of reals as an explicit hypothesis.",
+    "pending": false,
+    "repo": "Zetetic-Dhruv/transformer-learning-theory",
+    "status": "active",
+    "tbd": false,
+    "title": "The Measurability Cliff",
+    "vis": "open",
+    "witnesses": [
+     {
+      "cell": "novel_discovery",
+      "claim": "Descriptive complexity drops strictly from Borel to analytic at the softmax/argmax boundary.",
+      "code": "theorem measurabilityCliff\n    {d : ℕ} {V : Type*} [MeasurableSpace V]\n    (F : (Fin d → ℝ) → V → ℝ)\n    (hFmeas : ∀ θ, Measurable (F θ)) (hFcont : ∀ x, Continuous fun θ : Fin d → ℝ => F θ x)",
+      "file": "TLT_Proofs/Boundary/MeasurabilityCliff.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "name": "measurabilityCliff",
+      "source": "transformer-learning-theory/TLT_Proofs/Boundary/MeasurabilityCliff.lean ∷ measurabilityCliff"
+     },
+     {
+      "cell": "novel_discovery",
+      "claim": "Temperature as a measurability toggle: soft routing is Borel, argmax routing is non-Borel at every depth.",
+      "code": "theorem temperatureCliff {τ : ℝ} (hτ : 0 ≤ τ) (g : β → ℝ) (hg : Continuous g) [Nonempty β]\n    (h_non_borel : ¬ MeasurableSet (Set.range g)) (L : ℕ)",
+      "file": "TLT_Proofs/Boundary/TemperatureCliff.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "name": "temperatureCliff",
+      "source": "transformer-learning-theory/TLT_Proofs/Boundary/TemperatureCliff.lean ∷ temperatureCliff"
+     },
+     {
+      "cell": "novel_discovery",
+      "claim": "Sigma-compact parameter spaces are tame; Polish non-sigma-compact spaces admit analytic non-Borel bad events.",
+      "code": "theorem attention_router_measurability_dichotomy\n    (hex : ∃ A : Set ℝ, AnalyticSet A ∧ ¬ MeasurableSet A) :\n    (∀ (β : Type) [TopologicalSpace β] [SigmaCompactSpace β] (g : β → ℝ),\n        Continuous g → MeasurableSet (Set.range g)\n          ∧ MeasurableSet (singletonBadEvent (Set.range g)))",
+      "file": "TLT_Proofs/Boundary/AttentionRouterMeasurabilityDichotomy.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "name": "attention_router_measurability_dichotomy",
+      "source": "transformer-learning-theory/TLT_Proofs/Boundary/AttentionRouterMeasurabilityDichotomy.lean ∷ attention_router_measurability_dichotomy"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "A binary attention router over a Polish parameter space whose uniform-convergence bad event is analytic but not Borel.",
+      "code": "theorem attention_nonBorel_badEvent\n    (hex : ∃ A : Set ℝ, MeasureTheory.AnalyticSet A ∧ ¬ MeasurableSet A) :\n    ∃ (β : Type) (_hτ : TopologicalSpace β) (_hP : PolishSpace β)",
+      "file": "TLT_Proofs/Strictness/AttentionNonBorelWitness.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.4",
+      "name": "attention_nonBorel_badEvent",
+      "source": "transformer-learning-theory/TLT_Proofs/Strictness/AttentionNonBorelWitness.lean ∷ attention_nonBorel_badEvent"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "Measurability is the hinge between the positive certificate and the negative cliff.",
+      "code": "theorem executedCertificate_precondition_satisfied_and_violated\n    (T : RealTransformer)\n    {β : Type} [TopologicalSpace β] [PolishSpace β] [MeasurableSpace β] [BorelSpace β]\n    [StandardBorelSpace β] [Nonempty β] (g : β → ℝ) (hg : Continuous g)",
+      "file": "TLT_Proofs/Bridge/Certificate/MeasurabilityPrecondition.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.5",
+      "name": "executedCertificate_precondition_satisfied_and_violated",
+      "source": "transformer-learning-theory/TLT_Proofs/Bridge/Certificate/MeasurabilityPrecondition.lean ∷ executedCertificate_precondition_satisfied_and_violated"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "True mutual information is invariant under coordinatewise measurable reparametrization, but the KSG k-nearest-neighbor estimator is not: its radius core scales linearly under uniform similarity transformations. Per-axis standardization restores invariance of the radius statistic under the full diagonal-rescaling group. These estimator-geometry failure modes, together with training non-stationarity, are witnessed on a real JEPA world model by tracking effective rank, KSG mutual-information estimates, validation prediction loss, and linear probe R^2 across training at 64px and 128px resolution on dm_control Reacher.",
+    "hasWitness": true,
+    "note": "",
+    "pending": false,
+    "repo": "Zetetic-Dhruv/world-model-lab",
+    "status": "active",
+    "tbd": false,
+    "title": "Mutual Information · Estimator Invariance",
+    "vis": "open",
+    "witnesses": [
+     {
+      "cell": "established_result",
+      "claim": "True mutual information is invariant under coordinatewise measurable reparametrization.",
+      "code": "theorem mutualInformationReal_map_prodCongr\n    (e₁ : α ≃ᵐ α') (e₂ : β ≃ᵐ β') (P : Measure (α × β))\n    [IsProbabilityMeasure P]\n    (hP : P ≪ (P.map Prod.fst).prod (P.map Prod.snd)) :\n    mutualInformationReal (P.map (e₁.prodCongr e₂)) = mutualInformationReal P",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity/EstimatorGeometry.lean ∷ mutualInformationReal_map_prodCongr"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "The KSG radius core scales linearly under uniform similarity, so the estimator is not reparametrization-invariant.",
+      "code": "theorem ksgRadiusStat_map_smul {c : ℝ} (hcpos : 0 < c) {S : Finset (ℝ × ℝ)}\n    (hS : 2 ≤ S.card) :\n    ksgRadiusStat (S.map (scaleEmb hcpos.ne')) (two_le_card_map_scaleEmb hcpos.ne' hS)\n      = c * ksgRadiusStat S hS",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity/EstimatorGeometry.lean ∷ ksgRadiusStat_map_smul"
+     },
+     {
+      "cell": "novel_discovery",
+      "claim": "Per-axis standardization restores invariance under the full diagonal-rescaling group.",
+      "code": "theorem standardizedRadiusStat_diagEmb_invariant {c₁ c₂ : ℝ} (h₁pos : 0 < c₁) (h₂pos : 0 < c₂)\n    {S : Finset (ℝ × ℝ)} (hS : 2 ≤ S.card) (hnd : NonDegenerate S hS) :\n    standardizedRadiusStat (S.map (diagEmb h₁pos.ne' h₂pos.ne')) _ _\n      = standardizedRadiusStat S hS hnd",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "source": "Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/lean4/LewmValidity/EstimatorGeometry.lean ∷ standardizedRadiusStat_diagEmb_invariant"
+     },
+     {
+      "alt": "Overlay of 64px vs 128px training trajectories for effective rank, KSG mutual-information estimate, validation prediction loss, and linear probe R^2 across epochs 0-99 on dm_control Reacher",
+      "cell": "supporting_argument",
+      "claim": "Effective rank, KSG mutual-information estimate, validation prediction loss, and linear probe R^2 across epochs 0-99 on dm_control Reacher, overlaid for 64px and 128px training runs.",
+      "flag": "",
+      "isEmpirical": false,
+      "isFigure": true,
+      "isProof": false,
+      "source": "Projects/Machine Errors/JEPA/Robotics/lewm-vanilla/projects/lewm/runs/sweep_traj100/reacher/fig_trajectory_overlay.png",
+      "src": "assets/323020c8_fig_trajectory_overlay.png"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "The capacity bound covers the full multi-head encoder stack, multi-head attention with feed-forward blocks, layer normalization, and residual connections, with depth-graded constants that are linear in head count and free of sequence length. The Dudley entropy-integral bound is discharged to a closed affine form with the optimal constant, and the Lipschitz constant for softmax attention on a bounded query/key ball does not depend on sequence length. The certified capacity bound is packaged as a design law: a map out of configuration space indexed by TransformerConfig.",
+    "hasWitness": true,
+    "note": "",
+    "pending": false,
+    "repo": "Zetetic-Dhruv/transformer-learning-theory",
+    "status": "active",
+    "tbd": false,
+    "title": "Attention Capacity · Design Laws",
+    "vis": "open",
+    "witnesses": [
+     {
+      "cell": "novel_discovery",
+      "claim": "Depth-graded generalization bound for the true multi-head encoder stack with H heads and L layers.",
+      "code": "theorem transformerEncoderStackMH_certified_generalization {H p m : ℕ} [NeZero n] [Nonempty (Fin p)]\n    [MeasurableSpace (Fin n → Fin d → ℝ)] [BorelSpace (Fin n → Fin d → ℝ)]\n    {P : Measure (Fin n → Fin d → ℝ)} [IsProbabilityMeasure P] (hm : 0 < m)",
+      "file": "TLT_Proofs/Bridge/Certificate/MultiHeadEncoderStack.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "name": "transformerEncoderStackMH_certified_generalization",
+      "source": "transformer-learning-theory/TLT_Proofs/Bridge/Certificate/MultiHeadEncoderStack.lean ∷ transformerEncoderStackMH_certified_generalization"
+     },
+     {
+      "cell": "novel_discovery",
+      "claim": "Architecture design law: certified capacity as a map out of configuration space, indexed by TransformerConfig.",
+      "code": "theorem config_capacity_law (cfg : TransformerConfig) {p m : ℕ} [NeZero n] [Nonempty (Fin p)]\n    [MeasurableSpace (Fin n → Fin cfg.embedDim → ℝ)] [BorelSpace (Fin n → Fin cfg.embedDim → ℝ)]",
+      "file": "TLT_Proofs/Bridge/Certificate/ConfigDesignLaw.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "name": "config_capacity_law",
+      "source": "transformer-learning-theory/TLT_Proofs/Bridge/Certificate/ConfigDesignLaw.lean ∷ config_capacity_law"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Dudley entropy-integral capacity bound with the optimal constant 12√2, discharged to a closed affine form.",
+      "code": "theorem empiricalCapacityReal_le_computable {X : Type*} {d m : ℕ} [Nonempty (Fin d)] (hm : 0 < m)\n    {R : ℝ} (hR : 0 ≤ R) (F : ParamSpace d → X → ℝ) {b : ℝ} (hb : 0 < b) (hFb : ∀ θ x, |F θ x| ≤ b)\n    (S : Fin m → X) {L : ℝ} (hL : 0 < L)",
+      "file": "TLT_Proofs/Capacity/Chaining/LipschitzCoveringDischarge.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "name": "empiricalCapacityReal_le_computable",
+      "source": "transformer-learning-theory/TLT_Proofs/Capacity/Chaining/LipschitzCoveringDischarge.lean ∷ empiricalCapacityReal_le_computable"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "Sequence-length-free Lipschitz constant for softmax attention on a bounded query/key ball.",
+      "code": "theorem attnOut_lipschitz_on_ball [NeZero nK] {scale B bV : ℝ} (hscale : 0 < scale) (hB : 0 ≤ B)\n    (hbV0 : 0 ≤ bV) (Q Q' : Fin d → ℝ) (K K' : Fin nK → Fin d → ℝ) (V V' : Fin nK → Fin d → ℝ)\n    (c : Fin d) (hQ' : ∀ e, |Q' e| ≤ B) (hK : ∀ k' e, |K k' e| ≤ B) (hV : ∀ j, |V j c| ≤ bV)",
+      "file": "TLT_Proofs/Bridge/Lipschitz/AttentionLipschitzOnBall.lean",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.4",
+      "name": "attnOut_lipschitz_on_ball",
+      "source": "transformer-learning-theory/TLT_Proofs/Bridge/Lipschitz/AttentionLipschitzOnBall.lean ∷ attnOut_lipschitz_on_ball"
+     }
+    ]
    }
   ]
  },
@@ -617,6 +1055,267 @@
       "src": "current/assets/fp_comparison_grid.svg"
      }
     ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "Symmetrization arguments for PAC learning need the bad event to be measurable, and the Borel condition can be weakened to null-measurability. For a Borel-parameterized concept class the ghost-gap witness set is Borel, its projection over parameters is analytic by Suslin's projection theorem, and analytic sets are null-measurable under finite Borel measures on Polish spaces by Choquet capacitability. Every Borel-parameterized concept class therefore satisfies the null-measurable event-level condition the symmetrization proof requires.",
+    "hasWitness": true,
+    "note": "These statements are machine-checked in Lean 4 with no open proof obligations. They come from a ten-problem automated proof-search benchmark on research-level mathematics whose outcomes were four accepted, four partial, and two rejected.",
+    "pending": false,
+    "repo": "Zetetic-Dhruv/First-Proof-Benchmark-Results",
+    "status": "active",
+    "tbd": false,
+    "title": "Learner Measurability · Borel-Analytic Bridge",
+    "vis": "open",
+    "witnesses": [
+     {
+      "cell": "supporting_argument",
+      "claim": "The witness set of parameter and sample pairs with gap at least ε/2 is Borel when the evaluator and target are measurable.",
+      "code": "theorem paramWitnessSet_measurable\n    {X : Type u} [MeasurableSpace X]\n    {Θ : Type*} [MeasurableSpace Θ]\n    (e : Θ → Concept X Bool)\n    (he : Measurable (fun p : Θ × X => e p.1 p.2))\n    (c : Concept X Bool) (hc : Measurable c)\n    (m : ℕ) (ε : ℝ) :\n    MeasurableSet (paramWitnessSet e c m ε)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "formal-learning-theory-kernel/FLT_Proofs/Complexity/BorelAnalyticBridge.lean ∷ paramWitnessSet_measurable"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "The bad event, the existential projection of the witness set over parameters, is analytic by Suslin's projection theorem.",
+      "code": "theorem borel_param_badEvent_analytic\n    {X : Type u} [TopologicalSpace X] [MeasurableSpace X] [BorelSpace X] [PolishSpace X]\n    {Θ : Type*} [MeasurableSpace Θ] [StandardBorelSpace Θ]\n    (e : Θ → Concept X Bool)\n    (he : Measurable (fun p : Θ × X => e p.1 p.2))\n    (c : Concept X Bool) (hc : Measurable c)\n    (m : ℕ) (ε : ℝ) :\n    MeasureTheory.AnalyticSet (paramBadEvent e c m ε)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "formal-learning-theory-kernel/FLT_Proofs/Complexity/BorelAnalyticBridge.lean ∷ borel_param_badEvent_analytic"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "Inner regularity by compact sets for analytic sets, the key lemma underlying the Choquet capacitability argument.",
+      "code": "theorem MeasureTheory.AnalyticSet.exists_isCompact_measureReal_gt\n    {α : Type*}\n    [TopologicalSpace α] [MeasurableSpace α] [BorelSpace α] [PolishSpace α]\n    {μ : MeasureTheory.Measure α} [MeasureTheory.IsFiniteMeasure μ]\n    {s : Set α} (hs : MeasureTheory.AnalyticSet s) :\n    ∀ ε > 0, ∃ K : Set α, IsCompact K ∧ K ⊆ s ∧ μ.real s < μ.real K + ε",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "source": "formal-learning-theory-kernel/FLT_Proofs/PureMath/AnalyticMeasurability.lean ∷ MeasureTheory.AnalyticSet.exists_isCompact_measureReal_gt"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Analytic sets are null-measurable under finite Borel measures on Polish spaces.",
+      "code": "theorem analyticSet_nullMeasurableSet\n    {α : Type*}\n    [TopologicalSpace α] [MeasurableSpace α] [BorelSpace α] [PolishSpace α]\n    {μ : MeasureTheory.Measure α} [MeasureTheory.IsFiniteMeasure μ]\n    {s : Set α} (hs : MeasureTheory.AnalyticSet s) :\n    MeasureTheory.NullMeasurableSet s μ",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.4",
+      "source": "formal-learning-theory-kernel/FLT_Proofs/PureMath/AnalyticMeasurability.lean ∷ analyticSet_nullMeasurableSet"
+     },
+     {
+      "cell": "novel_discovery",
+      "claim": "Every Borel-parameterized concept class satisfies the null-measurable event-level condition required by symmetrization.",
+      "code": "theorem borel_param_wellBehavedVCMeasTarget\n    {X : Type u} [MeasurableSpace X] [TopologicalSpace X] [PolishSpace X] [BorelSpace X]\n    {Θ : Type*} [MeasurableSpace Θ] [StandardBorelSpace Θ]\n    (e : Θ → Concept X Bool)\n    (he : Measurable (fun p : Θ × X => e p.1 p.2)) :\n    WellBehavedVCMeasTarget X (Set.range e)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.5",
+      "source": "formal-learning-theory-kernel/FLT_Proofs/Complexity/BorelAnalyticBridge.lean ∷ borel_param_wellBehavedVCMeasTarget"
+     },
+     {
+      "alt": "Scatter plot of proof outcomes by problem on two axes: generalization robustness (x) and acceptance status (y), with quadrant labels (Partial/Accepted vs. Large/Compact) and individual problem markers",
+      "cell": "supporting_argument",
+      "claim": "Proof outcomes on the ten First Proof benchmark problems, four accepted, four partial, two rejected, plotted by generalization robustness and acceptance status.",
+      "flag": "",
+      "isEmpirical": false,
+      "isFigure": true,
+      "isProof": false,
+      "source": "Projects/First-Proof-Benchmark-Results/assets/proof_outcomes.svg",
+      "src": "assets/67173c69_proof_outcomes.svg"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "PAC learnability, finite VC dimension, finite sample compression with side information, and the Rademacher and growth-function conditions are equivalent, and the five-way equivalence is formally verified in Lean 4. A constructive separation shows the null-measurable-target condition for PAC learning is strictly weaker than the Krapp-Wirth Borel condition.",
+    "hasWitness": true,
+    "note": "The separation theorem takes a non-Borel analytic set as an explicit hypothesis and derives the separation from it.",
+    "pending": false,
+    "repo": "Zetetic-Dhruv/tetrad-audit-code",
+    "status": "active",
+    "tbd": false,
+    "title": "PAC Learnability · Characterizations",
+    "vis": "open",
+    "witnesses": [
+     {
+      "cell": "established_result",
+      "claim": "Five-way equivalence: PAC learnability, finite VC dimension, finite compression, Rademacher, and growth conditions coincide.",
+      "code": "theorem fundamental_theorem (X : Type u) [MeasurableSpace X]\n    [MeasurableSingletonClass X]\n    (C : ConceptClass X Bool)\n    [MeasurableConceptClass X C] :\n    (PACLearnable X C ↔ VCDim X C < ⊤) ∧\n    ((VCDim X C < ⊤) ↔ ∃ (k : ℕ) (cs : CompressionSchemeWithInfo0 X Bool C), cs.size = k) ∧ ...",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/PAC.lean ∷ fundamental_theorem"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "A concept class is PAC learnable iff its VC dimension is finite.",
+      "code": "theorem vc_characterization (X : Type u) [MeasurableSpace X]\n    [MeasurableSingletonClass X]\n    (C : ConceptClass X Bool)\n    [MeasurableConceptClass X C] :\n    PACLearnable X C ↔ VCDim X C < ⊤ :=",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/PAC.lean ∷ vc_characterization"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Moran-Yehudayoff equivalence: finite VC dimension iff a finite sample compression scheme with side information exists.",
+      "code": "theorem fundamental_vc_compression_with_info\n    (X : Type u) (C : ConceptClass X Bool) :\n    (VCDim X C < ⊤) ↔\n    (∃ (k : ℕ) (cs : CompressionSchemeWithInfo0 X Bool C), cs.size = k) :=",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Complexity/Compression.lean ∷ fundamental_vc_compression_with_info"
+     },
+     {
+      "cell": "novel_discovery",
+      "claim": "Given a non-Borel analytic set, the null-measurable-target condition is separated from the Borel-target condition for PAC learning.",
+      "code": "theorem analytic_nonborel_set_gives_measTarget_separation\n    (A : Set ℝ)\n    (hA_an : MeasureTheory.AnalyticSet A)\n    (hA_non : ¬ MeasurableSet A) :\n    KrappWirthSeparationMeasTarget :=",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.4",
+      "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/BorelAnalyticSeparation.lean ∷ analytic_nonborel_set_gives_measTarget_separation"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "The null-measurable condition is strictly separated from the Borel supremum condition: any analytic non-Borel subset of the reals yields a concept class that satisfies the first and fails the second. The weakened condition also carries a closure algebra under concept-class constructors, preserved by piecewise patching and by fiber-product amalgamation of concept families.",
+    "hasWitness": true,
+    "note": "The separation theorem is parametric: it converts any analytic non-Borel subset of the reals into a separating concept class.",
+    "pending": false,
+    "repo": "Zetetic-Dhruv/First-Proof-Benchmark-Results",
+    "status": "active",
+    "tbd": false,
+    "title": "Concept Classes · Separation and Closure",
+    "vis": "open",
+    "witnesses": [
+     {
+      "cell": "novel_discovery",
+      "claim": "Any analytic non-Borel subset of the reals witnesses a concept class satisfying the null-measurable condition but failing the Borel supremum condition.",
+      "code": "theorem analytic_nonborel_set_gives_measTarget_separation\n    (A : Set ℝ)\n    (hA_an : MeasureTheory.AnalyticSet A)\n    (hA_non : ¬ MeasurableSet A) :\n    KrappWirthSeparationMeasTarget",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "formal-learning-theory-kernel/FLT_Proofs/Theorem/BorelAnalyticSeparation.lean ∷ analytic_nonborel_set_gives_measTarget_separation"
+     },
+     {
+      "cell": "novel_discovery",
+      "claim": "Null-measurable well-behavedness is closed under piecewise patching of concept families.",
+      "code": "theorem patch_borel_param_wellBehavedVCMeasTarget\n    {X : Type u} [MeasurableSpace X] [TopologicalSpace X] [PolishSpace X] [BorelSpace X]\n    {Θ₁ Θ₂ Ρ : Type*}\n    [MeasurableSpace Θ₁] [StandardBorelSpace Θ₁]\n    [MeasurableSpace Θ₂] [StandardBorelSpace Θ₂]\n    [MeasurableSpace Ρ] [StandardBorelSpace Ρ]\n    (e₁ : Θ₁ → Concept X Bool) (e₂ : Θ₂ → Concept X Bool)\n    (r : Ρ → Concept X Bool)\n    ...\n    WellBehavedVCMeasTarget X (Set.range (patchEval e₁ e₂ r))",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "formal-learning-theory-kernel/FLT_Proofs/Complexity/BorelAnalyticBridge.lean ∷ patch_borel_param_wellBehavedVCMeasTarget"
+     },
+     {
+      "cell": "novel_discovery",
+      "claim": "Null-measurable well-behavedness is closed under fiber-product amalgamation of concept families.",
+      "code": "theorem amalgClass_wellBehaved\n    {X : Type u}\n    [MeasurableSpace X] [TopologicalSpace X] [PolishSpace X] [BorelSpace X]\n    {Θ₁ Θ₂ S : Type*}\n    [MeasurableSpace Θ₁] [StandardBorelSpace Θ₁]\n    [MeasurableSpace Θ₂] [StandardBorelSpace Θ₂]\n    [MeasurableSpace S] [StandardBorelSpace S]\n    (π₁ : Θ₁ → S) (π₂ : Θ₂ → S)\n    (hπ₁ : Measurable π₁) (hπ₂ : Measurable π₂)\n    (merge : Θ₁ × Θ₂ → Concept X Bool)\n    (hmerge : Measurable (fun p : (Θ₁ × Θ₂) × X => merge p.1 p.2)) :\n    WellBehavedVCMeasTarget X (amalgClass π₁ π₂ merge)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "source": "formal-learning-theory-kernel/FLT_Proofs/Complexity/Amalgamation.lean ∷ amalgClass_wellBehaved"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "Online learnability of a concept class is equivalent to finiteness of its Littlestone dimension, and for nonempty classes the optimal mistake bound equals the Littlestone dimension exactly. In the identification-in-the-limit setting, EX-learnability is characterized by a finite mind-change count, and Gold's theorem rules out EX-identification of any class containing all finite sets together with an infinite set; the proof runs through a fully explicit adversarial locking sequence.",
+    "hasWitness": true,
+    "note": "",
+    "pending": false,
+    "repo": "Zetetic-Dhruv/tetrad-audit-code",
+    "status": "active",
+    "tbd": false,
+    "title": "Online and Limit Learning · Mistake Bounds",
+    "vis": "open",
+    "witnesses": [
+     {
+      "cell": "established_result",
+      "claim": "A concept class is online learnable iff its Littlestone dimension is finite.",
+      "code": "theorem littlestone_characterization (X : Type) (C : ConceptClass X Bool) :\n    OnlineLearnable X Bool C ↔ LittlestoneDim X C < ⊤ :=",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/Online.lean ∷ littlestone_characterization"
+     },
+     {
+      "cell": "established_result",
+      "claim": "The optimal mistake bound equals the Littlestone dimension for nonempty concept classes.",
+      "code": "theorem optimal_mistake_bound_eq_ldim (X : Type)\n    (C : ConceptClass X Bool) (hne : C.Nonempty) :\n    (↑(OptimalMistakeBound X C) : WithBot (WithTop ℕ)) = LittlestoneDim X C :=",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/Online.lean ∷ optimal_mistake_bound_eq_ldim"
+     },
+     {
+      "cell": "established_result",
+      "claim": "No learner can EX-identify a class containing all finite sets plus an infinite set.",
+      "code": "theorem gold_theorem (X : Type u) [Countable X] [DecidableEq X]\n    (C : ConceptClass X Bool)\n    (h_finite : ∀ (S : Finset X), (fun x => decide (x ∈ S)) ∈ C)\n    (h_infinite : ∃ c ∈ C, Set.Infinite { x | c x = true }) :\n    ¬ EXLearnable X C :=",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/Gold.lean ∷ gold_theorem"
+     },
+     {
+      "cell": "established_result",
+      "claim": "A class is EX-learnable iff some learner makes only finitely many mind changes on every text presentation.",
+      "code": "theorem mind_change_characterization (X : Type u)\n    (C : ConceptClass X Bool) :\n    EXLearnable X C ↔\n      ∃ (L : GoldLearner X Bool),\n        ∀ (c : Concept X Bool), c ∈ C →\n          ∀ (T : TextPresentation X c),\n            MindChangeOrdinal X L c T.toDataStream < Ordinal.omega0 :=",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.4",
+      "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/Gold.lean ∷ mind_change_characterization"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "The McAllester PAC-Bayes bound is proved from first principles via Hoeffding's inequality and Jensen's inequality: for a finite hypothesis class, with probability at least 1 - delta over m independent samples, the Gibbs error of every posterior Q is at most its empirical Gibbs error plus sqrt((H_cross(Q, P) + log(1/delta)) / (2m)). The Efron-Stein inequality bounds the variance of a function of n independent random variables in a product probability space by the sum of coordinate-wise conditional variance terms.",
+    "hasWitness": true,
+    "note": "The PAC-Bayes statement is proved for a finite hypothesis class with an everywhere-positive prior.",
+    "pending": false,
+    "repo": "Zetetic-Dhruv/tetrad-audit-code",
+    "status": "active",
+    "tbd": false,
+    "title": "Concentration and Generalization",
+    "vis": "open",
+    "witnesses": [
+     {
+      "cell": "established_result",
+      "claim": "McAllester bound for a finite hypothesis class: Gibbs error at most empirical Gibbs error plus sqrt((H_cross(Q, P) + log(1/delta)) / (2m)).",
+      "code": "theorem pac_bayes_finite {X : Type u} [MeasurableSpace X]\n    {H : Type*} [Fintype H] [Nonempty H]\n    (D : MeasureTheory.Measure X) [MeasureTheory.IsProbabilityMeasure D]\n    (c : Concept X Bool) (hc_meas : Measurable c)\n    (hs : H → Concept X Bool) (hhs_meas : ∀ h, Measurable (hs h))\n    (P : FinitePMF H) (hP_pos : ∀ h, 0 < P.prob h)\n    (m : ℕ) (hm : 0 < m) (δ : ℝ) (hδ : 0 < δ) (hδ1 : δ ≤ 1) :\n    MeasureTheory.Measure.pi (fun _ : Fin m => D)\n      { S : Fin m → X |\n        ∀ (Q : FinitePMF H),\n          gibbsError Q hs c D ≤\n            gibbsEmpError Q hs c S +\n            Real.sqrt ((crossEntropyFinitePMF Q P + Real.log (1 / δ)) / (2 * ↑m)) }\n      ≥ ENNReal.ofReal (1 - δ) :=",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "Synthetic Discovery/empirical_analysis/flt/proofs/Theorem/PACBayes.lean ∷ pac_bayes_finite"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Efron-Stein: the variance of a function of n independent variables is bounded by summed conditional variance terms.",
+      "code": "theorem efronStein (f : (Fin n → Ω) → ℝ) (hf : MemLp f 2 μˢ) :\n    variance f μˢ ≤ ∑ i : Fin n, ∫ x, (f x - condExpExceptCoord (μs := μs) i f x)^2 ∂μˢ :=",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "Synthetic Discovery/empirical_analysis/slt/proofs/EfronStein.lean ∷ efronStein"
+     }
+    ]
    }
   ]
  },
@@ -641,7 +1340,6 @@
       "isEmpirical": false,
       "isFigure": false,
       "isProof": true,
-      "private": true,
       "source": "design-lab/causality/Causality/Proofs/Modern/CounterfactualID.lean ∷ CounterfactualID_proved"
      }
     ]
@@ -666,7 +1364,6 @@
       "isFigure": false,
       "isProof": true,
       "n": "arg.1",
-      "private": true,
       "source": "design-lab/transformers/TLT_Proofs/Bridge/Certificate/CertifiedTransformerBound.lean ∷ certified_executed_generalization_dudley"
      },
      {
@@ -675,7 +1372,6 @@
       "isEmpirical": false,
       "isFigure": false,
       "isProof": true,
-      "private": true,
       "source": "design-lab/transformers/TLT_Proofs/Bridge/Certificate/AttentionLiteralExecutedBinding.lean ∷ attnHead_literal_certified_generalization"
      },
      {
@@ -750,7 +1446,6 @@
       "isEmpirical": false,
       "isFigure": false,
       "isProof": true,
-      "private": true,
       "source": "design-lab/learning-theory/FLT_Proofs/Theorem/PAC.lean ∷ fundamental_theorem"
      },
      {
@@ -773,7 +1468,6 @@
       "isFigure": false,
       "isProof": true,
       "n": "arg.3",
-      "private": true,
       "source": "design-lab/learning-theory/FLT_Proofs/Compression/ApproxMinimax.lean ∷ vcdim_finite_imp_compression"
      },
      {
@@ -794,7 +1488,6 @@
       "isFigure": false,
       "isProof": true,
       "n": "arg.5",
-      "private": true,
       "source": "design-lab/learning-theory/FLT_Proofs/PACBayes/McAllester.lean ∷ pac_bayes_finite"
      }
     ]
@@ -817,7 +1510,6 @@
       "isEmpirical": false,
       "isFigure": false,
       "isProof": true,
-      "private": true,
       "source": "design-lab/measurements/ZPM/InformationTheory/Pinsker/General.lean ∷ pinsker_proof"
      }
     ]
@@ -840,7 +1532,6 @@
       "isEmpirical": false,
       "isFigure": false,
       "isProof": true,
-      "private": true,
       "source": "design-lab/statistics/SLT/proofs/EfronStein.lean ∷ efronStein"
      }
     ]
@@ -863,7 +1554,6 @@
       "isEmpirical": false,
       "isFigure": false,
       "isProof": true,
-      "private": true,
       "source": "design-lab/rl/RLTheory/Algorithm/QLearning.lean ∷ ae_tendsto_of_QLearning_markov"
      }
     ]
@@ -930,6 +1620,612 @@
     "title": "TRACES",
     "vis": "private",
     "witnesses": []
+   },
+   {
+    "alsoIn": "",
+    "direction": "Corpus admission is stated as typechecking: a dataset manifest is well-formed only when a conjunction of machine-checked propositions holds over it. Constraints that could be enforced at the type level were, which eliminated two classes of ill-formed manifest states; the remaining content-bearing rules, natural-shift origin, regime-schema consistency, and corpus-level referential integrity, are stated as propositions over the manifest and the corpus.",
+    "hasWitness": true,
+    "note": "",
+    "pending": false,
+    "repo": "noumenal-ai/TRACES",
+    "status": "active",
+    "tbd": false,
+    "title": "Benchmark Curation · Conformance as Typechecking",
+    "vis": "private",
+    "witnesses": [
+     {
+      "cell": "novel_discovery",
+      "claim": "Admission rules for a dataset manifest, machine-checked as a single conjunction of propositions.",
+      "code": "def WellFormed (m : DatasetManifest) : Prop :=\n  A1_NaturalShift m ∧ A4_KUInManifest m ∧ A6_RegimeClassified m ∧\n  A7_ProvenancePreserved m ∧ A10_RepresentationalCommitments m",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "TRACES/Lean4/Traces/Axioms.lean ∷ WellFormed"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "Regime-schema consistency stated as a content-bearing decidable proposition.",
+      "code": "def A6_RegimeClassified (m : DatasetManifest) : Prop :=\n  m.regimeMatchesSchema",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "TRACES/Lean4/Traces/Axioms.lean ∷ A6_RegimeClassified"
+     },
+     {
+      "cell": "novel_discovery",
+      "claim": "Corpus-level referential integrity stated as a universally quantified proposition.",
+      "code": "def allPairsMembersExist (c : Corpus) : Prop :=\n  ∀ p ∈ c.pairs, ∀ mname ∈ p.members,\n    ∃ m ∈ c.manifests, m.name = mname",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "source": "TRACES/Lean4/Traces/Corpus.lean ∷ Corpus.allPairsMembersExist"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "The natural-shift admission criterion, stated as a decidable proposition.",
+      "code": "def A1_NaturalShift (m : DatasetManifest) : Prop :=\n  m.dataOrigin.primary ≠ DataOriginPrimary.synthetic",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.4",
+      "source": "TRACES/Lean4/Traces/Axioms.lean ∷ A1_NaturalShift"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "The dependent-type encoding eliminated two classes of ill-formed manifest states, leaving this axiom tautological.",
+      "code": "def A8_DataOriginTransparent (_m : DatasetManifest) : Prop := True",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.5",
+      "source": "TRACES/Lean4/Traces/Axioms.lean ∷ A8_DataOriginTransparent"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "Every analytic subset of a Polish space is capacitable: a Choquet capacity evaluated on an analytic set equals the supremum of its values over compact subsets. Analytic sets are also null-measurable with respect to every finite Borel measure on a Polish space, a foundational bridge for RKHS kernel learning theory.",
+    "hasWitness": true,
+    "note": "The capacitability proof mechanizes the Baire-space diagonal construction directly in dependent type theory; the statement follows Kechris, Classical Descriptive Set Theory, Theorem 30.13.",
+    "pending": false,
+    "repo": "noumenal-ai/proof-and-theorem-library",
+    "status": "active",
+    "tbd": false,
+    "title": "Analytic Sets · Capacitability",
+    "vis": "internal",
+    "witnesses": [
+     {
+      "cell": "established_result",
+      "claim": "Choquet capacitability: the capacity of an analytic set is the supremum of the capacities of its compact subsets.",
+      "code": "theorem MeasureTheory.AnalyticSet.cap_eq_iSup_isCompact\n    {α : Type*}\n    [TopologicalSpace α] [MeasurableSpace α] [BorelSpace α] [PolishSpace α]\n    {cap : Set α → ENNReal}\n    (hcap : MeasureTheory.IsChoquetCapacity cap)\n    {s : Set α} (hs : MeasureTheory.AnalyticSet s) :\n    cap s = ⨆ (K : Set α), ⨆ (_ : IsCompact K), ⨆ (_ : K ⊆ s), cap K",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/MeasureTheory/ChoquetCapacity/Capacitability.lean ∷ MeasureTheory.AnalyticSet.cap_eq_iSup_isCompact"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Analytic sets are null-measurable under every finite Borel measure on a Polish space.",
+      "code": "theorem MeasureTheory.AnalyticSet.nullMeasurableSet\n    {α : Type*}\n    [TopologicalSpace α] [MeasurableSpace α] [BorelSpace α] [PolishSpace α]\n    {μ : MeasureTheory.Measure α} [MeasureTheory.IsFiniteMeasure μ]\n    {s : Set α} (hs : MeasureTheory.AnalyticSet s) :\n    MeasureTheory.NullMeasurableSet s μ",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/MeasureTheory/AnalyticMeasurability/NullMeasurable.lean ∷ MeasureTheory.AnalyticSet.nullMeasurableSet"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "The primitive experimental unit for out-of-distribution evaluation is a directed pair: a training environment and a distinct test environment under shift. Structural constraints on pairs, such as the number of member datasets each pair type admits, are carried as proofs in the data structure.",
+    "hasWitness": true,
+    "note": "",
+    "pending": false,
+    "repo": "noumenal-ai/TRACES",
+    "status": "active",
+    "tbd": false,
+    "title": "Distribution Shift · Environment Pairs",
+    "vis": "private",
+    "witnesses": [
+     {
+      "cell": "established_result",
+      "claim": "The environment pair as the primitive experimental unit for out-of-distribution evaluation.",
+      "code": "def A2_PairPrimitive (p : DatasetPair) : Prop :=\n  p.trainEnv ≠ [] ∧ p.oodTestEnv ≠ [] ∧ p.trainEnv ≠ p.oodTestEnv",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "TRACES/Lean4/Traces/Axioms.lean ∷ A2_PairPrimitive"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Member arity for each pair type is enforced as a proof carried in the data structure.",
+      "code": "def PairType.memberArity : PairType → (List String → Prop)\n  | .intraDatasetEnvSplit => fun l => l.length = 1\n  | _                     => fun l => 2 ≤ l.length",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "TRACES/Lean4/Traces/Pair.lean ∷ PairType.memberArity"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "Pinsker's inequality holds with the sharp constant: the total variation distance between probability measures is at most the square root of half the KL divergence. On the kernel side, the mean embedding reproduces integrals, squared MMD vanishes exactly when two measures coincide, and HSIC vanishes exactly when a joint law equals the product of its marginals, in each case under a characteristic kernel.",
+    "hasWitness": true,
+    "note": "The binary case is proved by an explicit derivative-based monotonicity argument for the Pinsker residual.",
+    "pending": false,
+    "repo": "noumenal-ai/proof-and-theorem-library",
+    "status": "active",
+    "tbd": false,
+    "title": "Distribution Discrepancies",
+    "vis": "internal",
+    "witnesses": [
+     {
+      "cell": "established_result",
+      "claim": "Pinsker's inequality with the sharp constant: TV(P,Q) ≤ √(KL(P‖Q)/2).",
+      "code": "theorem pinsker_proof\n    (P Q : Measure α) [IsProbabilityMeasure P] [IsProbabilityMeasure Q]\n    (hac : P.AbsolutelyContinuous Q) (h_int : Integrable (llr P Q) P) :\n    tvDistReal P Q ≤ Real.sqrt (klDivReal P Q / 2)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/InformationTheory/Pinsker/General.lean ∷ InformationTheory.pinsker_proof"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "Binary Pinsker inequality with sharp constant 2, the core lemma behind the measure-theoretic proof.",
+      "code": "theorem binary_pinsker (p q : ℝ) (hp₀ : 0 ≤ p) (hp₁ : p ≤ 1)\n    (hq₀ : 0 < q) (hq₁ : q < 1) :\n    2 * (p - q)^2 ≤ klBin p q",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/InformationTheory/Pinsker/Binary.lean ∷ InformationTheory.binary_pinsker"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Reproducing property of the kernel mean embedding: ⟨μ_P, f⟩ = ∫ f dP.",
+      "code": "theorem kernelMeanEmbedding_reproducing\n    (P : Measure X) [IsFiniteMeasure P]\n    (hcont : Continuous (fun x => kerFun H x (1 : ℝ)))\n    (f : H) :\n    @inner ℝ H _ (kernelMeanEmbedding (H := H) P) f = ∫ x, f x ∂P",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/Analysis/InnerProductSpace/KernelMeanEmbedding/Reproducing.lean ∷ kernelMeanEmbedding_reproducing"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Squared MMD is zero iff the two probability measures are equal, for a characteristic kernel.",
+      "code": "theorem mmdSq_zero_iff\n    (hchar : IsCharacteristic (H := H) (X := X))\n    (P Q : Measure X) :\n    mmdSq (H := H) P Q = 0 ↔ P = Q",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.4",
+      "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/Analysis/InnerProductSpace/MMD/Characteristic.lean ∷ mmdSq_zero_iff"
+     },
+     {
+      "cell": "established_result",
+      "claim": "HSIC is zero iff the joint distribution equals the product of its marginals, under a characteristic kernel.",
+      "code": "theorem hsicDef_zero_iff_independent\n    (hchar : IsCharacteristic (H := H) (X := X × Y))\n    (P : Measure (X × Y)) :\n    hsicDef (H := H) P = 0 ↔ P = (P.map Prod.fst).prod (P.map Prod.snd)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.5",
+      "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/Analysis/InnerProductSpace/HSIC/ZeroIff.lean ∷ hsicDef_zero_iff_independent"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "File-level and epistemic provenance are both typed. A checksum is a refinement subtype whose SHA-256 digest format is verified when the value is constructed, and the epistemic state recorded for each dataset holds facts, hypotheses, intuitions, and unknowns in a single level-indexed structure, extending datasheet-style dataset documentation to epistemics.",
+    "hasWitness": true,
+    "note": "Discharging the digest check with native_decide rather than kernel reduction widens the trusted base; the development documents this trust-boundary extension explicitly.",
+    "pending": false,
+    "repo": "noumenal-ai/TRACES",
+    "status": "active",
+    "tbd": false,
+    "title": "Provenance · Typed Records",
+    "vis": "private",
+    "witnesses": [
+     {
+      "cell": "established_result",
+      "claim": "Digest well-formedness is enforced at construction through a SHA-256 refinement subtype.",
+      "code": "def mkChecksum (path sha : String) (h : isSha256 sha = true := by native_decide) :\n    Checksum :=\n  ⟨path, ⟨sha, h⟩⟩",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "TRACES/Lean4/Traces/Schema.lean ∷ mkChecksum"
+     },
+     {
+      "cell": "established_result",
+      "claim": "A level-indexed record with a dependent boundary field replaces three duplicate structures.",
+      "code": "structure EpistemicState (level : EpistemicLevel) where\n  facts hypotheses intuitions unknowns : List String := []\n  boundary : level.BoundaryType",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "TRACES/Lean4/Traces/Schema.lean ∷ EpistemicState"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "Multiplicative weights reaches an approximate minimax solution: O(log N / ε²) rounds produce a mixed strategy with payoff at least v - ε against every pure column. The Sauer-Shelah lemma bounds the size of a set family with bounded VC dimension, and Assouad's dual bound gives VC dimension at most 2^{d+1} - 1 for the transpose when the original matrix has VC dimension at most d. A Chebyshev argument amplifies k ≥ 9/δ independent events, each of probability at least 2/3, into a majority holding with probability at least 1 - δ.",
+    "hasWitness": true,
+    "note": "The Sauer-Shelah proof is routed through Mathlib's shatterer API; the majority amplification lemma is a standard boosting primitive.",
+    "pending": false,
+    "repo": "noumenal-ai/proof-and-theorem-library",
+    "status": "active",
+    "tbd": false,
+    "title": "Minimax and VC Bounds",
+    "vis": "internal",
+    "witnesses": [
+     {
+      "cell": "established_result",
+      "claim": "MWU approximate minimax: O(log N / ε²) rounds yield a mixed strategy achieving payoff at least v - ε against all pure columns.",
+      "code": "theorem mwu_approx_minimax\n    {R C : Type*} [Fintype R] [Fintype C] [Nonempty R] [Nonempty C]\n    [DecidableEq R] [DecidableEq C]\n    (M : R → C → Bool) (v ε : ℝ) (hε : 0 < ε)\n    (hrow : ∀ q : FintypePMF C, ∃ r : R,\n      v ≤ ∑ c, q.prob c * (if M r c then (1 : ℝ) else 0)) :\n    ∃ p : FintypePMF R, ∀ c : C, v - ε ≤ boolGamePayoff M p c",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/Probability/Decision/Minimax/MWU/ApproxMinimax.lean ∷ ProbabilityTheory.mwu_approx_minimax"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Sauer-Shelah bound on the size of a set family with bounded VC dimension.",
+      "code": "theorem card_toFinsetFamily_le {m n : ℕ} (M : BinaryMatrix m n)\n    {d : ℕ} (hd : M.toFinsetFamily.vcDim ≤ d) :\n    M.toFinsetFamily.card ≤ ∑ k ∈ Finset.Iic d, n.choose k",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/Combinatorics/SetFamily/DualVC/SauerShelah.lean ∷ BinaryMatrix.card_toFinsetFamily_le"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Assouad's dual VC bound: VCDim(Mᵀ) ≤ 2^{d+1} - 1 when VCDim(M) ≤ d.",
+      "code": "theorem assouad_transpose_vcDim {m n : ℕ} (M : BinaryMatrix m n)\n    {d : ℕ} (hd : M.vcDim ≤ d) :\n    M.transpose.vcDim ≤ 2 ^ (d + 1) - 1",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/Combinatorics/SetFamily/DualVC/Assouad.lean ∷ BinaryMatrix.assouad_transpose_vcDim"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "Majority amplification: k ≥ 9/δ independent events of probability at least 2/3 give a majority with probability at least 1 - δ.",
+      "code": "lemma ProbabilityTheory.chebyshev_majority_bound\n    {Ω : Type*} [MeasurableSpace Ω] {μ : MeasureTheory.Measure Ω}\n    [MeasureTheory.IsProbabilityMeasure μ]\n    {k : ℕ} {δ : ℝ} (h_delta_pos : 0 < δ)\n    (hk : (9 : ℝ) / δ ≤ k)\n    (events : Fin k → Set Ω)\n    (hevents_meas : ∀ j, MeasurableSet (events j))\n    (hindep : ProbabilityTheory.iIndepSet (fun j => events j) μ)\n    (hprob : ∀ j, μ (events j) ≥ ENNReal.ofReal (2/3)) :\n    μ {ω | k < 2 * (Finset.univ.filter (fun j => ω ∈ events j)).card} ≥\n      ENNReal.ofReal (1 - δ)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.4",
+      "source": "proof-and-theorem-library/puremath/Noumenal/Puremath/Probability/Concentration/ChebyshevMajority.lean ∷ ProbabilityTheory.chebyshev_majority_bound"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "The five-way fundamental theorem of statistical learning is machine-checked in full, with PAC learnability, finite VC dimension, and finite sample compression among the equivalent characterizations, and no open proof obligations remain. The compression characterization runs through a constructive approximate minimax theorem obtained from multiplicative weights in place of Sion's exact minimax. Machine-verified alongside it are sharp combinatorial results, the exact VC dimension of halfspaces in R^n and Assouad's dual VC bound for binary matrices, and a McAllester PAC-Bayes bound that supplies a frequentist to Bayesian bridge.",
+    "hasWitness": true,
+    "note": "",
+    "pending": false,
+    "repo": "design-lab · learning-theory",
+    "status": "active",
+    "tbd": false,
+    "title": "Statistical Learning · Fundamental Theorem",
+    "vis": "internal",
+    "witnesses": [
+     {
+      "cell": "established_result",
+      "claim": "The five-way fundamental theorem of statistical learning, complete and sorry-free in Lean 4.",
+      "code": "theorem fundamental_theorem (X : Type u) [MeasurableSpace X]\n    [MeasurableSingletonClass X]\n    (C : ConceptClass X Bool)\n    [MeasurableConceptClass X C] :\n    (PACLearnable X C ↔ VCDim X C < ⊤) ∧\n    ((VCDim X C < ⊤) ↔ ∃ (k : ℕ) (cs : CompressionSchemeWithInfo0 X Bool C), cs.size = k) ∧ ...",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "design-lab/learning-theory/FLT_Proofs/Theorem/PAC.lean ∷ fundamental_theorem"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "A constructive approximate minimax theorem via multiplicative weights replaces Sion's exact minimax in the compression characterization.",
+      "code": "theorem mwu_approx_minimax\n    {R C : Type*} [Fintype R] [Fintype C] [Nonempty R] [Nonempty C]\n    [DecidableEq R] [DecidableEq C]\n    (M : R → C → Bool) (v ε : ℝ) (hε : 0 < ε)\n    (hrow : ∀ q : FinitePMF C, ∃ r : R,\n      v ≤ ∑ c, q.prob c * (if M r c then (1 : ℝ) else 0)) :\n    ∃ p : FinitePMF R, ∀ c : C, v - ε ≤ boolGamePayoff M p c",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "design-lab/learning-theory/FLT_Proofs/PureMath/ApproxMinimax.lean ∷ mwu_approx_minimax"
+     },
+     {
+      "cell": "established_result",
+      "claim": "The VC dimension of halfspaces in R^n equals n exactly (Cover 1965, Dudley 1978).",
+      "code": "theorem vcDim_halfspace_eq (n : ℕ) :\n    VCDim (Fin n → ℝ) (signClass (coordSpace n)) = (n : WithTop ℕ) :=\n  le_antisymm (vcDim_halfspace_le n) (vcDim_halfspace_ge n)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "source": "design-lab/learning-theory/FLT_Proofs/Complexity/IndependentVC/Halfspace.lean ∷ vcDim_halfspace_eq"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Assouad's bound on the dual VC dimension of a binary matrix, machine-verified.",
+      "code": "theorem assouad_transpose_vcDim {m n : ℕ} (M : BinaryMatrix m n)\n    {d : ℕ} (hd : M.vcDim ≤ d) :\n    M.transpose.vcDim ≤ 2 ^ (d + 1) - 1",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.4",
+      "source": "design-lab/measurements/ZPM/Combinatorics/SetFamily/DualVC/Assouad.lean ∷ assouad_transpose_vcDim"
+     },
+     {
+      "cell": "established_result",
+      "claim": "The McAllester PAC-Bayes generalization bound, a frequentist to Bayesian bridge in Lean 4.",
+      "code": "theorem pac_bayes_finite {X : Type u} [MeasurableSpace X]\n    {H : Type*} [Fintype H] [Nonempty H]\n    (D : MeasureTheory.Measure X) [MeasureTheory.IsProbabilityMeasure D]\n    (c : Concept X Bool) (hc_meas : Measurable c)\n    (hs : H → Concept X Bool) (hhs_meas : ∀ h, Measurable (hs h))\n    (P : FinitePMF H) (hP_pos : ∀ h, 0 < P.prob h)\n    (m : ℕ) (hm : 0 < m) (δ : ℝ) (hδ : 0 < δ) (hδ1 : δ ≤ 1) :\n    MeasureTheory.Measure.pi (fun _ : Fin m => D)\n      { S : Fin m → X | ∀ (Q : FinitePMF H),\n          gibbsError Q hs c D ≤ gibbsEmpError Q hs c S +\n            Real.sqrt ((crossEntropyFinitePMF Q P + Real.log (1 / δ)) / (2 * ↑m)) }\n      ≥ ENNReal.ofReal (1 - δ)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.5",
+      "source": "design-lab/learning-theory/FLT_Proofs/Theorem/PACBayes.lean ∷ pac_bayes_finite"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "PAC learning has a measurability core: uniform convergence arguments need the bad events to be regular enough to measure. Choquet's capacitability theorem yields that analytic sets are null-measurable, bridging capacity theory to learning, and a strict separation witness shows the null-measurable regularity condition for PAC bad events is distinct from the Borel one. The condition is preserved under amalgamation of concept classes over standard Borel parameter spaces, and a concrete version space learner is verified to pass the measurability gate.",
+    "hasWitness": true,
+    "note": "The Borel versus null-measurable separation is proved relative to an explicit hypothesis: the existence of an analytic set of reals that is not measurable.",
+    "pending": false,
+    "repo": "design-lab · learning-theory",
+    "status": "active",
+    "tbd": false,
+    "title": "Learner Measurability",
+    "vis": "internal",
+    "witnesses": [
+     {
+      "cell": "established_result",
+      "claim": "Choquet's capacitability theorem (Kechris 30.13): capacities of analytic sets in Polish spaces are approximated from within by compact sets.",
+      "code": "theorem MeasureTheory.AnalyticSet.cap_eq_iSup_isCompact\n    {α : Type*}\n    [TopologicalSpace α] [MeasurableSpace α] [BorelSpace α] [PolishSpace α]\n    {cap : Set α → ENNReal}\n    (hcap : MeasureTheory.IsChoquetCapacity cap)\n    {s : Set α} (hs : MeasureTheory.AnalyticSet s) :\n    cap s = ⨆ (K : Set α), ⨆ (_ : IsCompact K), ⨆ (_ : K ⊆ s), cap K",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "design-lab/measurements/ZPM/MeasureTheory/ChoquetCapacity/Capacitability.lean ∷ MeasureTheory.AnalyticSet.cap_eq_iSup_isCompact"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "Analytic sets are null-measurable: the bridge from Choquet capacity to PAC learning measurability.",
+      "code": "theorem analyticSet_nullMeasurableSet\n    {α : Type*}\n    [TopologicalSpace α] [MeasurableSpace α] [BorelSpace α] [PolishSpace α]\n    {μ : MeasureTheory.Measure α} [MeasureTheory.IsFiniteMeasure μ]\n    {s : Set α} (hs : MeasureTheory.AnalyticSet s) :\n    MeasureTheory.NullMeasurableSet s μ",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "design-lab/learning-theory/FLT_Proofs/PureMath/AnalyticMeasurability.lean ∷ analyticSet_nullMeasurableSet"
+     },
+     {
+      "cell": "novel_discovery",
+      "claim": "Null-measurable and Borel regularity conditions for PAC bad events are strictly separated, given an analytic non-measurable set of reals.",
+      "code": "theorem exists_measTarget_separation\n    (hex : ∃ A : Set ℝ, MeasureTheory.AnalyticSet A ∧ ¬ MeasurableSet A) :\n    KrappWirthSeparationMeasTarget",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "source": "design-lab/learning-theory/FLT_Proofs/Theorem/BorelAnalyticSeparation.lean ∷ exists_measTarget_separation"
+     },
+     {
+      "cell": "novel_discovery",
+      "claim": "Amalgamation of concept classes over standard Borel parameter spaces preserves null-measurability.",
+      "code": "theorem amalgClass_wellBehaved\n    {X : Type u}\n    [MeasurableSpace X] [TopologicalSpace X] [PolishSpace X] [BorelSpace X]\n    {Θ₁ Θ₂ S : Type*}\n    [MeasurableSpace Θ₁] [StandardBorelSpace Θ₁]\n    [MeasurableSpace Θ₂] [StandardBorelSpace Θ₂]\n    [MeasurableSpace S] [StandardBorelSpace S]\n    (π₁ : Θ₁ → S) (π₂ : Θ₂ → S)\n    (hπ₁ : Measurable π₁) (hπ₂ : Measurable π₂)\n    (merge : Θ₁ × Θ₂ → Concept X Bool)\n    (hmerge : Measurable (fun p : (Θ₁ × Θ₂) × X => merge p.1 p.2)) :\n    WellBehavedVCMeasTarget X (amalgClass π₁ π₂ merge)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.4",
+      "source": "design-lab/learning-theory/FLT_Proofs/Complexity/Amalgamation.lean ∷ amalgClass_wellBehaved"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "A non-neural version space learner satisfies the batch-learner measurability gate.",
+      "code": "theorem versionSpaceLearner_measurableBatchLearner\n    {X : Type u} [MeasurableSpace X] [MeasurableSingletonClass X]\n    (enum : ℕ → Concept X Bool)\n    (h_meas : ∀ n, Measurable (enum n)) :\n    MeasurableBatchLearner X (versionSpaceLearner enum)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.5",
+      "source": "design-lab/learning-theory/FLT_Proofs/Learner/VersionSpace.lean ∷ versionSpaceLearner_measurableBatchLearner"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "Q-learning converges almost surely to the optimal Q-function, and linear TD to its fixed point, under Markovian sampling with inverse-polynomial step sizes, all machine-checked. The proofs share a single Lyapunov-based recursive error bound and bottom out in the Robbins-Siegmund almost-supermartingale convergence theorem. For Q-learning the Lyapunov candidate is the squared l_p norm, whose smoothness with constant p - 1 is proved separately.",
+    "hasWitness": true,
+    "note": "The Markovian-sampling theorems are stated for inverse-polynomial step-size schedules with exponent in the interval (2/3, 1), as in the theorem hypotheses.",
+    "pending": false,
+    "repo": "design-lab · rl",
+    "status": "active",
+    "tbd": false,
+    "title": "Stochastic Approximation · TD and Q-Learning",
+    "vis": "internal",
+    "witnesses": [
+     {
+      "cell": "established_result",
+      "claim": "Q-learning converges almost surely to the optimal Q-function under Markovian samples.",
+      "code": "theorem ae_tendsto_of_QLearning_markov\n  {ν : ℝ} (hν : ν ∈ Set.Ioo (2 / 3) 1)\n  (hq : QLearningIterates (spec := spec) (q := q))\n  (hα : spec.α = fun n : ℕ => inv_poly ν 2 n) :\n  ∀ᵐ ω ∂ spec.MRP.markov_samples,\n    Tendsto (fun n => q n ω) atTop (𝓝 spec.optimal_q)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "design-lab/rl/RLTheory/Algorithm/QLearning.lean ∷ ae_tendsto_of_QLearning_markov"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Linear TD converges almost surely under Markovian samples and inverse-polynomial step sizes.",
+      "code": "theorem ae_tendsto_of_linearTD_markov\n  {ν : ℝ} (hν : ν ∈ Set.Ioo (2 / 3) 1)\n  (hw : LinearTDIterates (spec := spec) (w := w))\n  (hα : spec.α = fun n : ℕ => inv_poly ν 2 n) :\n  ∀ᵐ ω ∂ spec.markov_samples,\n    Tendsto (fun n => w n ω) atTop (𝓝 spec.td_fixed_point)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "design-lab/rl/RLTheory/Algorithm/LinearTD.lean ∷ ae_tendsto_of_linearTD_markov"
+     },
+     {
+      "cell": "established_result",
+      "claim": "The Robbins-Siegmund almost-supermartingale theorem, the foundation of the stochastic approximation proofs.",
+      "code": "theorem ae_tendsto_zero_of_almost_supermartingale\n    (hfnonneg : ∀ n, 0 ≤ᵐ[μ] f n)\n    {T : ℕ → ℝ} (hTpos : ∀ n, 0 < T n)\n    (hAlmostSupermartingale :\n      ∃ C ≥ 0, ∀ n, μ[f (n + 1) | ℱ n] ≤ᵐ[μ] (fun ω => (1 - T n) * f n ω + C * T n ^ 2)) :\n    ∀ᵐ ω ∂μ, Tendsto (fun n => f n ω) atTop (𝓝 0)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "source": "design-lab/rl/RLTheory/Probability/Martingale/Convergence.lean ∷ ae_tendsto_zero_of_almost_supermartingale"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "A Lyapunov-based recursive error bound shared by all the convergence proofs.",
+      "code": "theorem fundamental_inequality\n  {x : ℕ → Ω → E d}\n  (hx : Iterates x x₀ f e₁ e₂ α)\n  ...\n  [LyapunovFunction φ φ' f] :\n  ∃ B₁ B₂, 0 < B₁ ∧ 0 ≤ B₂ ∧ ∃ n₀, ∀ᵐ ω ∂μ, ∀ n, n ≥ n₀ →\n    φ (x (n + 1) ω - z) ≤ (1 - B₁ * α n) * φ (x n ω - z) +\n      ⟪φ' (x n ω - z), e₁ (n + 1) ω⟫ + B₂ * (α n) ^ 2",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.4",
+      "source": "design-lab/rl/RLTheory/StochasticApproximation/Pathwise.lean ∷ fundamental_inequality"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "Smoothness of the squared l_p norm with constant p - 1, the Lyapunov candidate for Q-learning.",
+      "code": "theorem smooth_half_sq_Lp (hp : 2 ≤ p) :\n  ∀ (x y : LpSpace p d),\n    half_sq_Lp y ≤ half_sq_Lp x + ⟪toL2 (half_sq_Lp' x), toL2 (y - x)⟫ + (p - 1) * half_sq_Lp (y - x)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.5",
+      "source": "design-lab/rl/RLTheory/StochasticApproximation/LpSpace.lean ∷ smooth_half_sq_Lp"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "Machine-verified zero conditions for standard discrepancy measures: MMD vanishes exactly when two distributions are equal, provided the kernel is characteristic; HSIC vanishes exactly when the joint distribution factorizes into its marginals, again under a characteristic-kernel hypothesis on the product space; and mutual information is zero if and only if independence holds, under an absolute continuity hypothesis. Pinsker's inequality with its sharp constant bounds total variation by the square root of half the KL divergence, and the reproducing property of the kernel mean embedding grounds the RKHS results.",
+    "hasWitness": true,
+    "note": "The mutual information characterization carries explicit absolute continuity and finite KL divergence hypotheses, stated as part of the theorem.",
+    "pending": false,
+    "repo": "design-lab · measurements",
+    "status": "active",
+    "tbd": false,
+    "title": "Discrepancies and Independence",
+    "vis": "internal",
+    "witnesses": [
+     {
+      "cell": "established_result",
+      "claim": "Pinsker's inequality with sharp constant, fully proved: total variation is at most the square root of half the KL divergence.",
+      "code": "theorem pinsker_proof\n    (P Q : Measure α) [IsProbabilityMeasure P] [IsProbabilityMeasure Q]\n    (hac : P.AbsolutelyContinuous Q) (h_int : Integrable (llr P Q) P) :\n    tvDistReal P Q ≤ Real.sqrt (klDivReal P Q / 2)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "design-lab/measurements/ZPM/InformationTheory/Pinsker/General.lean ∷ pinsker_proof"
+     },
+     {
+      "cell": "established_result",
+      "claim": "For a characteristic kernel, MMD vanishes exactly when the two distributions are equal.",
+      "code": "theorem mmdSq_zero_iff\n    (hchar : IsCharacteristic (H := H) (X := X))\n    (P Q : Measure X) :\n    mmdSq (H := H) P Q = 0 ↔ P = Q",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "design-lab/measurements/ZPM/Analysis/InnerProductSpace/MMD/Characteristic.lean ∷ mmdSq_zero_iff"
+     },
+     {
+      "cell": "established_result",
+      "claim": "For a characteristic kernel on the product space, HSIC vanishes exactly when the joint distribution is the product of its marginals.",
+      "code": "theorem hsicDef_zero_iff_independent\n    (hchar : IsCharacteristic (H := H) (X := X × Y))\n    (P : Measure (X × Y)) :\n    hsicDef (H := H) P = 0 ↔ P = (P.map Prod.fst).prod (P.map Prod.snd)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "source": "design-lab/measurements/ZPM/Analysis/InnerProductSpace/HSIC/ZeroIff.lean ∷ hsicDef_zero_iff_independent"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Mutual information equals zero if and only if the variables are independent, under an absolute continuity hypothesis.",
+      "code": "theorem mutualInformationReal_eq_zero_iff_product {α β : Type*}\n    [MeasurableSpace α] [MeasurableSpace β]\n    (P : Measure (α × β)) [IsProbabilityMeasure P]\n    (hac : P.AbsolutelyContinuous ((P.map Prod.fst).prod (P.map Prod.snd)))\n    (hfin : InformationTheory.klDiv P ((P.map Prod.fst).prod (P.map Prod.snd)) ≠ ⊤) :\n    mutualInformationReal P = 0 ↔ P = (P.map Prod.fst).prod (P.map Prod.snd)",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.4",
+      "source": "design-lab/measurements/ZPM/InformationTheory/MutualInformation/ZeroIffProduct.lean ∷ mutualInformationReal_eq_zero_iff_product"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "The reproducing property of the kernel mean embedding: inner products against the embedding compute expectations.",
+      "code": "theorem kernelMeanEmbedding_reproducing\n    (P : Measure X) [IsFiniteMeasure P]\n    (hcont : Continuous (fun x => kerFun H x (1 : ℝ)))\n    (f : H) :\n    @inner ℝ H _ (kernelMeanEmbedding (H := H) P) f = ∫ x, f x ∂P",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.5",
+      "source": "design-lab/measurements/ZPM/Analysis/InnerProductSpace/KernelMeanEmbedding/Reproducing.lean ∷ kernelMeanEmbedding_reproducing"
+     }
+    ]
+   },
+   {
+    "alsoIn": "",
+    "direction": "TorchLean is a typed, executable neural network framework whose robustness certificates are checkable in Lean: typed tensors and a shared graph IR feed verified reverse-mode autograd and IEEE-754 semantics, and bound propagation with affine and ReLU relaxations carries a perturbation set through the network to certified output bounds. Supporting analysis is formalized alongside: ReLU is 1-Lipschitz in L2 for tensors of any shape, a per-step squared-norm contraction bound holds for gradient steps on strongly monotone Lipschitz operators, and one-dimensional ridge regression has an explicit uniform stability constant.",
+    "hasWitness": true,
+    "note": "",
+    "pending": false,
+    "repo": "design-lab · neural-networks",
+    "status": "active",
+    "tbd": false,
+    "title": "Verified Neural Networks · TorchLean",
+    "vis": "internal",
+    "witnesses": [
+     {
+      "cell": "established_result",
+      "claim": "ReLU is 1-Lipschitz in L2 for any tensor shape, proved by structural induction on the shape type.",
+      "code": "theorem relu_lipschitz_general {s : Shape} (x y : Tensor ℝ s) :\n  tensorL2Dist (reluSpec x) (reluSpec y) ≤ tensorL2Dist x y",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.1",
+      "source": "design-lab/neural-networks/NN/Proofs/Analysis/Lipschitz.lean ∷ relu_lipschitz_general"
+     },
+     {
+      "cell": "supporting_argument",
+      "claim": "A per-step squared-norm contraction bound for gradient steps on strongly monotone Lipschitz operators.",
+      "code": "theorem step_norm_sq_le (η μ : ℝ) (hη : 0 ≤ η) {L : NNReal} (g : E → E)\n    (hmono : StrongMonotone μ g) (hlip : LipschitzWith L g)\n    (x y : E) :\n    ‖step η g x - step η g y‖ ^ 2 ≤ (1 - 2 * η * μ + (η ^ 2) * (L : ℝ) ^ 2) * ‖x - y‖ ^ 2",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.2",
+      "source": "design-lab/neural-networks/NN/MLTheory/Optimization/GDLinearConvergence.lean ∷ step_norm_sq_le"
+     },
+     {
+      "cell": "established_result",
+      "claim": "Uniform stability of one-dimensional ridge regression with an explicit stability constant.",
+      "code": "theorem ridgeFit1D_sqLoss_uniformStableReplace (hlam : 0 < lam) :\n    UniformStableReplace (Z := BoundedExample X Y) (H := ℝ)\n      (A := fun S => ridgeFit1D (n := n) (X := X) (Y := Y) lam S)\n      (ℓ := fun w z => sqLoss (X := X) (Y := Y) w z)\n      (β := 4 * X ^ 2 * Y ^ 2 * (lam + X ^ 2) ^ 2 / (lam ^ 3 * N (n := n)))",
+      "isEmpirical": false,
+      "isFigure": false,
+      "isProof": true,
+      "n": "arg.3",
+      "source": "design-lab/neural-networks/NN/MLTheory/LearningTheory/Stability/RidgeRegression1D/Real.lean ∷ ridgeFit1D_sqLoss_uniformStableReplace"
+     },
+     {
+      "alt": "Architecture diagram of TorchLean showing the pipeline from typed tensors, shared graph IR, verified reverse-mode autograd, FP32/IEEE-754 semantics, and certificate checking through to Lean proofs, executable models, and formal certificates for verified ML workflows",
+      "cell": "supporting_argument",
+      "claim": "TorchLean pipeline: typed tensors and a shared graph IR flow through verified reverse-mode autograd, IEEE-754 semantics, and certificate checking to Lean proofs, executable models, and formal certificates.",
+      "flag": "",
+      "isEmpirical": false,
+      "isFigure": true,
+      "isProof": false,
+      "source": "Noumenal/design-lab/neural-networks/home_page/assets/media/figures/torchlean-layout.png",
+      "src": "assets/033d6fa2_torchlean-layout.png"
+     },
+     {
+      "alt": "IBP / α-CROWN pipeline: perturbation input set → bound propagation through a neural network using affine + ReLU relaxations → certified output with lower/upper bounds and margin, with Lean-checkable certificates",
+      "cell": "supporting_argument",
+      "claim": "Bound propagation with affine and ReLU relaxations turns a perturbation input set into certified output bounds with margin, backed by Lean-checkable certificates.",
+      "flag": "",
+      "isEmpirical": false,
+      "isFigure": true,
+      "isProof": false,
+      "source": "Noumenal/design-lab/neural-networks/home_page/assets/media/examples/showcase/verification-bounds.png",
+      "src": "assets/ace1ca54_verification-bounds.png"
+     }
+    ]
    }
   ]
  }
