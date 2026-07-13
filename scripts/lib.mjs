@@ -61,12 +61,24 @@ function firstAuthor(author) {
 export function authorColor(author) { return AUTHOR_COLORS[firstAuthor(author)] || '#8a8273'; }
 export function authorBg(author) { return AUTHOR_BG[firstAuthor(author)] || '#efece4'; }
 
+function subcardJS(s) {
+  const head = `title:${j(s.title)}, tag:${j(s.tag||'')}, direction:${j(s.direction||'')}, note:${j(s.note||'')}`;
+  const ws = (s.witnesses||[]).map(w => '                ' + witnessJS(w)).join(',\n');
+  const wpart = (s.witnesses && s.witnesses.length) ? `, witnesses:[\n${ws}\n              ]` : `, witnesses:[]`;
+  return `{ ${head}${wpart} }`;
+}
+
 export function cardJS(c) {
   const fn = c.tbd ? 'tbd' : 'P';
   const head = `title:${j(c.title)}, repo:${j(c.repo)}, vis:${j(c.vis)}, status:${j(c.status)}, alsoIn:${j(c.alsoIn||'')}, author:${j(c.author||'')}, authorColor:${j(authorColor(c.author))}, authorBg:${j(authorBg(c.author))}, direction:${j(c.direction||'')}, note:${j(c.note||'')}`;
-  if (!c.witnesses || c.witnesses.length === 0) return `${fn}({ ${head} })`;
-  const ws = c.witnesses.map(w => '            ' + witnessJS(w)).join(',\n');
-  return `${fn}({ ${head}, witnesses:[\n${ws}\n          ] })`;
+  const parts = [head];
+  if (c.witnesses && c.witnesses.length) {
+    parts.push(`witnesses:[\n${c.witnesses.map(w => '            ' + witnessJS(w)).join(',\n')}\n          ]`);
+  }
+  if (c.subcards && c.subcards.length) {
+    parts.push(`subcards:[\n${c.subcards.map(s => '            ' + subcardJS(s)).join(',\n')}\n          ]`);
+  }
+  return `${fn}({ ${parts.join(', ')} })`;
 }
 
 // Lightweight manifest validation (no external deps; mirrors schemas/repo.v1.json essentials).

@@ -15,6 +15,10 @@ const INPUTS = path.join(NOUM, '_rebuild', 'push-inputs');
 const html = fs.readFileSync(path.join(SITE, 'index.html'), 'utf8');
 const sections = evalSections(html);
 
+const witJSON = (w) => w.isProof ? { type: 'proof', cell: w.cell, claim: w.claim || undefined, code: w.code, source: w.source }
+  : w.isEmpirical ? { type: 'empirical', cell: w.cell, headline: w.headline, metrics: w.metrics, source: w.source }
+  : { type: 'figure', cell: w.cell, claim: w.claim || undefined, alt: w.alt || undefined, source: w.source };
+
 const CORPUS_PREFIX = /^.*Epistemology and Zetesis\/(Projects\/|Noumenal\/)?/;
 
 // page layer: what a reader sees, machine-readable
@@ -24,11 +28,11 @@ const page = sections.map(s => ({
     title: p.title, repo: p.repo, visibility: p.vis, status: p.status,
     author: p.author || undefined,
     also_in: p.alsoIn || undefined, direction: p.direction || undefined, note: p.note || undefined,
-    witnesses: (p.witnesses || []).map(w => {
-      if (w.isProof) return { type: 'proof', cell: w.cell, claim: w.claim || undefined, code: w.code, source: w.source };
-      if (w.isEmpirical) return { type: 'empirical', cell: w.cell, headline: w.headline, metrics: w.metrics, source: w.source };
-      return { type: 'figure', cell: w.cell, claim: w.claim || undefined, alt: w.alt || undefined, source: w.source };
-    }),
+    witnesses: (p.witnesses || []).map(witJSON),
+    subcards: (p.subcards && p.subcards.length) ? p.subcards.map(sc => ({
+      title: sc.title, direction: sc.direction || undefined, note: sc.note || undefined,
+      witnesses: (sc.witnesses || []).map(witJSON),
+    })) : undefined,
   })),
 }));
 
