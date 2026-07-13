@@ -1723,9 +1723,40 @@
      "visibility": "open",
      "status": "active",
      "author": "Amit Timalsina",
-     "direction": "Turn a plain-language description of an operation into a fictional but coherent causal world with a declared ground-truth causal graph, then benchmark whether a causal-discovery method can recover it. Because the structure is declared, not learned, every generated world is an answer key.",
-     "note": "Published on PyPI with CI; MIT licensed.",
-     "witnesses": []
+     "direction": "Turn a plain-language description of an operation into a fictional but coherent causal world with a declared ground-truth causal graph, then benchmark whether a causal-discovery method can recover it. Because the structure is declared, not learned, every generated world is an answer key: run any discovery method on the data and score how well it recovered the world.",
+     "note": "Published on PyPI with CI, MIT licensed. The witnesses below are a live run on a generated world from the shipped benchmark.",
+     "witnesses": [
+      {
+       "type": "figure",
+       "cell": "established_result",
+       "claim": "The declared ground-truth causal DAG of a generated coffee-chain world, rendered by the package itself: eight variables across disturbance, controllable, observable and outcome roles, the hidden confounder dashed.",
+       "alt": "Declared ground-truth causal DAG of a generated regional-coffee-chain world: eight variables (weekend, loyalty discount, supplier lead time, foot traffic, queue length, drinks sold, daily margin, and a hidden barista-morale confounder), with directed causal edges and the hidden confounder drawn dashed.",
+       "source": "causal-worlds · benchmark/v0.2/world_00 · rendered with viz.to_dot + graphviz"
+      },
+      {
+       "type": "empirical",
+       "cell": "established_result",
+       "headline": "On a generated coffee-chain world (8 variables, 9 ground-truth edges, one hidden confounder, 2000 rows), an interventional grader recovers the graph at F1 0.88 and keeps zero spurious confounded edges; observational PC reaches F1 0.84 but keeps the hidden-confounded pair as a causal edge.",
+       "metrics": [
+        {
+         "label": "Interventional CI",
+         "pct": 88,
+         "frac": "F1 0.88"
+        },
+        {
+         "label": "PC algorithm",
+         "pct": 84,
+         "frac": "F1 0.84"
+        },
+        {
+         "label": "Naive correlation",
+         "pct": 70,
+         "frac": "F1 0.70"
+        }
+       ],
+       "source": "causal-worlds · benchmark/v0.2/world_00 · grade_spec(PC / interventional-CI / correlation)"
+      }
+     ]
     },
     {
      "title": "Mathesis",
