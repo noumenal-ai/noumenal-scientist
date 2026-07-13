@@ -192,9 +192,35 @@
      "visibility": "private",
      "status": "active",
      "author": "Chethan",
-     "direction": "A causal world model: object-centric slot representations, an explicitly inferred causal interaction graph, and latent-space rollouts where the inferred adjacency matrix is the sole gate on cross-object influence. Interventions and counterfactuals become checkable: knock out an edge and the rollout changes accordingly.",
-     "note": "One causal core with pluggable perception per dataset, trained in two stages.",
-     "witnesses": []
+     "direction": "A causal world model: object-centric slots, an explicitly inferred directed interaction graph, and latent-space rollouts where one scalar per object pair gates all cross-object influence. Because the structure is declared in the model rather than left implicit, interventions and counterfactuals become checkable: cut an edge and the rollout changes.",
+     "note": "Experiments across graviton, PushT, PHYRE, and CLEVRER; figures below are the project's own report figures. One causal core with pluggable perception per dataset, trained in two stages.",
+     "witnesses": [
+      {
+       "type": "figure",
+       "cell": "established_result",
+       "claim": "The shared causal core: a per-slot encoder, a confounder-free mechanism-inference module, and per-object mechanisms whose cross-object influence is gated by one inferred adjacency scalar per pair.",
+       "alt": "Architecture of the causalWM shared causal core on graviton: a per-slot encoder feeds a confounder-free mechanism-inference module that emits per-object mechanisms, gated by an inferred adjacency matrix, and rolls the future forward through that graph.",
+       "source": "design-lab/world-models/reports/causalwm_experiment_report · causalwm_report · fig arch (project figure)"
+      },
+      {
+       "type": "empirical",
+       "cell": "established_result",
+       "headline": "On the controlled graviton benchmark, where structure is scored against a planted ground-truth graph, adjacency AUROC is 1.0 and recoverable structural Hamming distance is 0 on every seed. Structure and confounder recovery hold from 100% down to 10% of the training data.",
+       "metrics": [
+        {
+         "label": "Adjacency AUROC",
+         "pct": 100,
+         "frac": "1.00"
+        },
+        {
+         "label": "Recovered structure",
+         "pct": 100,
+         "frac": "SHD 0 / seed"
+        }
+       ],
+       "source": "design-lab/world-models/reports/causalwm_experiment_report · causalwm_report · graviton structure metrics"
+      }
+     ]
     },
     {
      "title": "World-Model Theory",
@@ -751,8 +777,68 @@
      "status": "active",
      "author": "Chethan",
      "also_in": "Formalization",
-     "direction": "The agent-facing face of the causal world model: rolling futures forward in latent space under interventions, with cross-object influence carried only through the inferred graph.",
-     "witnesses": []
+     "direction": "The agent-facing face of the causal world model: rolling futures forward in latent space under interventions, with cross-object influence carried only through the inferred graph, so an edge can be knocked out and the effect read off the rollout.",
+     "note": "The report includes the parts that did not work; the numbers below are from the project's experiments.",
+     "witnesses": [
+      {
+       "type": "figure",
+       "cell": "novel_discovery",
+       "claim": "The graph is load-bearing: the planted true adjacency beside the learned soft adjacency and the edge-knockout delta-MSE. If the adjacency were decorative, knocking out an edge would move nothing.",
+       "alt": "graviton adjacency and edge-knockout: the planted true adjacency, the raw soft adjacency the model learns (close to a uniform gate), and the directed edge-knockout delta-MSE which is sparse and recovers the true structure.",
+       "source": "design-lab/world-models/reports/causalwm_experiment_report · causalwm_report · fig grav_adj_knockout (project figure)"
+      },
+      {
+       "type": "empirical",
+       "cell": "novel_discovery",
+       "headline": "The adjacency is causal, not decorative: cutting all edges raises rollout error 8.54 times, the action's effect localizes to the agent slot (0.114 against 0.03 elsewhere), and reversing the action diverges the trajectory. Cutting an edge damages only the child objects, which is what a faithful causal model must do.",
+       "metrics": [
+        {
+         "label": "Error under full edge-cut",
+         "pct": 100,
+         "frac": "x8.54"
+        },
+        {
+         "label": "Effect localizes to actor slot",
+         "pct": 79,
+         "frac": "0.114 vs 0.03"
+        }
+       ],
+       "source": "design-lab/world-models/reports/causalwm_experiment_report · causalwm_report · graviton intervention + counterfactual"
+      },
+      {
+       "type": "empirical",
+       "cell": "open_step",
+       "headline": "The honest reversal, reported as the sharpest finding: on PushT the model is the more stable long-horizon predictor (0.00842 error at ten steps while the baseline drifts) yet it plans worse than the baseline it beats. The failure is representational, not dynamical, and falsifiable: the slots miss the block pose by at least 20 pixels, the planning success tolerance.",
+       "metrics": [
+        {
+         "label": "Ten-step prediction (ours)",
+         "pct": 100,
+         "frac": "0.00842"
+        }
+       ],
+       "source": "design-lab/world-models/reports/causalwm_experiment_report · causalwm_report · PushT prediction vs planning"
+      },
+      {
+       "type": "empirical",
+       "cell": "open_step",
+       "headline": "A negative result, banked with numbers: on CLEVRER the inferred graph does not detect collisions. The causal-probe AUROC sits at or below chance and relational-knockout at collisions (AUROC 0.36) is barely distinguishable from knocking out edges anywhere.",
+       "metrics": [
+        {
+         "label": "Relational-knockout AUROC",
+         "pct": 36,
+         "frac": "0.36"
+        }
+       ],
+       "source": "design-lab/world-models/reports/causalwm_experiment_report · causalwm_report · CLEVRER causal probe"
+      },
+      {
+       "type": "figure",
+       "cell": "supporting_argument",
+       "claim": "PHYRE, at pixel scale: ground truth, the model's rollout, and the underlying slots for one episode.",
+       "alt": "PHYRE filmstrip: ground truth, model rollout, and the underlying slots for one episode, at pixel scale.",
+       "source": "design-lab/world-models/reports/causalwm_experiment_report · causalwm_report · fig phyre_filmstrip (project figure)"
+      }
+     ]
     },
     {
      "title": "noumenal-edge",
