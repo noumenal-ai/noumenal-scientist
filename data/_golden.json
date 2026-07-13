@@ -340,22 +340,6 @@
     "title": "TorchLean",
     "vis": "open",
     "witnesses": []
-   },
-   {
-    "alsoIn": "",
-    "author": "Akshat Thapa",
-    "authorBg": "#e6f0f0",
-    "authorColor": "#2a6b73",
-    "direction": "Within-slot disentanglement and single-factor representational intervention in object-centric world models: a JEPA training loop with a mechanism-sparsity penalty, and studies characterizing how far causal representation learning is reachable on frozen object-centric slots, and where it is not.",
-    "hasWitness": false,
-    "note": "",
-    "pending": true,
-    "repo": "noumenal-ai/Disentangling-Object-Centric-Slots-",
-    "status": "active",
-    "tbd": false,
-    "title": "C-JEPA · slot disentanglement",
-    "vis": "private",
-    "witnesses": []
    }
   ]
  },
@@ -857,6 +841,22 @@
       ]
      }
     ]
+   },
+   {
+    "alsoIn": "",
+    "author": "Akshat Thapa",
+    "authorBg": "#e6f0f0",
+    "authorColor": "#2a6b73",
+    "direction": "Within-slot disentanglement and single-factor representational intervention in object-centric world models: a JEPA training loop with a mechanism-sparsity penalty, and studies characterizing how far causal representation learning is reachable on frozen object-centric slots, and where it is not.",
+    "hasWitness": false,
+    "note": "A model-level representation problem: disentanglement of the learned latent, not the substrate.",
+    "pending": true,
+    "repo": "noumenal-ai/Disentangling-Object-Centric-Slots-",
+    "status": "active",
+    "tbd": false,
+    "title": "C-JEPA · slot disentanglement",
+    "vis": "private",
+    "witnesses": []
    }
   ]
  },
@@ -1212,6 +1212,21 @@
     "repo": "noumenal-ai/world-model-theory",
     "tbd": false,
     "title": "World-Model Theory",
+    "vis": "open",
+    "witnesses": []
+   },
+   {
+    "alsoIn": "",
+    "author": "Dhruv Gupta",
+    "authorBg": "#ebedf5",
+    "authorColor": "#3b4a93",
+    "direction": "An evidence bank for machine-checked machine-learning theory, modeled on GenBank and the Protein Data Bank rather than a journal: a Dictionary of definitions, Claims frozen before any proof is attempted, and Results, kernel-checked demonstrations that discharge them, each with a stable accession identifier.",
+    "hasWitness": false,
+    "note": "Commentary, applications, and overlay journals build on top of accessions instead of gating publication behind one editorial judgment.",
+    "pending": true,
+    "repo": "noumenal-ai/mathesis-bank",
+    "tbd": false,
+    "title": "Mathesis",
     "vis": "open",
     "witnesses": []
    },

@@ -6,11 +6,11 @@
     {
       "order": 9590,
       "alsoIn": "",
-      "note": "",
+      "note": "A model-level representation problem: disentanglement of the learned latent, not the substrate.",
       "tbd": false,
       "witnesses": [],
       "status": "active",
-      "ingredient": "substrate",
+      "ingredient": "formalization",
       "title": "C-JEPA \u00b7 slot disentanglement",
       "repo": "noumenal-ai/Disentangling-Object-Centric-Slots-",
       "vis": "private",

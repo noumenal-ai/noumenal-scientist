@@ -741,6 +741,19 @@
       "note": "Every claim on the companion site is a theorem in Lean 4: noumenal-ai.github.io/world-model-theory.",
       "witnesses": [],
       "subcards": []
+    },
+    {
+      "order": 104,
+      "ingredient": "knowledge",
+      "title": "Mathesis",
+      "repo": "noumenal-ai/mathesis-bank",
+      "vis": "open",
+      "author": "Dhruv Gupta",
+      "alsoIn": "",
+      "direction": "An evidence bank for machine-checked machine-learning theory, modeled on GenBank and the Protein Data Bank rather than a journal: a Dictionary of definitions, Claims frozen before any proof is attempted, and Results, kernel-checked demonstrations that discharge them, each with a stable accession identifier.",
+      "note": "Commentary, applications, and overlay journals build on top of accessions instead of gating publication behind one editorial judgment.",
+      "tbd": false,
+      "witnesses": []
     }
   ]
 }
